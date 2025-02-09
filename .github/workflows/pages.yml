@@ -6,8 +6,8 @@ on:
 permissions:
   pages: write
   id-token: write
-  release: write
-  deployment: write
+  deployments: write
+  contents: write
 
 jobs:
   build:
