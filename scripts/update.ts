@@ -30,7 +30,7 @@ export async function updateDatabase(): Promise<void> {
     // write the similar file to update the lastUpdated.ts
     writeFileSync(
       path.resolve(dirname, "../src/assets/lastUpdated.ts"),
-      `export const lastUpdated: Date = Date.parse("${lastUpdatedRemote.toISOString()}");`,
+      `export const lastUpdated: Date = new Date("${lastUpdatedRemote.toISOString()}");`,
     );
   }
 }
