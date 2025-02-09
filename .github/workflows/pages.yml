@@ -42,7 +42,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          // generate release tag from date, branch name and commit hash - it must be sorted by date
-          // don't assume any internal state, always generate the tag by executing git commands
           export tag=$(git log --pretty=format:'%ad-%h' --date=short -n1)
           gh release create $tag --target main --title="${tag}" --generate-notes
