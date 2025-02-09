@@ -2,6 +2,7 @@ import { useMemo } from "react";
 
 import { getPartyColor } from "../utils/getPartyColor.ts";
 import { Poll } from "../assets/poll.ts";
+
 import { useTheme } from "@/hooks/use-theme.ts";
 import { PartyEntry } from "@/types/PartyEntry.ts";
 

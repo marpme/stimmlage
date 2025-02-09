@@ -68,23 +68,23 @@ export const DonutChart = ({
       <g key={i}>
         <path d={slicePath ?? undefined} fill={grp.data.color} />
         <text
+          dominantBaseline="middle"
+          fill={color.hexa().toString()}
+          fontSize={14}
+          textAnchor="middle"
           x={centroidX}
           y={centroidY}
-          fill={color.hexa().toString()}
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fontSize={14}
         >
           {label}
         </text>
         <text
+          dominantBaseline="middle"
+          fill={color.hexa().toString()}
+          fontSize={12}
+          fontStyle="italic"
+          textAnchor="middle"
           x={centroidX}
           y={centroidY + 14}
-          fill={color.hexa().toString()}
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fontStyle="italic"
-          fontSize={12}
         >
           {subLabel}
         </text>
@@ -93,18 +93,18 @@ export const DonutChart = ({
   });
 
   return (
-    <svg width={width} height={height} style={{ display: "inline-block" }}>
+    <svg height={height} style={{ display: "inline-block" }} width={width}>
       <g transform={`translate(${width / 2}, ${height / 2})`}>
         <g>{shapes}</g>
         <circle fill={"#ccc"} fillOpacity={0.5} r={innerRadius / 2} />
-        <text textAnchor="middle" dominantBaseline="middle" fontSize={32}>
+        <text dominantBaseline="middle" fontSize={32} textAnchor="middle">
           {TOTAL_PARLIAMENT_SEATS}
         </text>
         <text
-          y={20}
-          textAnchor="middle"
           dominantBaseline="middle"
           fontSize={18}
+          textAnchor="middle"
+          y={20}
         >
           seats
         </text>

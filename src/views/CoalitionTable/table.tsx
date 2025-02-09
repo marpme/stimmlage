@@ -9,6 +9,7 @@ import {
 } from "@heroui/react";
 import { FC, useMemo, useState } from "react";
 import * as d3 from "d3";
+
 import { PartyEntry } from "@/types/PartyEntry.ts";
 
 const columns = [
@@ -61,25 +62,25 @@ export const CoalitionsTable: FC<{
       <svg height={"32px"} width={"300px"}>
         <g key={item.name}>
           <rect
-            x={xScale(0)}
-            y={0}
-            width={xScale(item.value)}
-            height={"32"}
-            opacity={0.7}
-            stroke={"#000000"}
             fill={item.color}
             fillOpacity={0.7}
-            strokeWidth={1}
+            height={"32"}
+            opacity={0.7}
             rx={1}
+            stroke={"#000000"}
+            strokeWidth={1}
+            width={xScale(item.value)}
+            x={xScale(0)}
+            y={0}
           />
           <text
-            x={xScale(item.value) + 10}
-            y="20"
+            alignmentBaseline="baseline"
             fill="#fff"
+            fontSize={16}
             height="32"
             textAnchor="start"
-            alignmentBaseline="baseline"
-            fontSize={16}
+            x={xScale(item.value) + 10}
+            y="20"
           >
             {Math.round(item.value * 10) / 10}%
           </text>

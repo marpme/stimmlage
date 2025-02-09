@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+
 import { PartyValues } from "../utils/Party.ts";
 
 type Store = {
