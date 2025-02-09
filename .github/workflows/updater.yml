@@ -4,6 +4,12 @@ on:
   schedule:
     - cron: '0 */3 * * *'
 
+permissions:
+  pages: write
+  id-token: write
+  deployments: write
+  contents: write
+
 jobs:
   update-poll:
     runs-on: ubuntu-latest
