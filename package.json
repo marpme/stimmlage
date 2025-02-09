@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint -c .eslintrc.json ./src/**/**/*.{ts,tsx} --fix",
     "preview": "vite preview",
-    "update": "node --experimental-strip-types ./scripts/update.ts"
+    "update:poll": "node --experimental-strip-types ./scripts/update.ts"
   },
   "dependencies": {
     "@heroui/button": "2.2.9",
