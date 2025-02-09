@@ -14,7 +14,7 @@ jobs:
           node-version: lts
       - run: npm install -g pnpm@10
       - run: pnpm install --frozen-lockfile
-      - run: pnpm now-build
+      - run: pnpm build
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
@@ -38,7 +38,8 @@ jobs:
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
         run: |
           // generate release tag from date, branch name and commit hash - it must be sorted by date
-            tag=$(date +'%Y%m%d')-${GITHUB_REF#refs/heads/}-$(git rev-parse --short HEAD)
+          // don't assume any internal state, always generate the tag by executing git commands
+          export tag=$(git log --pretty=format:'%ad-%h' --date=short -n1)
+          gh release create $tag --target main --title="${tag}" --generate-notes
