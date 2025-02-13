@@ -22,27 +22,26 @@ export default function DefaultLayout({
             ? establishedYear
             : `${establishedYear} - ${currentYear}`}
         </div>
-        <div className="w-full flex items-center justify-center gap-1 py-3">
-          Daten von
+        <div className="flex items-center justify-center gap-1 pt-4">
+          License: Data retrieved from
           <Link
             isExternal
-            className="flex items-center gap-1"
             href="https://dawum.de/"
             title="Dawum - Neueste Wahlumfragen und Ergebnisse"
           >
             dawum.de
           </Link>
+        </div>
+        <div className="flex items-center justify-center gap-1">
           licensed under
           <Link
             isExternal
-            className="flex items-center gap-1 "
             href="https://opendatacommons.org/licenses/odbl/1-0/"
             title="Open Database License (ODbL) v1.0"
           >
             Open Database License (ODbL)
           </Link>
         </div>
-        <p className="text-primary">HeroUI</p>
       </footer>
     </div>
   );
