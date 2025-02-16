@@ -1,6 +1,7 @@
-import { MutableRefObject, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export const useDimensions = (ref: MutableRefObject<Element | null>) => {
+export const useDimensions = () => {
+  const ref = useRef<HTMLDivElement | null>(null);
   const [dimensions, setDimensions] = useState<DOMRectReadOnly>(
     new DOMRectReadOnly(0, 0, 200, 200),
   );
@@ -25,5 +26,8 @@ export const useDimensions = (ref: MutableRefObject<Element | null>) => {
     };
   }, [ref]);
 
-  return dimensions;
+  return {
+    ref,
+    dimensions,
+  };
 };

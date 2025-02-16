@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import * as d3 from "d3";
 import Color from "color";
+import { useDimensions } from "@/hooks/useDimensions.ts";
+import { Card } from "@heroui/react";
 
 type DataItem = {
   name: string;
@@ -9,30 +11,26 @@ type DataItem = {
 };
 
 type DonutChartProps = {
-  width?: number;
-  height?: number;
   data: DataItem[];
 };
 
 const MARGIN = 30;
 const TOTAL_PARLIAMENT_SEATS = 635;
 
-export const DonutChart = ({
-  width = 640,
-  height = 640,
-  data,
-}: DonutChartProps) => {
+export const DonutChart = ({ data }: DonutChartProps) => {
   // Sort by alphabetical to maximise consistency between dataset
   const sortedData = useMemo(
     () => data.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0)),
     [data],
   );
 
+  const { ref, dimensions } = useDimensions();
+
   const utilizedPercentageInParliament = sortedData.reduce((sum, poll) => {
     return sum + (poll.value ?? 0);
   }, 0);
 
-  const radius = Math.min(width, height) / 2 - MARGIN;
+  const radius = Math.min(dimensions.width, dimensions.height) / 2 - MARGIN;
   const innerRadius = radius / 2;
 
   const pie = useMemo(() => {
@@ -93,22 +91,26 @@ export const DonutChart = ({
   });
 
   return (
-    <svg height={height} style={{ display: "inline-block" }} width={width}>
-      <g transform={`translate(${width / 2}, ${height / 2})`}>
-        <g>{shapes}</g>
-        <circle fill={"#ccc"} fillOpacity={0.5} r={innerRadius / 2} />
-        <text dominantBaseline="middle" fontSize={32} textAnchor="middle">
-          {TOTAL_PARLIAMENT_SEATS}
-        </text>
-        <text
-          dominantBaseline="middle"
-          fontSize={18}
-          textAnchor="middle"
-          y={20}
+    <Card ref={ref} className="min-h-96 w-full md:w-[50vw]">
+      <svg height={dimensions.height} width={dimensions.width}>
+        <g
+          transform={`translate(${dimensions.width / 2}, ${dimensions.height / 2})`}
         >
-          seats
-        </text>
-      </g>
-    </svg>
+          <g>{shapes}</g>
+          <circle fill={"#ccc"} fillOpacity={0.5} r={innerRadius / 2} />
+          <text dominantBaseline="middle" fontSize={32} textAnchor="middle">
+            {TOTAL_PARLIAMENT_SEATS}
+          </text>
+          <text
+            dominantBaseline="middle"
+            fontSize={18}
+            textAnchor="middle"
+            y={20}
+          >
+            seats
+          </text>
+        </g>
+      </svg>
+    </Card>
   );
 };

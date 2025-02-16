@@ -46,11 +46,7 @@ export default function IndexPage() {
           </CardBody>
         </Card>
 
-        <Card>
-          <CardBody>
-            <DonutChart data={useSortedAndLimitedParliament} />
-          </CardBody>
-        </Card>
+        <DonutChart data={useSortedAndLimitedParliament} />
       </section>
     </DefaultLayout>
   );

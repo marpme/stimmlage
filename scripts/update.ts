@@ -7,7 +7,7 @@ const DAWUM_DB_API = "https://api.dawum.de/";
 const dirname = path.dirname(new URL(import.meta.url).pathname);
 
 export async function fetchLastUpdated(): Promise<Date> {
-  const response = await fetch(DAWUM_UPDATE_API);
+  const response = await fetch(DAWUM_UPDATE_API, {});
   const data = await response.text();
   return new Date(data);
 }

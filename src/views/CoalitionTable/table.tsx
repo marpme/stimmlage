@@ -11,15 +11,17 @@ import { FC, useMemo, useState } from "react";
 import * as d3 from "d3";
 
 import { PartyEntry } from "@/types/PartyEntry.ts";
+import Color from "color";
+import { useLastElectionResults } from "@/assets/lastElectionResult.ts";
+import { useTheme } from "@/hooks/use-theme.ts";
+import { useFivePercentBarrier } from "@/hooks/useFivePercentBarrier.ts";
+import { useDimensions } from "@/hooks/useDimensions.ts";
+import { useWindowDimensions } from "@/hooks/useWindowDimensions.ts";
 
 const columns = [
   {
     key: "name",
     label: "Name",
-  },
-  {
-    key: "color",
-    label: "COLOR",
   },
   {
     key: "value",
@@ -30,7 +32,21 @@ const columns = [
 export const CoalitionsTable: FC<{
   data: Array<PartyEntry>;
 }> = ({ data }) => {
-  const [selectedKeys, setSelectedKeys] = useState(new Set(["2"]));
+  const { isLight } = useTheme();
+  const dimensions = useWindowDimensions();
+  const maxWidth = dimensions.width * 0.8;
+
+  console.log(maxWidth);
+
+  const limitedParliamentParties = useFivePercentBarrier(data);
+  const fixedParties = new Set(
+    limitedParliamentParties.map((party) => party.name),
+  );
+  const [selectedKeys, setSelectedKeys] = useState(
+    new Set(limitedParliamentParties.map((party) => party.name)),
+  );
+
+  const lastElectionResults = useLastElectionResults();
   const sortedData = useMemo(
     () =>
       data.sort((a, b) => {
@@ -53,47 +69,98 @@ export const CoalitionsTable: FC<{
     return d3
       .scaleLinear()
       .domain([min, max + 20])
-      .range([0, 300]);
-  }, [sortedData]);
+      .range([0, maxWidth * 0.8]);
+  }, [sortedData, dimensions]);
 
-  const items = sortedData.map((item) => ({
-    ...item,
-    value: (
-      <svg height={"32px"} width={"300px"}>
-        <g key={item.name}>
-          <rect
-            fill={item.color}
-            fillOpacity={0.7}
-            height={"32"}
-            opacity={0.7}
-            rx={1}
-            stroke={"#000000"}
-            strokeWidth={1}
-            width={xScale(item.value)}
-            x={xScale(0)}
-            y={0}
-          />
-          <text
-            alignmentBaseline="baseline"
-            fill="#fff"
-            fontSize={16}
-            height="32"
-            textAnchor="start"
-            x={xScale(item.value) + 10}
-            y="20"
-          >
-            {Math.round(item.value * 10) / 10}%
-          </text>
-        </g>
-      </svg>
-    ),
-  }));
+  const items = sortedData.map((item) => {
+    const lastElectionResult = lastElectionResults.find(
+      (entry) => entry.name === item.name,
+    );
+
+    if (!lastElectionResult) {
+      return {
+        ...item,
+        value: (
+          <svg height={"32px"} width={"300px"}>
+            <g key={item.name}>
+              <rect
+                fill={Color(item.color).darken(0.3).hex()}
+                fillOpacity={0.8}
+                height={"32"}
+                rx={1}
+                stroke={Color(item.color).darken(0.5).hex()}
+                strokeOpacity={0.8}
+                strokeWidth={1}
+                width={xScale(item.value)}
+                x={xScale(0)}
+                y={0}
+              />
+              <text
+                alignmentBaseline="baseline"
+                fill={isLight ? "#000" : "#fff"}
+                fontSize={16}
+                height="32"
+                textAnchor="start"
+                x={xScale(item.value) + 10}
+                y="20"
+              >
+                {Math.round(item.value * 10) / 10}%
+              </text>
+            </g>
+          </svg>
+        ),
+      };
+    }
+
+    return {
+      ...item,
+      value: (
+        <svg width={maxWidth} height={64}>
+          <g key={item.name}>
+            <rect
+              fill={Color(item.color).darken(0.3).hex()}
+              fillOpacity={0.8}
+              height={"32"}
+              rx={1}
+              stroke={Color(item.color).darken(0.5).hex()}
+              strokeOpacity={0.8}
+              strokeWidth={1}
+              width={xScale(item.value)}
+              x={xScale(0)}
+              y={0}
+            />
+            <rect
+              fill={Color(lastElectionResult.color).hex()}
+              fillOpacity={0.4}
+              height={"32"}
+              rx={1}
+              stroke={Color(lastElectionResult.color).darken(0.5).hex()}
+              strokeOpacity={0.4}
+              strokeWidth={1}
+              width={xScale(lastElectionResult.value)}
+              x={xScale(0)}
+              y={20}
+            />
+            <text
+              alignmentBaseline="baseline"
+              fill={isLight ? "#000" : "#fff"}
+              fontSize={16}
+              height="32"
+              textAnchor="start"
+              x={xScale(item.value) + 10}
+              y="20"
+            >
+              {Math.round(item.value * 10) / 10}%
+            </text>
+          </g>
+        </svg>
+      ),
+    };
+  });
 
   return (
     <Table
-      aria-label="Controlled table example with dynamic content"
-      disabledBehavior="selection"
-      selectedKeys={selectedKeys}
+      selectedKeys={[...fixedParties, ...selectedKeys]}
       selectionMode="multiple"
       onSelectionChange={(keys) => setSelectedKeys(new Set(String(keys)))}
     >
