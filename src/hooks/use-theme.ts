@@ -1,6 +1,4 @@
-// originally written by @imoaazahmed
-
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 const ThemeProps = {
   key: "theme",
@@ -25,7 +23,7 @@ export const useTheme = (defaultTheme?: Theme) => {
     return theme === ThemeProps.light;
   }, [theme]);
 
-  const _setTheme = (theme: Theme) => {
+  const updateGlobalTheme = useCallback((theme: Theme) => {
     localStorage.setItem(ThemeProps.key, theme);
     document.documentElement.classList.remove(
       ThemeProps.light,
@@ -33,18 +31,18 @@ export const useTheme = (defaultTheme?: Theme) => {
     );
     document.documentElement.classList.add(theme);
     setTheme(theme);
-  };
+  }, []);
 
-  const setLightTheme = () => _setTheme(ThemeProps.light);
+  useEffect(() => {
+    updateGlobalTheme(theme);
+  }, [theme]);
 
-  const setDarkTheme = () => _setTheme(ThemeProps.dark);
+  const setLightTheme = () => setTheme(ThemeProps.light);
+
+  const setDarkTheme = () => setTheme(ThemeProps.dark);
 
   const toggleTheme = () =>
     theme === ThemeProps.dark ? setLightTheme() : setDarkTheme();
-
-  useEffect(() => {
-    _setTheme(theme);
-  });
 
   return { theme, isDark, isLight, setLightTheme, setDarkTheme, toggleTheme };
 };

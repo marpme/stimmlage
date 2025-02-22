@@ -17,7 +17,6 @@ import { ThemeSwitch } from "@/components/theme-switch";
 import { GithubIcon, HeartFilledIcon, UpdateIcon } from "@/components/icons";
 import { Logo } from "@/components/icons";
 import { useLatestUpdateTime } from "@/hooks/useLatestUpdateTime.ts";
-import { SearchInput } from "@/components/SearchInput.tsx";
 import { usePollData } from "@/hooks/usePollData.ts";
 import { Tooltip } from "@heroui/react";
 
@@ -61,8 +60,10 @@ export const Navbar = () => {
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
-        <NavbarItem className="hidden lg:flex">
-          <SearchInput />
+        <NavbarItem>
+          <Button>
+            <ThemeSwitch />
+          </Button>
         </NavbarItem>
         <NavbarItem className="hidden md:flex">
           <Button
@@ -98,7 +99,6 @@ export const Navbar = () => {
       <NavbarMenu>
         <NavbarMenuItem>
           <div className="my-2 flex flex-row align-middle justify-evenly gap-2">
-            <SearchInput />
             <Tooltip>
               <Button
                 isLoading={pollDataIsFetching}
