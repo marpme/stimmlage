@@ -15,7 +15,6 @@ import Color from "color";
 import { useLastElectionResults } from "@/assets/lastElectionResult.ts";
 import { useTheme } from "@/hooks/use-theme.ts";
 import { useFivePercentBarrier } from "@/hooks/useFivePercentBarrier.ts";
-import { useDimensions } from "@/hooks/useDimensions.ts";
 import { useWindowDimensions } from "@/hooks/useWindowDimensions.ts";
 
 const columns = [
@@ -35,8 +34,6 @@ export const CoalitionsTable: FC<{
   const { isLight } = useTheme();
   const dimensions = useWindowDimensions();
   const maxWidth = dimensions.width * 0.8;
-
-  console.log(maxWidth);
 
   const limitedParliamentParties = useFivePercentBarrier(data);
   const fixedParties = new Set(

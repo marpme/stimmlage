@@ -8,22 +8,24 @@ import { PartyEntry } from "@/types/PartyEntry.ts";
 
 export const useGroupedHistogram = (
   parliamentId: string,
-  data: Poll,
+  data?: Poll,
 ): Array<PartyEntry> => {
   const { isLight } = useTheme();
 
-  return useMemo(
-    () =>
-      Object.values(data.Surveys)
-        .filter((e) => e.Parliament_ID === parliamentId)
-        .flatMap((e) =>
-          Object.entries(e.Results).map(([key, value]) => ({
-            name: data.Parties[key].Shortcut,
-            value: value,
-            date: e.Date,
-            color: getPartyColor(isLight, data.Parties[key].Shortcut),
-          })),
-        ),
-    [data, parliamentId],
-  );
+  return useMemo(() => {
+    if (!data) {
+      return [];
+    }
+
+    return Object.values(data.Surveys)
+      .filter((e) => e.Parliament_ID === parliamentId)
+      .flatMap<PartyEntry>((e) =>
+        Object.entries(e.Results).map<PartyEntry>(([key, value]) => ({
+          name: data.Parties[key].Shortcut,
+          value: value,
+          date: e.Date,
+          color: getPartyColor(isLight, data.Parties[key].Shortcut),
+        })),
+      );
+  }, [data, parliamentId]);
 };

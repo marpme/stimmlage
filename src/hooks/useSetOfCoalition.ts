@@ -1,20 +1,25 @@
 import { useMemo } from "react";
 
-import { Poll } from "../utils/poller.ts";
 import { getPartyColor } from "../utils/getPartyColor.ts";
 import { PartyValues } from "../utils/Party.ts";
 
 import { useTheme } from "@/hooks/use-theme.ts";
 import { PartyEntry } from "@/types/PartyEntry.ts";
+import { Poll } from "@/assets/poll.ts";
 
 export const useSetOfCoalition = (
   parliamentId: string,
-  data: Poll,
   directCandidates: PartyValues[],
+  data?: Poll,
 ): Array<PartyEntry> => {
   const { isLight } = useTheme();
 
   return useMemo(() => {
+    if (!data) {
+      const emptyData: PartyEntry[] = [];
+      return emptyData;
+    }
+
     const instituteResult = Object.entries(
       Object.groupBy(
         Object.values(data.Surveys)
