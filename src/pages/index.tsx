@@ -12,7 +12,6 @@ import { usePollData } from "@/hooks/usePollData.ts";
 export default function IndexPage() {
   const { data: pollData } = usePollData();
   const { parliamentId, directCandidates } = useParliamentStore();
-  // const groupedHistogram = useGroupedHistogram(parliamentId, pollData);
   const setOfCoalition = useSetOfCoalition(
     parliamentId,
     directCandidates,
