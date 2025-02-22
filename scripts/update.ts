@@ -1,5 +1,5 @@
 import { writeFileSync } from "node:fs";
-import { lastUpdated } from "../src/assets/lastUpdated.ts";
+import data from "../public/lastUpdated.json" with { type: "json" };
 import * as path from "node:path";
 
 const DAWUM_UPDATE_API = "https://api.dawum.de/last_update.txt";
@@ -18,19 +18,19 @@ export async function fetchDatabase(): Promise<any> {
 }
 
 export async function updateDatabase(): Promise<void> {
-  const lastUpdatedLocal = lastUpdated;
+  const lastUpdatedLocal = new Date(data.lastUpdated);
   const lastUpdatedRemote = await fetchLastUpdated();
 
   if (lastUpdatedRemote > lastUpdatedLocal) {
     const data = await fetchDatabase();
     writeFileSync(
-      path.resolve(dirname, "../src/assets/poll.json"),
+      path.resolve(dirname, "../public/poll.json"),
       JSON.stringify(data),
     );
     // write the similar file to update the lastUpdated.ts
     writeFileSync(
-      path.resolve(dirname, "../src/assets/lastUpdated.ts"),
-      `export const lastUpdated: Date = new Date("${lastUpdatedRemote.toISOString()}");`,
+      path.resolve(dirname, "../public/lastUpdated.json"),
+      `{ "lastUpdated": "${lastUpdatedRemote.toISOString()}" }`,
     );
   }
 }

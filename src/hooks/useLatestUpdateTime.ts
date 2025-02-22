@@ -2,10 +2,18 @@ import { formatDistance } from "date-fns/formatDistance";
 import { useQuery } from "@tanstack/react-query";
 
 export const getLastUpdatedTime = async () => {
-  const { lastUpdated } = await import("../assets/lastUpdated");
-  return formatDistance(lastUpdated, new Date(), {
-    addSuffix: true,
-  });
+  const { lastUpdated } = await fetch("/lastUpdated.json").then((res) =>
+    res.json(),
+  );
+
+  const parsedLastUpdated = new Date(lastUpdated);
+
+  return {
+    lastUpdated: parsedLastUpdated,
+    formatedLastUpdated: formatDistance(parsedLastUpdated, new Date(), {
+      addSuffix: true,
+    }),
+  };
 };
 
 export const useLatestUpdateTime = () => {

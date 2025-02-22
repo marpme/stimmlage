@@ -21,7 +21,7 @@ import { usePollData } from "@/hooks/usePollData.ts";
 import { Tooltip } from "@heroui/react";
 
 export const Navbar = () => {
-  const { data: lastUpdated } = useLatestUpdateTime();
+  const { data: lastUpdatedData } = useLatestUpdateTime();
   const { refetch: refetchPollData, isFetching: pollDataIsFetching } =
     usePollData();
 
@@ -71,7 +71,9 @@ export const Navbar = () => {
             onPress={() => refetchPollData()}
           >
             {pollDataIsFetching ? null : <UpdateIcon />}
-            {pollDataIsFetching ? "updating" : lastUpdated}
+            {pollDataIsFetching
+              ? "updating"
+              : lastUpdatedData?.formatedLastUpdated}
           </Button>
         </NavbarItem>
         <NavbarItem className="hidden md:flex">
@@ -105,7 +107,9 @@ export const Navbar = () => {
                 onPress={() => refetchPollData()}
               >
                 {pollDataIsFetching ? null : <UpdateIcon />}
-                {pollDataIsFetching ? "updating" : lastUpdated}
+                {pollDataIsFetching
+                  ? "updating"
+                  : lastUpdatedData?.formatedLastUpdated}
               </Button>
             </Tooltip>
           </div>

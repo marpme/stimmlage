@@ -1,19 +1,13 @@
-import { Convert, Poll } from "@/assets/poll.ts";
+import { Convert } from "@/assets/poll.ts";
 import { useQuery } from "@tanstack/react-query";
 
-export const getPollData = () => {
-  const { promise, resolve } = Promise.withResolvers<Poll>();
+export const getPollData = async () => {
+  const pollData = await fetch(`/poll.json`).then((res) => res.text());
 
-  setTimeout(async () => {
-    const { default: pollData } = await import("../assets/poll.json");
-    return resolve(Convert.toPoll(JSON.stringify(pollData)));
-  }, Math.random() * 1000);
-
-  return promise;
+  return Convert.toPoll(pollData);
 };
 
 export const usePollData = () => {
-  // return the last updated time
   return useQuery({
     queryKey: ["getPollData"],
     queryFn: getPollData,
