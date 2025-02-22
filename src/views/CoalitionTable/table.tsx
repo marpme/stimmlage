@@ -8,7 +8,7 @@ import {
   getKeyValue,
   Card,
 } from "@heroui/react";
-import { FC, useMemo, useState } from "react";
+import { FC, useMemo } from "react";
 import * as d3 from "d3";
 
 import { PartyEntry } from "@/types/PartyEntry.ts";
@@ -16,7 +16,8 @@ import Color from "color";
 import { useLastElectionResults } from "@/assets/lastElectionResult.ts";
 import { useTheme } from "@/hooks/use-theme.ts";
 import { useDimensions } from "@/hooks/useDimensions.ts";
-import { useFivePercentBarrier } from "@/hooks/useFivePercentBarrier.ts";
+import { useParliamentStore } from "@/model/useParliamentConfiguration.ts";
+import { PartyValues } from "@/utils/Party.ts";
 
 const columns = [
   {
@@ -34,13 +35,10 @@ export const CoalitionsTable: FC<{
 }> = ({ data }) => {
   const { isLight } = useTheme();
   const { ref, dimensions } = useDimensions();
+  const { addDirectCandidate, removeDirectCandidate, directCandidates } =
+    useParliamentStore();
+
   const maxWidth = dimensions.width * 0.6;
-
-  const limitedParliamentParties = useFivePercentBarrier(data);
-
-  const [selectedKeys, setSelectedKeys] = useState(
-    new Set(limitedParliamentParties.map((party) => party.name)),
-  );
 
   const lastElectionResults = useLastElectionResults();
   const sortedData = useMemo(
@@ -68,100 +66,117 @@ export const CoalitionsTable: FC<{
       .range([0, maxWidth]);
   }, [sortedData, dimensions]);
 
-  const items = sortedData.map((item) => {
-    const lastElectionResult = lastElectionResults.find(
-      (entry) => entry.name === item.name,
-    );
+  const items = useMemo(
+    () =>
+      sortedData.map((item) => {
+        const lastElectionResult = lastElectionResults.find(
+          (entry) => entry.name === item.name,
+        );
 
-    if (!lastElectionResult) {
-      return {
-        ...item,
-        value: (
-          <svg height={"32px"} width={`${maxWidth}px`}>
-            <g key={item.name}>
-              <rect
-                fill={Color(item.color).darken(0.3).hex()}
-                fillOpacity={0.5}
-                height={"32"}
-                rx={1}
-                stroke={Color(item.color).darken(0.5).hex()}
-                strokeOpacity={0.5}
-                strokeWidth={1}
-                width={xScale(item.value)}
-                x={xScale(0)}
-                y={0}
-              />
-              <text
-                alignmentBaseline="baseline"
-                fill={isLight ? "#000" : "#fff"}
-                fontSize={16}
-                height="32"
-                textAnchor="start"
-                x={xScale(item.value) + 10}
-                y="20"
-              >
-                {Math.round(item.value * 10) / 10}%
-              </text>
-            </g>
-          </svg>
-        ),
-      };
-    }
+        if (!lastElectionResult) {
+          return {
+            ...item,
+            value: (
+              <svg height={"32px"} width={`${maxWidth}px`}>
+                <g key={item.name}>
+                  <rect
+                    fill={Color(item.color).darken(0.3).hex()}
+                    fillOpacity={0.5}
+                    height={"32"}
+                    rx={1}
+                    stroke={Color(item.color).darken(0.5).hex()}
+                    strokeOpacity={0.5}
+                    strokeWidth={1}
+                    width={xScale(item.value)}
+                    x={xScale(0)}
+                    y={0}
+                  />
+                  <text
+                    alignmentBaseline="baseline"
+                    fill={isLight ? "#000" : "#fff"}
+                    fontSize={16}
+                    height="32"
+                    textAnchor="start"
+                    x={xScale(item.value) + 10}
+                    y="20"
+                  >
+                    {Math.round(item.value * 10) / 10}%
+                  </text>
+                </g>
+              </svg>
+            ),
+          };
+        }
 
-    return {
-      ...item,
-      value: (
-        <svg height={64} width={`${maxWidth}px`}>
-          <g key={item.name}>
-            <rect
-              fill={Color(item.color).darken(0.3).hex()}
-              fillOpacity={0.8}
-              height={"32"}
-              rx={1}
-              stroke={Color(item.color).darken(0.5).hex()}
-              strokeOpacity={0.8}
-              strokeWidth={1}
-              width={xScale(item.value)}
-              x={xScale(0)}
-              y={0}
-            />
-            <rect
-              fill={Color(lastElectionResult.color).hex()}
-              fillOpacity={0.4}
-              height={"32"}
-              rx={1}
-              stroke={Color(lastElectionResult.color).darken(0.5).hex()}
-              strokeOpacity={0.4}
-              strokeWidth={1}
-              width={xScale(lastElectionResult.value)}
-              x={xScale(0)}
-              y={20}
-            />
-            <text
-              alignmentBaseline="baseline"
-              fill={isLight ? "#000" : "#fff"}
-              fontSize={16}
-              height="32"
-              textAnchor="start"
-              x={xScale(item.value) + 10}
-              y="20"
-            >
-              {Math.round(item.value * 10) / 10}%
-            </text>
-          </g>
-        </svg>
-      ),
-    };
-  });
+        return {
+          ...item,
+          value: (
+            <svg height={64} width={`${maxWidth}px`}>
+              <g key={item.name}>
+                <rect
+                  fill={Color(item.color).darken(0.3).hex()}
+                  fillOpacity={0.8}
+                  height={"32"}
+                  rx={1}
+                  stroke={Color(item.color).darken(0.5).hex()}
+                  strokeOpacity={0.8}
+                  strokeWidth={1}
+                  width={xScale(item.value)}
+                  x={xScale(0)}
+                  y={0}
+                />
+                <rect
+                  fill={Color(lastElectionResult.color).hex()}
+                  fillOpacity={0.4}
+                  height={"32"}
+                  rx={1}
+                  stroke={Color(lastElectionResult.color).darken(0.5).hex()}
+                  strokeOpacity={0.4}
+                  strokeWidth={1}
+                  width={xScale(lastElectionResult.value)}
+                  x={xScale(0)}
+                  y={20}
+                />
+                <text
+                  alignmentBaseline="baseline"
+                  fill={isLight ? "#000" : "#fff"}
+                  fontSize={16}
+                  height="32"
+                  textAnchor="start"
+                  x={xScale(item.value) + 10}
+                  y="20"
+                >
+                  {Math.round(item.value * 10) / 10}%
+                </text>
+              </g>
+            </svg>
+          ),
+        };
+      }),
+    [isLight, sortedData, xScale, maxWidth, lastElectionResults],
+  );
 
   return (
     <Card ref={ref} className="min-h-96 w-full md:w-[50vw]">
       <Table
-        selectedKeys={[...selectedKeys]}
+        selectedKeys={new Set(directCandidates.keys().map((d) => d))}
         selectionMode="multiple"
         onSelectionChange={(keys) => {
-          console.log(keys);
-          setSelectedKeys(new Set(keys));
+          const newSelectedKeys = new Set(keys as Set<string>);
+
+          // Remove direct candidates that are no longer selected
+          directCandidates.forEach((key) => {
+            if (!newSelectedKeys.has(key)) {
+              removeDirectCandidate(key as any);
+            }
+          });
+
+          // Add new direct candidates
+          newSelectedKeys.forEach((key) => {
+            if (!directCandidates.has(key as PartyValues)) {
+              addDirectCandidate(key as any);
+            }
+          });
         }}
       >
         <TableHeader columns={columns}>

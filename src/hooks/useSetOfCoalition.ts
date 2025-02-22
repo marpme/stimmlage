@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 
 import { getPartyColor } from "../utils/getPartyColor.ts";
-import { PartyValues } from "../utils/Party.ts";
 
 import { useTheme } from "@/hooks/use-theme.ts";
 import { PartyEntry } from "@/types/PartyEntry.ts";
@@ -9,7 +8,6 @@ import { Poll } from "@/assets/poll.ts";
 
 export const useSetOfCoalition = (
   parliamentId: string,
-  directCandidates: PartyValues[],
   data?: Poll,
 ): Array<PartyEntry> => {
   const { isLight } = useTheme();
@@ -54,5 +52,5 @@ export const useSetOfCoalition = (
       color: partyPolls!.at(0)!.color,
       date: partyPolls!.at(0)!.date,
     }));
-  }, [parliamentId, data, directCandidates]);
+  }, [parliamentId, data]);
 };

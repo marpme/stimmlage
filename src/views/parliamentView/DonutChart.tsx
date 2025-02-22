@@ -12,12 +12,13 @@ type DataItem = {
 
 type DonutChartProps = {
   data: DataItem[];
+  showMajorityMarker: boolean;
 };
 
 const MARGIN = 30;
 const TOTAL_PARLIAMENT_SEATS = 630;
 
-export const DonutChart = ({ data }: DonutChartProps) => {
+export const DonutChart = ({ data, showMajorityMarker }: DonutChartProps) => {
   // Sort by alphabetical to maximise consistency between dataset
   const sortedData = useMemo(
     () => data.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0)),
@@ -56,7 +57,7 @@ export const DonutChart = ({ data }: DonutChartProps) => {
     };
     const [centroidX, centroidY] = arcGenerator.centroid(sliceInfo);
     const slicePath = arcGenerator(sliceInfo);
-    const label = `${grp.data.name} (${Math.round(grp.value)}%)`;
+    const label = `${grp.data.name} (${Math.round(100 * (grp.value / utilizedPercentageInParliament))}%)`;
     const subLabel = `${Math.round(TOTAL_PARLIAMENT_SEATS * (grp.value / utilizedPercentageInParliament))} seats`;
     const color = Color(grp.data.color).isDark()
       ? Color("white")
@@ -109,6 +110,28 @@ export const DonutChart = ({ data }: DonutChartProps) => {
           >
             seats
           </text>
+          {showMajorityMarker ? (
+            <g>
+              <line
+                x1="0"
+                y1={-radius}
+                x2="0"
+                y2={-innerRadius}
+                stroke="red"
+                strokeDasharray={"4 4"}
+                strokeWidth="2"
+              />
+              <text
+                dominantBaseline="middle"
+                fontSize={12}
+                textAnchor="middle"
+                fill="red"
+                y={-radius - 10}
+              >
+                50% + 1 mark
+              </text>
+            </g>
+          ) : null}
         </g>
       </svg>
     </Card>

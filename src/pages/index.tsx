@@ -6,20 +6,33 @@ import { useParliamentStore } from "@/model/useParliamentConfiguration";
 
 import { DonutChart } from "@/views/parliamentView/DonutChart.tsx";
 import { CoalitionsTable } from "@/views/CoalitionTable/table.tsx";
-import { useFivePercentBarrier } from "@/hooks/useFivePercentBarrier.ts";
+import {
+  qualifiesAsParty,
+  useFivePercentBarrier,
+} from "@/hooks/useFivePercentBarrier.ts";
 import { usePollData } from "@/hooks/usePollData.ts";
+import { useEffect } from "react";
+import { PartyValues } from "@/utils/Party.ts";
 
 export default function IndexPage() {
   const { data: pollData } = usePollData();
-  const { parliamentId, directCandidates } = useParliamentStore();
-  const setOfCoalition = useSetOfCoalition(
-    parliamentId,
-    directCandidates,
-    pollData,
-  );
+  const { parliamentId, addDirectCandidate } = useParliamentStore();
+
+  const setOfCoalition = useSetOfCoalition(parliamentId, pollData);
+
+  useEffect(() => {
+    setOfCoalition.forEach((party) => {
+      if (qualifiesAsParty(party)) {
+        addDirectCandidate(party.name as PartyValues);
+      }
+    });
+  }, [setOfCoalition]);
 
   const sortedParliament = useSortedParliament(setOfCoalition);
-  const useSortedAndLimitedParliament = useFivePercentBarrier(sortedParliament);
+
+  const useSortedAndLimitedParliament = useSortedParliament(
+    useFivePercentBarrier(sortedParliament),
+  );
 
   return (
     <DefaultLayout>
@@ -34,17 +47,9 @@ export default function IndexPage() {
             more information.
           </div>
         </div>
-
-        {/*<Card>
-          <CardBody>
-            <Violin data={groupedHistogram} />
-          </CardBody>
-        </Card>*/}
-
         <span className={title({ color: "cyan" })}>Parliaments Builder</span>
         <div className={"flex md:flex-row flex-col gap-4 w-full"}>
           <CoalitionsTable data={sortedParliament} />
-
           <DonutChart data={useSortedAndLimitedParliament} />
         </div>
       </section>

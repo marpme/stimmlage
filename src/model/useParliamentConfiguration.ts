@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
 
 import { PartyValues } from "../utils/Party.ts";
 
@@ -7,33 +6,27 @@ type Store = {
   parliamentId: string;
   setParliamentId: (id: string) => void;
 
-  directCandidates: PartyValues[];
+  directCandidates: Set<PartyValues>;
   addDirectCandidate: (name: PartyValues) => void;
   removeDirectCandidate: (name: PartyValues) => void;
 };
 
-export const useParliamentStore = create<Store>()(
-  persist(
-    (set) => ({
-      parliamentId: "0",
-      setParliamentId: (id) =>
-        set(() => ({
-          parliamentId: id,
-        })),
+export const useParliamentStore = create<Store>()((set) => ({
+  parliamentId: "0",
+  setParliamentId: (id) =>
+    set(() => ({
+      parliamentId: id,
+    })),
 
-      directCandidates: [],
-      addDirectCandidate: (name) =>
-        set((state) => ({
-          directCandidates: [...state.directCandidates, name],
-        })),
-      removeDirectCandidate: (name) =>
-        set((state) => ({
-          directCandidates: state.directCandidates.filter((d) => d !== name),
-        })),
+  directCandidates: new Set(),
+  addDirectCandidate: (name) =>
+    set((state) => ({
+      directCandidates: new Set(state.directCandidates).add(name),
+    })),
+  removeDirectCandidate: (name) =>
+    set((state) => {
+      const newSet = new Set(state.directCandidates);
+      newSet.delete(name);
+      return { directCandidates: newSet };
     }),
-    {
-      name: "parliament-storage",
-      storage: createJSONStorage(() => sessionStorage),
-    },
-  ),
-);
+}));
