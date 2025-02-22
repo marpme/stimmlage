@@ -1,0 +1,56 @@
+@keyframes blackBarAnimation {
+  0%, 100% {
+    width: 32px;
+    fill: black;
+    filter: grayscale(100%);
+    transform: scaleX(1);
+  }
+  50% {
+    width: calc(var(--black-bar-width, 32px) / 2);
+    fill: black;
+    filter: none;
+    transform: scaleX(1.1);
+  }
+}
+
+@keyframes redBarAnimation {
+  0%, 100% {
+    width: 32px;
+    fill: red;
+    filter: grayscale(100%);
+    transform: scaleX(1);
+  }
+  50% {
+    width: calc(var(--red-bar-width, 32px) * 0.75);
+    fill: red;
+    filter: none;
+    transform: scaleX(1.1);
+  }
+}
+
+@keyframes goldBarAnimation {
+  0%, 100% {
+    width: 32px;
+    fill: gold;
+    filter: grayscale(100%);
+    transform: scaleX(1);
+  }
+  50% {
+    width: calc(var(--gold-bar-width, 32px) / 2);
+    fill: gold;
+    filter: none;
+    transform: scaleX(1.1);
+  }
+}
+
+.blackBar {
+  animation: blackBarAnimation 3s infinite alternate;
+}
+
+.redBar {
+  animation: redBarAnimation 3s infinite alternate;
+}
+
+.goldBar {
+  animation: goldBarAnimation 3s infinite alternate;
+}

@@ -1,28 +1,55 @@
 import * as React from "react";
+import styles from "./icons.module.css";
 
 import { IconSvgProps } from "@/types";
+import { useEffect } from "react";
+import { randomizeLogoBars } from "./randomizeLogoBars";
 
 export const Logo: React.FC<IconSvgProps> = ({
   size = 36,
-  height,
+  width,
   ...props
-}) => (
-  <svg
-    fill="none"
-    height={size || height}
-    viewBox="0 0 32 32"
-    width={size || height}
-    {...props}
-  >
-    <path
-      clipRule="evenodd"
-      d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
-      fill="currentColor"
-      fillRule="evenodd"
-    />
-  </svg>
-);
+}) => {
+  useEffect(() => {
+    const interval = setInterval(() => {
+      randomizeLogoBars();
+    }, 3000);
 
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <svg
+      fill="none"
+      width={size || width}
+      viewBox="0 0 32 32"
+      height={size || width}
+      className={styles.logo}
+      {...props}
+    >
+      <rect
+        className={styles.blackBar}
+        width="32"
+        height="10.67"
+        fill="black"
+      />
+      <rect
+        className={styles.redBar}
+        width="24"
+        height="10.67"
+        y="10.67"
+        fill="red"
+      />
+      <rect
+        className={styles.goldBar}
+        width="16"
+        height="10.67"
+        y="21.33"
+        fill="gold"
+      />
+    </svg>
+  );
+};
 export const DiscordIcon: React.FC<IconSvgProps> = ({
   size = 24,
   width,
