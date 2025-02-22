@@ -6,6 +6,7 @@ import {
   TableRow,
   TableCell,
   getKeyValue,
+  Card,
 } from "@heroui/react";
 import { FC, useMemo, useState } from "react";
 import * as d3 from "d3";
@@ -14,8 +15,8 @@ import { PartyEntry } from "@/types/PartyEntry.ts";
 import Color from "color";
 import { useLastElectionResults } from "@/assets/lastElectionResult.ts";
 import { useTheme } from "@/hooks/use-theme.ts";
+import { useDimensions } from "@/hooks/useDimensions.ts";
 import { useFivePercentBarrier } from "@/hooks/useFivePercentBarrier.ts";
-import { useWindowDimensions } from "@/hooks/useWindowDimensions.ts";
 
 const columns = [
   {
@@ -32,13 +33,11 @@ export const CoalitionsTable: FC<{
   data: Array<PartyEntry>;
 }> = ({ data }) => {
   const { isLight } = useTheme();
-  const dimensions = useWindowDimensions();
-  const maxWidth = dimensions.width * 0.8;
+  const { ref, dimensions } = useDimensions();
+  const maxWidth = dimensions.width * 0.6;
 
   const limitedParliamentParties = useFivePercentBarrier(data);
-  const fixedParties = new Set(
-    limitedParliamentParties.map((party) => party.name),
-  );
+
   const [selectedKeys, setSelectedKeys] = useState(
     new Set(limitedParliamentParties.map((party) => party.name)),
   );
@@ -66,7 +65,7 @@ export const CoalitionsTable: FC<{
     return d3
       .scaleLinear()
       .domain([min, max + 20])
-      .range([0, maxWidth * 0.8]);
+      .range([0, maxWidth]);
   }, [sortedData, dimensions]);
 
   const items = sortedData.map((item) => {
@@ -78,15 +77,15 @@ export const CoalitionsTable: FC<{
       return {
         ...item,
         value: (
-          <svg height={"32px"} width={"300px"}>
+          <svg height={"32px"} width={`${maxWidth}px`}>
             <g key={item.name}>
               <rect
                 fill={Color(item.color).darken(0.3).hex()}
-                fillOpacity={0.8}
+                fillOpacity={0.5}
                 height={"32"}
                 rx={1}
                 stroke={Color(item.color).darken(0.5).hex()}
-                strokeOpacity={0.8}
+                strokeOpacity={0.5}
                 strokeWidth={1}
                 width={xScale(item.value)}
                 x={xScale(0)}
@@ -112,7 +111,7 @@ export const CoalitionsTable: FC<{
     return {
       ...item,
       value: (
-        <svg width={maxWidth} height={64}>
+        <svg height={64} width={`${maxWidth}px`}>
           <g key={item.name}>
             <rect
               fill={Color(item.color).darken(0.3).hex()}
@@ -156,23 +155,30 @@ export const CoalitionsTable: FC<{
   });
 
   return (
-    <Table
-      selectedKeys={[...fixedParties, ...selectedKeys]}
-      selectionMode="multiple"
-      onSelectionChange={(keys) => setSelectedKeys(new Set(String(keys)))}
-    >
-      <TableHeader columns={columns}>
-        {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-      </TableHeader>
-      <TableBody items={items}>
-        {(item) => (
-          <TableRow key={item.name}>
-            {(columnKey) => (
-              <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <Card ref={ref} className="min-h-96 w-full md:w-[50vw]">
+      <Table
+        selectedKeys={[...selectedKeys]}
+        selectionMode="multiple"
+        onSelectionChange={(keys) => {
+          console.log(keys);
+          setSelectedKeys(new Set(keys));
+        }}
+      >
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn key={column.key}>{column.label}</TableColumn>
+          )}
+        </TableHeader>
+        <TableBody items={items}>
+          {(item) => (
+            <TableRow key={item.name}>
+              {(columnKey) => (
+                <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </Card>
   );
 };

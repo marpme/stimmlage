@@ -23,20 +23,17 @@ export default function IndexPage() {
 
   return (
     <DefaultLayout>
-      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-        <div className="inline-block max-w-lg text-center justify-center">
-          <span className={title()}>Make&nbsp;</span>
-          <span className={title({ color: "violet" })}>beautiful&nbsp;</span>
-          <br />
-          <span className={title()}>
-            websites regardless of your design experience.
-          </span>
+      <section className="flex flex-col justify-center gap-4 py-8 md:py-10">
+        <div className="inline-block max-w-lg text-center m-auto justify-center">
+          <span className={title()}>Create&nbsp;</span>
+          <span className={title({ color: "violet" })}>parliaments&nbsp;</span>
+          <span className={title()}>with ease and precision.</span>
           <div className={subtitle({ class: "mt-4" })}>
-            Beautiful, fast and modern React UI library.
+            Our platform empowers you to build a unique and interactive
+            parliament with the given parties available in the table and much
+            more information.
           </div>
         </div>
-
-        <CoalitionsTable data={sortedParliament} />
 
         {/*<Card>
           <CardBody>
@@ -44,7 +41,12 @@ export default function IndexPage() {
           </CardBody>
         </Card>*/}
 
-        <DonutChart data={useSortedAndLimitedParliament} />
+        <span className={title({ color: "cyan" })}>Parliaments Builder</span>
+        <div className={"flex md:flex-row flex-col gap-4 w-full"}>
+          <CoalitionsTable data={sortedParliament} />
+
+          <DonutChart data={useSortedAndLimitedParliament} />
+        </div>
       </section>
     </DefaultLayout>
   );

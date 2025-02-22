@@ -15,7 +15,7 @@ type DonutChartProps = {
 };
 
 const MARGIN = 30;
-const TOTAL_PARLIAMENT_SEATS = 635;
+const TOTAL_PARLIAMENT_SEATS = 630;
 
 export const DonutChart = ({ data }: DonutChartProps) => {
   // Sort by alphabetical to maximise consistency between dataset
