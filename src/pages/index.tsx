@@ -1,13 +1,10 @@
 import { title, subtitle } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
-import { useGroupedHistogram } from "@/hooks/useGroupedHistorgram.ts";
 import { useSetOfCoalition } from "@/hooks/useSetOfCoalition.ts";
 import { useSortedParliament } from "@/hooks/useSortedParliament.ts";
 import { useParliamentStore } from "@/model/useParliamentConfiguration";
 
-import { Violin } from "@/views/history/Violin.tsx";
 import { DonutChart } from "@/views/parliamentView/DonutChart.tsx";
-import { Card, CardBody } from "@heroui/react";
 import { CoalitionsTable } from "@/views/CoalitionTable/table.tsx";
 import { useFivePercentBarrier } from "@/hooks/useFivePercentBarrier.ts";
 import { usePollData } from "@/hooks/usePollData.ts";
@@ -15,7 +12,7 @@ import { usePollData } from "@/hooks/usePollData.ts";
 export default function IndexPage() {
   const { data: pollData } = usePollData();
   const { parliamentId, directCandidates } = useParliamentStore();
-  const groupedHistogram = useGroupedHistogram(parliamentId, pollData);
+  // const groupedHistogram = useGroupedHistogram(parliamentId, pollData);
   const setOfCoalition = useSetOfCoalition(
     parliamentId,
     directCandidates,
@@ -42,11 +39,11 @@ export default function IndexPage() {
 
         <CoalitionsTable data={sortedParliament} />
 
-        <Card>
+        {/*<Card>
           <CardBody>
             <Violin data={groupedHistogram} />
           </CardBody>
-        </Card>
+        </Card>*/}
 
         <DonutChart data={useSortedAndLimitedParliament} />
       </section>
