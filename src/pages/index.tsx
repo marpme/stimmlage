@@ -50,7 +50,10 @@ export default function IndexPage() {
         <span className={title({ color: "cyan" })}>Parliaments Builder</span>
         <div className={"flex md:flex-row flex-col gap-4 w-full"}>
           <CoalitionsTable data={sortedParliament} />
-          <DonutChart data={useSortedAndLimitedParliament} />
+          <DonutChart
+            data={useSortedAndLimitedParliament}
+            showMajorityMarker={false}
+          />
         </div>
       </section>
     </DefaultLayout>
