@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 import { Party } from "../utils/Party.ts";
 
-const getSortingValueOfParty = (partyName: string) => {
+export const getSortingValueOfParty = (partyName: string) => {
   switch (partyName) {
     case Party.AFD:
       return -1;

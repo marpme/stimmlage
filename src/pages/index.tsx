@@ -13,6 +13,7 @@ import {
 import { usePollData } from "@/hooks/usePollData.ts";
 import { useEffect } from "react";
 import { PartyValues } from "@/utils/Party.ts";
+import { InstituteTable } from "@/views/institues/InstituteTable.tsx";
 
 export default function IndexPage() {
   const { data: pollData } = usePollData();
@@ -55,6 +56,7 @@ export default function IndexPage() {
             showMajorityMarker={false}
           />
         </div>
+        <InstituteTable surveys={pollData?.Surveys} />
       </section>
     </DefaultLayout>
   );
