@@ -14,6 +14,8 @@ import { usePollData } from "@/hooks/usePollData.ts";
 import { useEffect } from "react";
 import { PartyValues } from "@/utils/Party.ts";
 import { InstituteTable } from "@/views/institues/InstituteTable.tsx";
+import { ElectionTimeline } from "@/views/timeline/ElectionTimeline.tsx";
+import { Tabs, Tab } from "@heroui/react";
 
 export default function IndexPage() {
   const { data: pollData } = usePollData();
@@ -48,15 +50,30 @@ export default function IndexPage() {
             more information.
           </div>
         </div>
-        <span className={title({ color: "cyan" })}>Parliaments Builder</span>
-        <div className={"flex md:flex-row flex-col gap-4 w-full"}>
-          <CoalitionsTable data={sortedParliament} />
-          <DonutChart
-            data={useSortedAndLimitedParliament}
-            showMajorityMarker={false}
-          />
-        </div>
-        <InstituteTable surveys={pollData?.Surveys} />
+        <Tabs aria-label="Election views" variant="underlined" size="lg">
+          <Tab key="parliament" title="Parliament Builder">
+            <div className="flex flex-col gap-4">
+              <span className={title({ color: "cyan" })}>Parliaments Builder</span>
+              <div className={"flex md:flex-row flex-col gap-4 w-full"}>
+                <CoalitionsTable data={sortedParliament} />
+                <DonutChart
+                  data={useSortedAndLimitedParliament}
+                  showMajorityMarker={false}
+                />
+              </div>
+              <InstituteTable surveys={pollData?.Surveys} />
+            </div>
+          </Tab>
+          <Tab key="timeline" title="Timeline">
+            <div className="flex flex-col gap-4">
+              <span className={title({ color: "cyan" })}>Election Poll Timeline</span>
+              <p className="text-default-500 text-sm">
+                Historical polling trends per party, with election dates marked as reference lines.
+              </p>
+              <ElectionTimeline />
+            </div>
+          </Tab>
+        </Tabs>
       </section>
     </DefaultLayout>
   );
