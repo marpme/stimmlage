@@ -38,11 +38,17 @@ function rollingAverageLinear(points: TimelinePoint[]): TimelinePoint[] {
   let windowSum = 0;
   for (let i = 0; i < points.length; i++) {
     windowSum += points[i].value;
-    while (points[i].date.getTime() - points[windowStart].date.getTime() > ROLLING_MS) {
+    while (
+      points[i].date.getTime() - points[windowStart].date.getTime() >
+      ROLLING_MS
+    ) {
       windowSum -= points[windowStart].value;
       windowStart++;
     }
-    result[i] = { date: points[i].date, value: windowSum / (i - windowStart + 1) };
+    result[i] = {
+      date: points[i].date,
+      value: windowSum / (i - windowStart + 1),
+    };
   }
   return result;
 }
@@ -85,7 +91,11 @@ export const useTimelineSurveys = (
     for (const survey of surveys) {
       for (const [partyId, pct] of Object.entries(survey.Results)) {
         const shortcut = pollData.Parties[partyId]?.Shortcut;
-        if (shortcut && !shortcut.includes("Sonstige") && pct >= FIVE_PERCENT_THRESHOLD) {
+        if (
+          shortcut &&
+          !shortcut.includes("Sonstige") &&
+          pct >= FIVE_PERCENT_THRESHOLD
+        ) {
           qualifyingParties.add(shortcut);
         }
       }

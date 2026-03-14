@@ -16,11 +16,11 @@ export default function DefaultLayout({
         {children}
       </main>
       <footer className="w-full flex flex-col items-center justify-center py-3">
-        <div className="text-default-600">
-          Made with ❤️ in Germany &mdash; ©{" "}
-          {establishedYear - currentYear === 0
+        <div className="text-default-500 text-sm">
+          Made in Germany &mdash; &copy;{" "}
+          {establishedYear === currentYear
             ? establishedYear
-            : `${establishedYear} - ${currentYear}`}
+            : `${establishedYear}–${currentYear}`}
         </div>
         <div className="flex items-center justify-center gap-1 pt-4">
           License: Data retrieved from

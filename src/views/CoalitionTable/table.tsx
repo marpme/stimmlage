@@ -81,11 +81,11 @@ export const CoalitionsTable: FC<{
                 <g key={item.name}>
                   <rect
                     fill={Color(item.color).darken(0.3).hex()}
-                    fillOpacity={0.5}
+                    fillOpacity={0.7}
                     height={"32"}
-                    rx={1}
+                    rx={2}
                     stroke={Color(item.color).darken(0.5).hex()}
-                    strokeOpacity={0.5}
+                    strokeOpacity={0.4}
                     strokeWidth={1}
                     width={xScale(item.value)}
                     x={xScale(0)}
@@ -93,12 +93,13 @@ export const CoalitionsTable: FC<{
                   />
                   <text
                     alignmentBaseline="baseline"
-                    fill={isLight ? "#000" : "#fff"}
-                    fontSize={16}
+                    fill={isLight ? "#111" : "#f0f0f0"}
+                    fontSize={13}
+                    fontWeight="600"
                     height="32"
                     textAnchor="start"
                     x={xScale(item.value) + 10}
-                    y="20"
+                    y="21"
                   >
                     {Math.round(item.value * 10) / 10}%
                   </text>
@@ -111,40 +112,43 @@ export const CoalitionsTable: FC<{
         return {
           ...item,
           value: (
-            <svg height={64} width={`${maxWidth}px`}>
+            <svg height={52} width={`${maxWidth}px`}>
               <g key={item.name}>
+                {/* Current poll bar */}
                 <rect
                   fill={Color(item.color).darken(0.3).hex()}
-                  fillOpacity={0.8}
-                  height={"32"}
-                  rx={1}
+                  fillOpacity={0.7}
+                  height={28}
+                  rx={2}
                   stroke={Color(item.color).darken(0.5).hex()}
-                  strokeOpacity={0.8}
+                  strokeOpacity={0.4}
                   strokeWidth={1}
                   width={xScale(item.value)}
                   x={xScale(0)}
                   y={0}
                 />
+                {/* Last election comparison bar */}
                 <rect
                   fill={Color(lastElectionResult.color).hex()}
-                  fillOpacity={0.4}
-                  height={"32"}
-                  rx={1}
+                  fillOpacity={0.3}
+                  height={16}
+                  rx={2}
                   stroke={Color(lastElectionResult.color).darken(0.5).hex()}
-                  strokeOpacity={0.4}
+                  strokeOpacity={0.3}
                   strokeWidth={1}
                   width={xScale(lastElectionResult.value)}
                   x={xScale(0)}
-                  y={20}
+                  y={32}
                 />
                 <text
                   alignmentBaseline="baseline"
-                  fill={isLight ? "#000" : "#fff"}
-                  fontSize={16}
-                  height="32"
+                  fill={isLight ? "#111" : "#f0f0f0"}
+                  fontSize={13}
+                  fontWeight="600"
+                  height="28"
                   textAnchor="start"
                   x={xScale(item.value) + 10}
-                  y="20"
+                  y="21"
                 >
                   {Math.round(item.value * 10) / 10}%
                 </text>

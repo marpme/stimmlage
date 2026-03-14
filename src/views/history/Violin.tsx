@@ -88,17 +88,8 @@ export const Violin = ({ width = 640, height = 640, data }: ViolinProps) => {
   });
 
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      <input
-        id="cowbell"
-        max="100"
-        min="0"
-        name="cowbell"
-        step="10"
-        type="range"
-        value="90"
-      />
-      <svg height={height} style={{ display: "inline-block" }} width={width}>
+    <div className="flex flex-col">
+      <svg height={height} className="inline-block" width={width}>
         {/* first group is for the violin and box shapes */}
 
         <g

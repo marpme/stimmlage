@@ -11,6 +11,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@heroui/dropdown";
+import { ChevronDownIcon } from "@heroui/shared-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { ThemeSwitch } from "@/components/theme-switch";
@@ -20,6 +21,9 @@ import { useLatestUpdateTime } from "@/hooks/useLatestUpdateTime.ts";
 import { usePollData } from "@/hooks/usePollData.ts";
 
 const LANDTAG_IDS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"];
+
+const navLinkClass = (isActive: boolean) =>
+  `text-sm font-medium transition-colors ${isActive ? "text-primary" : "text-default-600 hover:text-foreground"}`;
 
 export const Navbar = () => {
   const { data: lastUpdatedData } = useLatestUpdateTime();
@@ -45,14 +49,7 @@ export const Navbar = () => {
       <NavbarContent className="gap-2" justify="center">
         {/* Bundestag */}
         <NavbarItem isActive={location.pathname === "/parliament/0"}>
-          <Link
-            to="/parliament/0"
-            className={`text-sm font-medium transition-colors ${
-              location.pathname === "/parliament/0"
-                ? "text-primary"
-                : "text-default-600 hover:text-foreground"
-            }`}
-          >
+          <Link to="/parliament/0" className={navLinkClass(location.pathname === "/parliament/0")}>
             Bundestag
           </Link>
         </NavbarItem>
@@ -61,14 +58,9 @@ export const Navbar = () => {
         <NavbarItem isActive={isLandtagActive}>
           <Dropdown>
             <DropdownTrigger>
-              <button
-                className={`text-sm font-medium transition-colors cursor-pointer ${
-                  isLandtagActive
-                    ? "text-primary"
-                    : "text-default-600 hover:text-foreground"
-                }`}
-              >
-                Landtage ▾
+              <button className={`${navLinkClass(isLandtagActive)} cursor-pointer flex items-center gap-1`}>
+                Landtage
+                <ChevronDownIcon className="w-3 h-3" />
               </button>
             </DropdownTrigger>
             <DropdownMenu
@@ -78,9 +70,7 @@ export const Navbar = () => {
               {LANDTAG_IDS.filter((id) => pollData?.Parliaments[id]).map((id) => (
                 <DropdownItem
                   key={id}
-                  className={
-                    location.pathname === `/parliament/${id}` ? "text-primary" : ""
-                  }
+                  className={location.pathname === `/parliament/${id}` ? "text-primary" : ""}
                 >
                   {pollData?.Parliaments[id]?.Name ?? id}
                 </DropdownItem>
@@ -91,24 +81,15 @@ export const Navbar = () => {
 
         {/* EU */}
         <NavbarItem isActive={location.pathname === "/parliament/17"}>
-          <Link
-            to="/parliament/17"
-            className={`text-sm font-medium transition-colors ${
-              location.pathname === "/parliament/17"
-                ? "text-primary"
-                : "text-default-600 hover:text-foreground"
-            }`}
-          >
+          <Link to="/parliament/17" className={navLinkClass(location.pathname === "/parliament/17")}>
             EU
           </Link>
         </NavbarItem>
       </NavbarContent>
 
       <NavbarContent justify="end">
-        <NavbarItem className="flex justify-end">
-          <Button>
-            <ThemeSwitch />
-          </Button>
+        <NavbarItem>
+          <ThemeSwitch />
         </NavbarItem>
         <NavbarItem>
           <Button
@@ -117,7 +98,7 @@ export const Navbar = () => {
           >
             {pollDataIsFetching ? null : <UpdateIcon />}
             {pollDataIsFetching
-              ? "updating"
+              ? "Updating…"
               : lastUpdatedData?.formatedLastUpdated}
           </Button>
         </NavbarItem>

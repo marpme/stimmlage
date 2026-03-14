@@ -10,7 +10,10 @@ type ParliamentCardProps = {
   pollData: Poll;
 };
 
-export const ParliamentCard = ({ parliamentId, pollData }: ParliamentCardProps) => {
+export const ParliamentCard = ({
+  parliamentId,
+  pollData,
+}: ParliamentCardProps) => {
   const parties = useSetOfCoalition(parliamentId, pollData);
   const series = useTimelineSurveys(parliamentId, pollData);
 
@@ -58,7 +61,9 @@ export const ParliamentCard = ({ parliamentId, pollData }: ParliamentCardProps) 
       <div className="flex flex-col gap-1">
         {top3.map((p) => (
           <div key={p.name} className="flex items-center gap-2">
-            <span className="text-xs text-default-500 w-14 truncate">{p.name}</span>
+            <span className="text-xs text-default-500 w-14 truncate">
+              {p.name}
+            </span>
             <div className="flex-1 h-1.5 rounded-full bg-default-200 overflow-hidden">
               <div
                 className="h-full rounded-full"

@@ -1,17 +1,32 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as d3 from "d3";
+import { Button } from "@heroui/button";
 
 import { useDimensions } from "@/hooks/useDimensions.ts";
 import { usePollData } from "@/hooks/usePollData.ts";
 import { useParliamentStore } from "@/model/useParliamentConfiguration.ts";
-import { useTimelineSurveys, TimelinePartyData, TimelineBucket } from "@/hooks/useTimelineSurveys.ts";
+import {
+  useTimelineSurveys,
+  TimelinePartyData,
+  TimelineBucket,
+} from "@/hooks/useTimelineSurveys.ts";
 import { electionDates } from "@/assets/electionDates.ts";
 import { useTheme } from "@/hooks/use-theme.ts";
 
 const MARGIN = { top: 20, right: 20, bottom: 40, left: 44 };
 const MINI_HEIGHT = 60;
 const MINI_MARGIN = { top: 8, bottom: 20 };
-const GAP = 12; // px between main chart and minimap
+
+/** Semantic color tokens that adapt to light/dark theme */
+const themeColors = (isLight: boolean) => ({
+  axis: isLight ? "#555" : "#aaa",
+  grid: isLight ? "#e5e5e5" : "#333",
+  election: isLight ? "#444" : "#bbb",
+  crosshair: isLight ? "#999" : "#555",
+  tooltipStroke: isLight ? "#fff" : "#000",
+  miniAxis: isLight ? "#999" : "#666",
+  brush: isLight ? "#6366f1" : "#818cf8",
+});
 
 type TooltipState = {
   x: number;
@@ -30,7 +45,10 @@ function bisectClosest(dates: Date[], target: Date): number {
     if (dates[mid].getTime() < t) lo = mid + 1;
     else hi = mid;
   }
-  if (lo > 0 && Math.abs(dates[lo - 1].getTime() - t) < Math.abs(dates[lo].getTime() - t)) {
+  if (
+    lo > 0 &&
+    Math.abs(dates[lo - 1].getTime() - t) < Math.abs(dates[lo].getTime() - t)
+  ) {
     return lo - 1;
   }
   return lo;
@@ -46,7 +64,13 @@ type ChartProps = {
   zoomDomain: [Date, Date] | null;
 };
 
-const TimelineChart = ({ width, height, series, parliamentId, zoomDomain }: ChartProps) => {
+const TimelineChart = ({
+  width,
+  height,
+  series,
+  parliamentId,
+  zoomDomain,
+}: ChartProps) => {
   const { isLight } = useTheme();
   const axesRef = useRef<SVGGElement>(null);
   const [hoveredParty, setHoveredParty] = useState<string | null>(null);
@@ -57,7 +81,11 @@ const TimelineChart = ({ width, height, series, parliamentId, zoomDomain }: Char
   const elections = electionDates[parliamentId] ?? [];
 
   const fullDateExtent = useMemo(
-    () => d3.extent(series.flatMap((s) => s.smooth.map((d) => d.date))) as [Date, Date],
+    () =>
+      d3.extent(series.flatMap((s) => s.smooth.map((d) => d.date))) as [
+        Date,
+        Date,
+      ],
     [series],
   );
 
@@ -71,7 +99,9 @@ const TimelineChart = ({ width, height, series, parliamentId, zoomDomain }: Char
     if (!zoomDomain) return allValues;
     const [lo, hi] = zoomDomain.map((d) => d.getTime());
     return series.flatMap((s) =>
-      s.smooth.filter((d) => d.date.getTime() >= lo && d.date.getTime() <= hi).map((d) => d.value),
+      s.smooth
+        .filter((d) => d.date.getTime() >= lo && d.date.getTime() <= hi)
+        .map((d) => d.value),
     );
   }, [series, zoomDomain, allValues]);
 
@@ -90,37 +120,50 @@ const TimelineChart = ({ width, height, series, parliamentId, zoomDomain }: Char
     if (!axesRef.current) return;
     const svg = d3.select(axesRef.current);
     svg.selectAll("*").remove();
-    const tickColor = isLight ? "#555" : "#aaa";
+    const colors = themeColors(isLight);
 
     svg
       .append("g")
       .attr("transform", `translate(0,${boundsHeight})`)
       .call(d3.axisBottom(xScale).ticks(6))
-      .call((g) => g.select(".domain").attr("stroke", tickColor))
-      .call((g) => g.selectAll(".tick line").attr("stroke", tickColor))
-      .call((g) => g.selectAll(".tick text").attr("fill", tickColor));
+      .call((g) => g.select(".domain").attr("stroke", colors.axis))
+      .call((g) => g.selectAll(".tick line").attr("stroke", colors.axis))
+      .call((g) => g.selectAll(".tick text").attr("fill", colors.axis));
 
     svg
       .append("g")
-      .call(d3.axisLeft(yScale).ticks(6).tickFormat((v) => `${v}%`))
-      .call((g) => g.select(".domain").attr("stroke", tickColor))
-      .call((g) => g.selectAll(".tick line").attr("stroke", tickColor))
-      .call((g) => g.selectAll(".tick text").attr("fill", tickColor));
+      .call(
+        d3
+          .axisLeft(yScale)
+          .ticks(6)
+          .tickFormat((v) => `${v}%`),
+      )
+      .call((g) => g.select(".domain").attr("stroke", colors.axis))
+      .call((g) => g.selectAll(".tick line").attr("stroke", colors.axis))
+      .call((g) => g.selectAll(".tick text").attr("fill", colors.axis));
 
     svg
       .append("g")
-      .call(d3.axisLeft(yScale).ticks(6).tickSize(-boundsWidth).tickFormat(() => ""))
+      .call(
+        d3
+          .axisLeft(yScale)
+          .ticks(6)
+          .tickSize(-boundsWidth)
+          .tickFormat(() => ""),
+      )
       .call((g) => g.select(".domain").remove())
       .call((g) =>
-        g.selectAll(".tick line")
-          .attr("stroke", isLight ? "#e0e0e0" : "#333")
+        g
+          .selectAll(".tick line")
+          .attr("stroke", colors.grid)
           .attr("stroke-dasharray", "3,3"),
       );
   }, [xScale, yScale, boundsWidth, boundsHeight, isLight]);
 
   const lineGenerator = useMemo(
     () =>
-      d3.line<{ date: Date; value: number }>()
+      d3
+        .line<{ date: Date; value: number }>()
         .x((d) => xScale(d.date))
         .y((d) => yScale(d.value))
         .curve(d3.curveMonotoneX)
@@ -130,7 +173,8 @@ const TimelineChart = ({ width, height, series, parliamentId, zoomDomain }: Char
 
   const areaGenerator = useMemo(
     () =>
-      d3.area<TimelineBucket>()
+      d3
+        .area<TimelineBucket>()
         .x((d) => xScale(d.date))
         .y0((d) => yScale(d.min))
         .y1((d) => yScale(d.max))
@@ -170,7 +214,9 @@ const TimelineChart = ({ width, height, series, parliamentId, zoomDomain }: Char
       const values = series
         .map((s) => {
           const v = s.valueByDate.get(t);
-          return v !== undefined ? { party: s.party, color: s.color, value: v } : null;
+          return v !== undefined
+            ? { party: s.party, color: s.color, value: v }
+            : null;
         })
         .filter(Boolean) as { party: string; color: string; value: number }[];
 
@@ -206,11 +252,25 @@ const TimelineChart = ({ width, height, series, parliamentId, zoomDomain }: Char
           {elections.map((election) => {
             const ex = xScale(election.date);
             if (ex < 0 || ex > boundsWidth) return null;
+            const electionColor = themeColors(isLight).election;
             return (
               <g key={election.name}>
-                <line x1={ex} x2={ex} y1={0} y2={boundsHeight}
-                  stroke={isLight ? "#444" : "#bbb"} strokeDasharray="5,4" strokeWidth={1.5} />
-                <text x={ex + 4} y={10} fill={isLight ? "#444" : "#bbb"} fontSize={10} fontWeight="600">
+                <line
+                  x1={ex}
+                  x2={ex}
+                  y1={0}
+                  y2={boundsHeight}
+                  stroke={electionColor}
+                  strokeDasharray="5,4"
+                  strokeWidth={1.5}
+                />
+                <text
+                  x={ex + 4}
+                  y={10}
+                  fill={electionColor}
+                  fontSize={10}
+                  fontWeight="600"
+                >
                   {election.name}
                 </text>
               </g>
@@ -219,22 +279,32 @@ const TimelineChart = ({ width, height, series, parliamentId, zoomDomain }: Char
 
           <g clipPath="url(#chart-clip)">
             {series.map((s) => {
-              const isActive = hoveredParty === null || hoveredParty === s.party;
+              const isActive =
+                hoveredParty === null || hoveredParty === s.party;
               return (
-                <path key={`band-${s.party}`}
-                  d={bandStrings.get(s.party)} fill={s.color} stroke="none"
+                <path
+                  key={`band-${s.party}`}
+                  d={bandStrings.get(s.party)}
+                  fill={s.color}
+                  stroke="none"
                   opacity={isActive ? 0.12 : 0.03}
-                  style={{ transition: "opacity 0.1s" }} />
+                  style={{ transition: "opacity 0.1s" }}
+                />
               );
             })}
             {series.map((s) => {
-              const isActive = hoveredParty === null || hoveredParty === s.party;
+              const isActive =
+                hoveredParty === null || hoveredParty === s.party;
               return (
-                <path key={s.party}
-                  d={pathStrings.get(s.party)} fill="none" stroke={s.color}
+                <path
+                  key={s.party}
+                  d={pathStrings.get(s.party)}
+                  fill="none"
+                  stroke={s.color}
                   opacity={isActive ? 1 : 0.15}
                   strokeWidth={isActive && hoveredParty === s.party ? 2.5 : 1.5}
-                  style={{ transition: "opacity 0.1s, stroke-width 0.1s" }} />
+                  style={{ transition: "opacity 0.1s, stroke-width 0.1s" }}
+                />
               );
             })}
           </g>
@@ -242,36 +312,62 @@ const TimelineChart = ({ width, height, series, parliamentId, zoomDomain }: Char
           {tooltip && (
             <g>
               <line
-                x1={tooltip.x - MARGIN.left} x2={tooltip.x - MARGIN.left}
-                y1={0} y2={boundsHeight}
-                stroke={isLight ? "#999" : "#555"} strokeWidth={1} strokeDasharray="3,3"
-                pointerEvents="none" />
+                x1={tooltip.x - MARGIN.left}
+                x2={tooltip.x - MARGIN.left}
+                y1={0}
+                y2={boundsHeight}
+                stroke={themeColors(isLight).crosshair}
+                strokeWidth={1}
+                strokeDasharray="3,3"
+                pointerEvents="none"
+              />
               {tooltip.values.map((v) => (
-                <circle key={v.party}
-                  cx={tooltip.x - MARGIN.left} cy={yScale(v.value)}
-                  r={4} fill={v.color}
-                  stroke={isLight ? "#fff" : "#000"} strokeWidth={1.5}
-                  pointerEvents="none" />
+                <circle
+                  key={v.party}
+                  cx={tooltip.x - MARGIN.left}
+                  cy={yScale(v.value)}
+                  r={4}
+                  fill={v.color}
+                  stroke={themeColors(isLight).tooltipStroke}
+                  strokeWidth={1.5}
+                  pointerEvents="none"
+                />
               ))}
             </g>
           )}
 
-          <rect fill="transparent" height={boundsHeight} width={boundsWidth}
-            onMouseLeave={handleMouseLeave} onMouseMove={handleMouseMove} />
+          <rect
+            fill="transparent"
+            height={boundsHeight}
+            width={boundsWidth}
+            onMouseLeave={handleMouseLeave}
+            onMouseMove={handleMouseMove}
+          />
         </g>
       </svg>
 
       {tooltip && (
-        <div className="absolute pointer-events-none z-10 rounded-lg border border-default-200 bg-background/90 px-3 py-2 shadow-md text-xs"
-          style={{ left: tooltip.x + 8, top: tooltip.y }}>
+        <div
+          className="absolute pointer-events-none z-10 rounded-lg border border-default-200 bg-background/90 px-3 py-2 shadow-md text-xs"
+          style={{ left: tooltip.x + 8, top: tooltip.y }}
+        >
           <div className="font-semibold mb-1 text-default-700">
-            {tooltip.date.toLocaleDateString("de-DE", { year: "numeric", month: "short", day: "numeric" })}
+            {tooltip.date.toLocaleDateString("de-DE", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
           </div>
           {tooltip.values.map((v) => (
             <div key={v.party} className="flex items-center gap-1.5">
-              <span className="inline-block w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: v.color }} />
+              <span
+                className="inline-block w-2.5 h-2.5 rounded-full flex-shrink-0"
+                style={{ background: v.color }}
+              />
               <span className="text-default-600">{v.party}</span>
-              <span className="ml-auto font-medium pl-3">{v.value.toFixed(1)}%</span>
+              <span className="ml-auto font-medium pl-3">
+                {v.value.toFixed(1)}%
+              </span>
             </div>
           ))}
         </div>
@@ -306,7 +402,8 @@ const Minimap = ({ width, series, zoomDomain, onBrush }: MinimapProps) => {
 
   const xScale = useMemo(() => {
     if (allDates.length === 0) return d3.scaleTime().range([0, boundsWidth]);
-    return d3.scaleTime()
+    return d3
+      .scaleTime()
       .domain(d3.extent(allDates) as [Date, Date])
       .range([0, boundsWidth]);
   }, [allDates, boundsWidth]);
@@ -318,7 +415,8 @@ const Minimap = ({ width, series, zoomDomain, onBrush }: MinimapProps) => {
 
   const lineGen = useMemo(
     () =>
-      d3.line<{ date: Date; value: number }>()
+      d3
+        .line<{ date: Date; value: number }>()
         .x((d) => xScale(d.date))
         .y((d) => yScale(d.value))
         .curve(d3.curveMonotoneX),
@@ -334,8 +432,12 @@ const Minimap = ({ width, series, zoomDomain, onBrush }: MinimapProps) => {
   useEffect(() => {
     if (!brushRef.current || boundsWidth <= 0) return;
 
-    const brush = d3.brushX()
-      .extent([[0, 0], [boundsWidth, boundsHeight]])
+    const brush = d3
+      .brushX()
+      .extent([
+        [0, 0],
+        [boundsWidth, boundsHeight],
+      ])
       .on("end", (event: d3.D3BrushEvent<unknown>) => {
         if (!event.selection) {
           onBrush(null);
@@ -356,34 +458,50 @@ const Minimap = ({ width, series, zoomDomain, onBrush }: MinimapProps) => {
     }
 
     // Style the brush handles and selection
+    const brushColor = themeColors(isLight).brush;
     g.select(".selection")
-      .attr("fill", isLight ? "#6366f1" : "#818cf8")
+      .attr("fill", brushColor)
       .attr("fill-opacity", 0.15)
-      .attr("stroke", isLight ? "#6366f1" : "#818cf8")
+      .attr("stroke", brushColor)
       .attr("stroke-width", 1);
   }, [boundsWidth, boundsHeight, xScale, zoomDomain, onBrush, isLight]);
-
-  const tickColor = isLight ? "#999" : "#666";
 
   return (
     <svg width={width} height={MINI_HEIGHT}>
       <g transform={`translate(${MARGIN.left},${MINI_MARGIN.top})`}>
         {/* Faint x-axis */}
         <g transform={`translate(0,${boundsHeight})`}>
-          {xScale.ticks(6).map((tick) => (
-            <g key={tick.toString()} transform={`translate(${xScale(tick)},0)`}>
-              <line y2={4} stroke={tickColor} />
-              <text y={14} textAnchor="middle" fontSize={9} fill={tickColor}>
-                {d3.timeFormat("%Y")(tick)}
-              </text>
-            </g>
-          ))}
+          {xScale.ticks(6).map((tick) => {
+            const miniAxisColor = themeColors(isLight).miniAxis;
+            return (
+              <g
+                key={tick.toString()}
+                transform={`translate(${xScale(tick)},0)`}
+              >
+                <line y2={4} stroke={miniAxisColor} />
+                <text
+                  y={14}
+                  textAnchor="middle"
+                  fontSize={9}
+                  fill={miniAxisColor}
+                >
+                  {d3.timeFormat("%Y")(tick)}
+                </text>
+              </g>
+            );
+          })}
         </g>
 
         {/* Mini lines */}
         {series.map((s) => (
-          <path key={s.party} d={miniPaths.get(s.party)} fill="none"
-            stroke={s.color} strokeWidth={1} opacity={0.6} />
+          <path
+            key={s.party}
+            d={miniPaths.get(s.party)}
+            fill="none"
+            stroke={s.color}
+            strokeWidth={1}
+            opacity={0.6}
+          />
         ))}
 
         {/* Brush layer */}
@@ -399,7 +517,9 @@ type ElectionTimelineProps = {
   parliamentId?: string;
 };
 
-export const ElectionTimeline = ({ parliamentId: parliamentIdProp }: ElectionTimelineProps = {}) => {
+export const ElectionTimeline = ({
+  parliamentId: parliamentIdProp,
+}: ElectionTimelineProps = {}) => {
   const { ref, dimensions } = useDimensions();
   const { data: pollData } = usePollData();
   const { parliamentId: storeParliamentId } = useParliamentStore();
@@ -408,11 +528,17 @@ export const ElectionTimeline = ({ parliamentId: parliamentIdProp }: ElectionTim
   const [zoomDomain, setZoomDomain] = useState<[Date, Date] | null>(null);
 
   // Reset zoom when parliament changes
-  useEffect(() => { setZoomDomain(null); }, [parliamentId]);
+  useEffect(() => {
+    setZoomDomain(null);
+  }, [parliamentId]);
 
   const handleBrush = useCallback((domain: [Date, Date] | null) => {
     // Ignore tiny accidental selections (< 3 days)
-    if (domain && domain[1].getTime() - domain[0].getTime() < 3 * 24 * 60 * 60 * 1000) return;
+    if (
+      domain &&
+      domain[1].getTime() - domain[0].getTime() < 3 * 24 * 60 * 60 * 1000
+    )
+      return;
     setZoomDomain(domain);
   }, []);
 
@@ -421,20 +547,27 @@ export const ElectionTimeline = ({ parliamentId: parliamentIdProp }: ElectionTim
   return (
     <div ref={ref} className="w-full">
       {dimensions.width > 0 && series.length > 0 ? (
-        <div className="flex flex-col" style={{ gap: GAP }}>
+        <div className="flex flex-col gap-3">
           {isZoomed && (
             <div className="flex items-center gap-2">
               <span className="text-xs text-default-500">
-                {zoomDomain![0].toLocaleDateString("de-DE", { month: "short", year: "numeric" })}
+                {zoomDomain![0].toLocaleDateString("de-DE", {
+                  month: "short",
+                  year: "numeric",
+                })}
                 {" – "}
-                {zoomDomain![1].toLocaleDateString("de-DE", { month: "short", year: "numeric" })}
+                {zoomDomain![1].toLocaleDateString("de-DE", {
+                  month: "short",
+                  year: "numeric",
+                })}
               </span>
-              <button
-                className="text-xs px-2 py-0.5 rounded border border-default-300 text-default-600 hover:bg-default-100 transition-colors"
-                onClick={() => setZoomDomain(null)}
+              <Button
+                size="sm"
+                variant="bordered"
+                onPress={() => setZoomDomain(null)}
               >
                 Reset zoom
-              </button>
+              </Button>
             </div>
           )}
           <TimelineChart
@@ -453,7 +586,9 @@ export const ElectionTimeline = ({ parliamentId: parliamentIdProp }: ElectionTim
         </div>
       ) : (
         <div className="flex items-center justify-center h-48 text-default-400 text-sm">
-          {series.length === 0 ? "No timeline data available for this parliament." : "Loading…"}
+          {series.length === 0
+            ? "No timeline data available for this parliament."
+            : "Loading…"}
         </div>
       )}
     </div>

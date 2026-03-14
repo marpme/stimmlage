@@ -9,7 +9,11 @@ type SparklineChartProps = {
   height: number;
 };
 
-export const SparklineChart = ({ series, width, height }: SparklineChartProps) => {
+export const SparklineChart = ({
+  series,
+  width,
+  height,
+}: SparklineChartProps) => {
   const allDates = useMemo(
     () => series.flatMap((s) => s.smooth.map((d) => d.date)),
     [series],
@@ -21,12 +25,18 @@ export const SparklineChart = ({ series, width, height }: SparklineChartProps) =
 
   const xScale = useMemo(() => {
     if (allDates.length === 0) return d3.scaleTime().range([0, width]);
-    return d3.scaleTime().domain(d3.extent(allDates) as [Date, Date]).range([0, width]);
+    return d3
+      .scaleTime()
+      .domain(d3.extent(allDates) as [Date, Date])
+      .range([0, width]);
   }, [allDates, width]);
 
   const yScale = useMemo(() => {
     const [minV, maxV] = d3.extent(allValues) as [number, number];
-    return d3.scaleLinear().domain([minV ?? 0, maxV ?? 50]).range([height, 0]);
+    return d3
+      .scaleLinear()
+      .domain([minV ?? 0, maxV ?? 50])
+      .range([height, 0]);
   }, [allValues, height]);
 
   const lineGen = useMemo(

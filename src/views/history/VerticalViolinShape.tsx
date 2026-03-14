@@ -46,8 +46,8 @@ export const VerticalViolinShape = ({
       d={areaPath || undefined}
       fill={color}
       fillOpacity={0.6}
-      opacity={1}
-      stroke="black"
+      stroke="currentColor"
+      strokeOpacity={0.2}
       strokeWidth={1}
     />
   );

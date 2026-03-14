@@ -12,7 +12,6 @@ import { usePollData } from "@/hooks/usePollData.ts";
 import { InstituteTable } from "@/views/institues/InstituteTable.tsx";
 import { ElectionTimeline } from "@/views/timeline/ElectionTimeline.tsx";
 import { PartyValues } from "@/utils/Party.ts";
-import { title } from "@/components/primitives";
 
 export default function ParliamentDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -46,7 +45,7 @@ export default function ParliamentDetailPage() {
   return (
     <DefaultLayout>
       <section className="flex flex-col gap-8 py-8 md:py-10">
-        <h1 className={title({ color: "cyan" })}>{parliamentName}</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">{parliamentName}</h1>
 
         <div className="flex md:flex-row flex-col gap-4 w-full">
           <CoalitionsTable data={sortedParliament} />
@@ -56,7 +55,7 @@ export default function ParliamentDetailPage() {
         <InstituteTable surveys={pollData?.Surveys} />
 
         <div className="flex flex-col gap-2">
-          <h2 className={title({ size: "sm", color: "cyan" })}>Poll Timeline</h2>
+          <h2 className="text-xl font-semibold tracking-tight text-foreground">Poll Timeline</h2>
           <p className="text-default-500 text-sm">
             Historical polling trends per party. Drag the overview strip below to zoom in.
           </p>

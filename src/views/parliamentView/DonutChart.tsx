@@ -69,7 +69,8 @@ export const DonutChart = ({ data, showMajorityMarker }: DonutChartProps) => {
         <text
           dominantBaseline="middle"
           fill={color.hexa().toString()}
-          fontSize={14}
+          fontSize={13}
+          fontWeight="600"
           textAnchor="middle"
           x={centroidX}
           y={centroidY}
@@ -79,11 +80,10 @@ export const DonutChart = ({ data, showMajorityMarker }: DonutChartProps) => {
         <text
           dominantBaseline="middle"
           fill={color.hexa().toString()}
-          fontSize={12}
-          fontStyle="italic"
+          fontSize={11}
           textAnchor="middle"
           x={centroidX}
-          y={centroidY + 14}
+          y={centroidY + 15}
         >
           {subLabel}
         </text>
@@ -98,15 +98,23 @@ export const DonutChart = ({ data, showMajorityMarker }: DonutChartProps) => {
           transform={`translate(${dimensions.width / 2}, ${dimensions.height / 2})`}
         >
           <g>{shapes}</g>
-          <circle fill={"#ccc"} fillOpacity={0.5} r={innerRadius / 2} />
-          <text dominantBaseline="middle" fontSize={32} textAnchor="middle">
+          <circle fill="currentColor" fillOpacity={0.08} r={innerRadius / 2} />
+          <text
+            dominantBaseline="middle"
+            fontSize={28}
+            fontWeight="700"
+            textAnchor="middle"
+            fill="currentColor"
+          >
             {TOTAL_PARLIAMENT_SEATS}
           </text>
           <text
             dominantBaseline="middle"
-            fontSize={18}
+            fontSize={13}
             textAnchor="middle"
-            y={20}
+            fill="currentColor"
+            fillOpacity={0.5}
+            y={22}
           >
             seats
           </text>
@@ -117,15 +125,17 @@ export const DonutChart = ({ data, showMajorityMarker }: DonutChartProps) => {
                 y1={-radius}
                 x2="0"
                 y2={-innerRadius}
-                stroke="red"
-                strokeDasharray={"4 4"}
-                strokeWidth="2"
+                stroke="currentColor"
+                strokeOpacity={0.6}
+                strokeDasharray="4 4"
+                strokeWidth="1.5"
               />
               <text
                 dominantBaseline="middle"
-                fontSize={12}
+                fontSize={11}
                 textAnchor="middle"
-                fill="red"
+                fill="currentColor"
+                fillOpacity={0.6}
                 y={-radius - 10}
               >
                 50% + 1 mark
