@@ -1,48 +1,18 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect } from "react";
 
-const ThemeProps = {
-  key: "theme",
-  light: "light",
-  dark: "dark",
-} as const;
+export const useTheme = () => {
+  const isLight = true;
+  const isDark = false;
 
-type Theme = typeof ThemeProps.light | typeof ThemeProps.dark;
-
-export const useTheme = (defaultTheme?: Theme) => {
-  const [theme, setTheme] = useState<Theme>(() => {
-    const storedTheme = localStorage.getItem(ThemeProps.key) as Theme | null;
-
-    return storedTheme || (defaultTheme ?? ThemeProps.light);
-  });
-
-  const isDark = useMemo(() => {
-    return theme === ThemeProps.dark;
-  }, [theme]);
-
-  const isLight = useMemo(() => {
-    return theme === ThemeProps.light;
-  }, [theme]);
-
-  const updateGlobalTheme = useCallback((theme: Theme) => {
-    localStorage.setItem(ThemeProps.key, theme);
-    document.documentElement.classList.remove(
-      ThemeProps.light,
-      ThemeProps.dark,
-    );
-    document.documentElement.classList.add(theme);
-    setTheme(theme);
+  const applyLightTheme = useCallback(() => {
+    localStorage.removeItem("theme");
+    document.documentElement.classList.remove("dark");
+    document.documentElement.classList.add("light");
   }, []);
 
   useEffect(() => {
-    updateGlobalTheme(theme);
-  }, [theme]);
+    applyLightTheme();
+  }, [applyLightTheme]);
 
-  const setLightTheme = () => setTheme(ThemeProps.light);
-
-  const setDarkTheme = () => setTheme(ThemeProps.dark);
-
-  const toggleTheme = () =>
-    theme === ThemeProps.dark ? setLightTheme() : setDarkTheme();
-
-  return { theme, isDark, isLight, setLightTheme, setDarkTheme, toggleTheme };
+  return { theme: "light" as const, isDark, isLight };
 };

@@ -1,53 +1,55 @@
-import { tv } from "tailwind-variants";
+type TitleOptions = {
+  color?:
+    | "accent"
+    | "muted"
+    | "violet"
+    | "yellow"
+    | "blue"
+    | "cyan"
+    | "green"
+    | "pink"
+    | "foreground";
+  size?: "sm" | "md" | "lg";
+  fullWidth?: boolean;
+};
 
-export const title = tv({
-  base: "tracking-tight inline font-semibold",
-  variants: {
-    color: {
-      violet: "from-[#FF1CF7] to-[#b249f8]",
-      yellow: "from-[#FF705B] to-[#FFB457]",
-      blue: "from-[#5EA2EF] to-[#0072F5]",
-      cyan: "from-[#00b7fa] to-[#01cfea]",
-      green: "from-[#6FEE8D] to-[#17c964]",
-      pink: "from-[#FF72E1] to-[#F54C7A]",
-      foreground: "dark:from-[#FFFFFF] dark:to-[#4B4B4B]",
-    },
-    size: {
-      sm: "text-3xl lg:text-4xl",
-      md: "text-[2.3rem] lg:text-5xl leading-9",
-      lg: "text-4xl lg:text-6xl",
-    },
-    fullWidth: {
-      true: "w-full block",
-    },
-  },
-  defaultVariants: {
-    size: "md",
-  },
-  compoundVariants: [
-    {
-      color: [
-        "violet",
-        "yellow",
-        "blue",
-        "cyan",
-        "green",
-        "pink",
-        "foreground",
-      ],
-      class: "bg-clip-text text-transparent bg-gradient-to-b",
-    },
-  ],
-});
+export const title = (options: TitleOptions = {}) => {
+  const { color, size = "md", fullWidth } = options;
 
-export const subtitle = tv({
-  base: "w-full md:w-1/2 my-2 text-lg lg:text-xl text-default-600 block max-w-full",
-  variants: {
-    fullWidth: {
-      true: "!w-full",
-    },
-  },
-  defaultVariants: {
-    fullWidth: true,
-  },
-});
+  const sizeClass = {
+    sm: "text-2xl lg:text-3xl",
+    md: "text-3xl lg:text-4xl leading-tight",
+    lg: "text-4xl lg:text-5xl",
+  }[size];
+
+  const colorClass =
+    color === "accent"
+      ? "text-accent"
+      : color === "muted"
+        ? "text-ink-secondary"
+        : "text-ink";
+
+  return [
+    "tracking-tight inline font-bold",
+    sizeClass,
+    colorClass,
+    fullWidth ? "w-full block" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+};
+
+type SubtitleOptions = {
+  class?: string;
+  fullWidth?: boolean;
+};
+
+export const subtitle = (options: SubtitleOptions = {}) => {
+  return [
+    "w-full md:w-1/2 my-2 text-base lg:text-lg text-ink-secondary block max-w-full",
+    options.fullWidth === false ? "" : "!w-full",
+    options.class ?? "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+};

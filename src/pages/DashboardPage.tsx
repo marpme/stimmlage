@@ -15,7 +15,10 @@ type GroupProps = {
 
 const ParliamentGroup = ({ heading, ids, pollData }: GroupProps) => (
   <div>
-    <h2 className="text-lg font-semibold text-default-700 mb-3">{heading}</h2>
+    <div className="flex items-center gap-3 mb-4">
+      <span className="text-xs font-semibold tracking-widest uppercase text-accent">{heading}</span>
+      <div className="flex-1 h-px bg-rule" />
+    </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
       {ids
         .filter((id) => pollData.Parliaments[id])
@@ -31,12 +34,12 @@ export default function DashboardPage() {
 
   return (
     <DefaultLayout>
-      <section className="flex flex-col gap-8 py-8 md:py-10">
+      <section className="flex flex-col gap-10 py-8 md:py-10">
         <div>
-          <h1 className={title()}>Election&nbsp;
-            <span className={title({ color: "violet" })}>Overview</span>
+          <h1 className={title()}>
+            Election <span className={title({ color: "accent" })}>Overview</span>
           </h1>
-          <p className="text-default-500 text-sm mt-2">
+          <p className="text-ink-tertiary text-sm mt-2">
             Latest poll standings across all German parliaments. Click a card for details.
           </p>
         </div>
@@ -44,8 +47,8 @@ export default function DashboardPage() {
         {pollData ? (
           <>
             <ParliamentGroup
-              heading="Bundestag"
-              ids={[BUNDESTAG_ID]}
+              heading="Bundestag & Europaparlament"
+              ids={[BUNDESTAG_ID, EU_ID]}
               pollData={pollData}
             />
             <ParliamentGroup
@@ -53,14 +56,9 @@ export default function DashboardPage() {
               ids={LANDTAG_IDS}
               pollData={pollData}
             />
-            <ParliamentGroup
-              heading="Europaparlament"
-              ids={[EU_ID]}
-              pollData={pollData}
-            />
           </>
         ) : (
-          <div className="flex items-center justify-center h-48 text-default-400 text-sm">
+          <div className="flex items-center justify-center h-48 text-ink-tertiary text-sm">
             Loading poll data…
           </div>
         )}

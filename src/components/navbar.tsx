@@ -1,29 +1,18 @@
-import { Button } from "@heroui/button";
-import {
-  Navbar as HeroUINavbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-} from "@heroui/navbar";
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-} from "@heroui/dropdown";
-import { ChevronDownIcon } from "@heroui/shared-icons";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { ThemeSwitch } from "@/components/theme-switch";
-import { UpdateIcon } from "@/components/icons";
-import { Logo } from "@/components/icons";
+import { UpdateIcon, Logo } from "@/components/icons";
 import { useLatestUpdateTime } from "@/hooks/useLatestUpdateTime.ts";
 import { usePollData } from "@/hooks/usePollData.ts";
 
 const LANDTAG_IDS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"];
 
 const navLinkClass = (isActive: boolean) =>
-  `text-sm font-medium transition-colors ${isActive ? "text-primary" : "text-default-600 hover:text-foreground"}`;
+  `text-sm font-medium transition-colors py-1 border-b-2 ${
+    isActive
+      ? "text-accent border-accent"
+      : "text-ink-tertiary border-transparent hover:text-ink hover:border-rule"
+  }`;
 
 export const Navbar = () => {
   const { data: lastUpdatedData } = useLatestUpdateTime();
@@ -36,73 +25,83 @@ export const Navbar = () => {
   );
 
   return (
-    <HeroUINavbar maxWidth="xl" position="sticky">
-      <NavbarBrand className="gap-3 max-w-fit">
-        <Link
-          to="/"
-          className="flex justify-start items-center gap-1 text-foreground"
-        >
-          <Logo />
-        </Link>
-      </NavbarBrand>
+    <nav className="sticky top-0 z-50 w-full bg-paper border-b border-rule">
+      <div className="container mx-auto max-w-7xl px-2 md:px-6 h-14 flex items-center justify-between gap-6">
 
-      <NavbarContent className="gap-2" justify="center">
-        {/* Bundestag */}
-        <NavbarItem isActive={location.pathname === "/parliament/0"}>
-          <Link to="/parliament/0" className={navLinkClass(location.pathname === "/parliament/0")}>
+        {/* Brand */}
+        <Link to="/" className="flex items-center gap-2 flex-shrink-0" aria-label="gelection home">
+          <Logo />
+          <span className="text-sm font-bold tracking-tight text-ink">gelection</span>
+        </Link>
+
+        {/* Nav links */}
+        <div className="flex items-center gap-6">
+          <Link
+            to="/parliament/0"
+            className={navLinkClass(location.pathname === "/parliament/0")}
+            aria-current={location.pathname === "/parliament/0" ? "page" : undefined}
+          >
             Bundestag
           </Link>
-        </NavbarItem>
 
-        {/* Landtage dropdown */}
-        <NavbarItem isActive={isLandtagActive}>
-          <Dropdown>
-            <DropdownTrigger>
-              <button className={`${navLinkClass(isLandtagActive)} cursor-pointer flex items-center gap-1`}>
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger asChild>
+              <button
+                className={`${navLinkClass(isLandtagActive)} flex items-center gap-1 cursor-pointer`}
+                aria-current={isLandtagActive ? "page" : undefined}
+              >
                 Landtage
-                <ChevronDownIcon className="w-3 h-3" />
+                <svg className="w-3 h-3 opacity-60" viewBox="0 0 12 12" fill="none">
+                  <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </button>
-            </DropdownTrigger>
-            <DropdownMenu
-              aria-label="Landtage"
-              onAction={(key) => navigate(`/parliament/${key}`)}
-            >
-              {LANDTAG_IDS.filter((id) => pollData?.Parliaments[id]).map((id) => (
-                <DropdownItem
-                  key={id}
-                  className={location.pathname === `/parliament/${id}` ? "text-primary" : ""}
-                >
-                  {pollData?.Parliaments[id]?.Name ?? id}
-                </DropdownItem>
-              ))}
-            </DropdownMenu>
-          </Dropdown>
-        </NavbarItem>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Portal>
+              <DropdownMenu.Content
+                className="min-w-48 bg-paper border border-rule rounded-lg shadow-sm py-1 z-50"
+                sideOffset={8}
+                align="start"
+              >
+                {LANDTAG_IDS.filter((id) => pollData?.Parliaments[id]).map((id) => (
+                  <DropdownMenu.Item
+                    key={id}
+                    className={`px-3 py-1.5 text-sm cursor-pointer outline-none transition-colors ${
+                      location.pathname === `/parliament/${id}`
+                        ? "text-accent font-medium"
+                        : "text-ink-secondary hover:text-ink hover:bg-rule/40"
+                    }`}
+                    onSelect={() => navigate(`/parliament/${id}`)}
+                  >
+                    {pollData?.Parliaments[id]?.Name ?? id}
+                  </DropdownMenu.Item>
+                ))}
+              </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+          </DropdownMenu.Root>
 
-        {/* EU */}
-        <NavbarItem isActive={location.pathname === "/parliament/17"}>
-          <Link to="/parliament/17" className={navLinkClass(location.pathname === "/parliament/17")}>
+          <Link
+            to="/parliament/17"
+            className={navLinkClass(location.pathname === "/parliament/17")}
+            aria-current={location.pathname === "/parliament/17" ? "page" : undefined}
+          >
             EU
           </Link>
-        </NavbarItem>
-      </NavbarContent>
+        </div>
 
-      <NavbarContent justify="end">
-        <NavbarItem>
-          <ThemeSwitch />
-        </NavbarItem>
-        <NavbarItem>
-          <Button
-            isLoading={pollDataIsFetching}
-            onPress={() => refetchPollData()}
-          >
-            {pollDataIsFetching ? null : <UpdateIcon />}
-            {pollDataIsFetching
-              ? "Updating…"
-              : lastUpdatedData?.formatedLastUpdated}
-          </Button>
-        </NavbarItem>
-      </NavbarContent>
-    </HeroUINavbar>
+        {/* Data freshness */}
+        <button
+          className="flex items-center gap-1.5 text-xs text-ink-tertiary hover:text-ink transition-colors ml-auto"
+          onClick={() => refetchPollData()}
+          disabled={pollDataIsFetching}
+          aria-label="Refresh poll data"
+        >
+          <UpdateIcon className={`w-3.5 h-3.5 ${pollDataIsFetching ? "animate-spin" : ""}`} />
+          <span className="tabular-nums">
+            {pollDataIsFetching ? "Updating…" : lastUpdatedData?.formatedLastUpdated}
+          </span>
+        </button>
+
+      </div>
+    </nav>
   );
 };

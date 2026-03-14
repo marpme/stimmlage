@@ -35,21 +35,26 @@ export const ParliamentCard = ({
   return (
     <Link
       to={`/parliament/${parliamentId}`}
-      className="block rounded-xl border border-default-200 bg-default-50 hover:bg-default-100 transition-colors p-4 group"
+      className="block rounded-lg border border-rule bg-paper hover:border-accent/30 transition-colors p-4 group relative overflow-hidden"
+      style={
+        leader
+          ? { borderTopColor: leader.color, borderTopWidth: "2px" }
+          : undefined
+      }
     >
       <div className="flex items-start justify-between gap-2 mb-3">
         <div>
-          <div className="font-semibold text-sm text-default-800 group-hover:text-primary transition-colors leading-tight">
+          <div className="font-semibold text-sm text-ink group-hover:text-accent transition-colors leading-tight">
             {parliament.Name}
           </div>
           {leader && (
             <div className="flex items-center gap-1.5 mt-1">
               <span
-                className="inline-block w-2 h-2 rounded-full flex-shrink-0"
+                className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0"
                 style={{ background: leader.color }}
               />
-              <span className="text-xs text-default-500">
-                {leader.name} {leader.value.toFixed(1)}%
+              <span className="text-xs text-ink-tertiary">
+                {leader.name} · {leader.value.toFixed(1)}%
               </span>
             </div>
           )}
@@ -58,13 +63,13 @@ export const ParliamentCard = ({
       </div>
 
       {/* Top-3 party bars */}
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1.5">
         {top3.map((p) => (
           <div key={p.name} className="flex items-center gap-2">
-            <span className="text-xs text-default-500 w-14 truncate">
+            <span className="text-xs text-ink-tertiary w-14 truncate">
               {p.name}
             </span>
-            <div className="flex-1 h-1.5 rounded-full bg-default-200 overflow-hidden">
+            <div className="flex-1 h-1 rounded-full bg-rule overflow-hidden">
               <div
                 className="h-full rounded-full"
                 style={{
@@ -73,7 +78,7 @@ export const ParliamentCard = ({
                 }}
               />
             </div>
-            <span className="text-xs text-default-400 w-8 text-right">
+            <span className="text-xs text-ink-secondary w-8 text-right tabular-nums">
               {p.value.toFixed(0)}%
             </span>
           </div>

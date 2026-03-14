@@ -1,3 +1,58 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    /* Editorial press-blue accent — The Economist / FT newspaper blue */
+    --color-accent: oklch(44% 0.16 252);
+    --color-accent-subtle: oklch(44% 0.16 252 / 0.08);
+    --color-accent-muted: oklch(44% 0.16 252 / 0.18);
+
+    /* Warm paper — barely warm off-white instead of pure white */
+    --color-paper: oklch(97.8% 0.006 80);
+
+    /* Ink — cool near-black for strong typographic presence */
+    --color-ink: oklch(16% 0.012 260);
+    --color-ink-secondary: oklch(40% 0.008 260);
+    --color-ink-tertiary: oklch(58% 0.006 260);
+
+    /* Section label rule color */
+    --color-rule: oklch(82% 0.005 260);
+  }
+
+  html {
+    background-color: var(--color-paper);
+  }
+
+  body {
+    background-color: var(--color-paper);
+  }
+}
+
+@layer utilities {
+  .text-accent {
+    color: var(--color-accent);
+  }
+  .bg-accent-subtle {
+    background-color: var(--color-accent-subtle);
+  }
+  .bg-accent-muted {
+    background-color: var(--color-accent-muted);
+  }
+  .bg-paper {
+    background-color: var(--color-paper);
+  }
+  .text-ink {
+    color: var(--color-ink);
+  }
+  .text-ink-secondary {
+    color: var(--color-ink-secondary);
+  }
+  .text-ink-tertiary {
+    color: var(--color-ink-tertiary);
+  }
+  .border-rule {
+    border-color: var(--color-rule);
+  }
+}

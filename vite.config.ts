@@ -15,7 +15,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          "heroui-react": ["@heroui/react"],
           d3: ["d3"],
           color: ["color"],
           dateFns: ["date-fns"],

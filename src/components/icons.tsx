@@ -212,14 +212,14 @@ export const SearchIcon = (props: IconSvgProps) => (
   </svg>
 );
 
-export const UpdateIcon = () => (
+export const UpdateIcon = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"
     strokeWidth={1.5}
     stroke="currentColor"
-    className="size-6"
+    className={className ?? "size-4"}
   >
     <path
       strokeLinecap="round"

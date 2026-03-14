@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import * as d3 from "d3";
 import Color from "color";
 import { useDimensions } from "@/hooks/useDimensions.ts";
-import { Card } from "@heroui/react";
 
 type DataItem = {
   name: string;
@@ -92,7 +91,10 @@ export const DonutChart = ({ data, showMajorityMarker }: DonutChartProps) => {
   });
 
   return (
-    <Card ref={ref} className="min-h-96 w-full md:w-[50vw]">
+    <div
+      ref={ref}
+      className="min-h-96 w-full md:w-[50vw] rounded-lg border border-rule overflow-hidden"
+    >
       <svg height={dimensions.height} width={dimensions.width}>
         <g
           transform={`translate(${dimensions.width / 2}, ${dimensions.height / 2})`}
@@ -144,6 +146,6 @@ export const DonutChart = ({ data, showMajorityMarker }: DonutChartProps) => {
           ) : null}
         </g>
       </svg>
-    </Card>
+    </div>
   );
 };

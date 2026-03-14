@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as d3 from "d3";
-import { Button } from "@heroui/button";
-
 import { useDimensions } from "@/hooks/useDimensions.ts";
 import { usePollData } from "@/hooks/usePollData.ts";
 import { useParliamentStore } from "@/model/useParliamentConfiguration.ts";
@@ -561,13 +559,12 @@ export const ElectionTimeline = ({
                   year: "numeric",
                 })}
               </span>
-              <Button
-                size="sm"
-                variant="bordered"
-                onPress={() => setZoomDomain(null)}
+              <button
+                className="text-xs px-2 py-1 rounded border border-rule text-ink-secondary hover:text-ink hover:border-ink-tertiary transition-colors"
+                onClick={() => setZoomDomain(null)}
               >
                 Reset zoom
-              </Button>
+              </button>
             </div>
           )}
           <TimelineChart

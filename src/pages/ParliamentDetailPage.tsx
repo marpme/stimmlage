@@ -45,7 +45,7 @@ export default function ParliamentDetailPage() {
   return (
     <DefaultLayout>
       <section className="flex flex-col gap-8 py-8 md:py-10">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">{parliamentName}</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-ink">{parliamentName}</h1>
 
         <div className="flex md:flex-row flex-col gap-4 w-full">
           <CoalitionsTable data={sortedParliament} />
@@ -54,9 +54,12 @@ export default function ParliamentDetailPage() {
 
         <InstituteTable surveys={pollData?.Surveys} />
 
-        <div className="flex flex-col gap-2">
-          <h2 className="text-xl font-semibold tracking-tight text-foreground">Poll Timeline</h2>
-          <p className="text-default-500 text-sm">
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-3">
+            <h2 className="text-sm font-semibold tracking-widest uppercase text-accent">Poll Timeline</h2>
+            <div className="flex-1 h-px bg-rule" />
+          </div>
+          <p className="text-ink-tertiary text-sm">
             Historical polling trends per party. Drag the overview strip below to zoom in.
           </p>
           <ElectionTimeline parliamentId={id} />
