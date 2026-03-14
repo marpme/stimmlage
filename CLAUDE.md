@@ -45,3 +45,24 @@ No tests are configured in this project.
 - `DonutChart` — D3-based parliament seat donut visualization
 - `InstituteTable` — Shows individual institute survey data
 - `Violin` / `VerticalViolinShape` — Historical poll distribution charts (violin plots via D3)
+
+## Design Context
+
+### Users
+German-speaking political analysts, journalists, researchers, and engaged citizens who want to explore live polling data and model coalition scenarios. They are data-literate, results-oriented, and arrive with a specific question in mind (e.g. "Can SPD+Grüne form a majority?"). The interface should respect their intelligence and get out of the way.
+
+### Brand Personality
+**Clean, minimal, informative.** gelection is a reference tool, not an entertainment product. It should feel authoritative and trustworthy — like a well-edited data journalism piece, not a dashboard product or a party campaign site.
+
+### Aesthetic Direction
+- **Reference:** FiveThirtyEight, The Economist data pages — strong typographic hierarchy, editorial restraint, charts that carry the weight of the page, confident use of white space.
+- **Anti-reference:** Political party branding. Visual choices must stay strictly neutral. No color palette, layout treatment, or typographic decision should read as sympathy toward any party. Party colors are used only as data encodings, never as decorative or branding choices.
+- **Theme:** Light mode only. Clean white/off-white backgrounds, high-contrast text, color used sparingly and purposefully.
+- **Motion:** Minimal — functional transitions only (data updates, loading states). No decorative animation.
+
+### Design Principles
+1. **Data first.** Every design decision should help the data communicate more clearly. Decoration competes with data; when in doubt, remove it.
+2. **Editorial restraint.** Typography and spacing should feel like a quality publication — tight, intentional, nothing wasted. Prefer prose-weight type scales over display-heavy ones.
+3. **Strict visual neutrality.** Party colors are data encodings. No UI element should inadvertently favor or echo any political party's brand aesthetic.
+4. **WCAG AA compliance.** Sufficient color contrast for all text and interactive elements, keyboard navigability, and screen reader support are non-negotiable.
+5. **Respect the user's intent.** Users come with a question. Minimize friction, avoid unnecessary onboarding, and surface the most useful data (current poll averages + coalition math) without requiring exploration.
