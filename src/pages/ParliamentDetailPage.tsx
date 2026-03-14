@@ -7,20 +7,18 @@ import { useSortedParliament } from "@/hooks/useSortedParliament.ts";
 import { useParliamentStore } from "@/model/useParliamentConfiguration";
 import { DonutChart } from "@/views/parliamentView/DonutChart.tsx";
 import { CoalitionsTable } from "@/views/CoalitionTable/table.tsx";
-import { qualifiesAsParty, useFivePercentBarrier } from "@/hooks/useFivePercentBarrier.ts";
+import { useFivePercentBarrier } from "@/hooks/useFivePercentBarrier.ts";
 import { usePollData } from "@/hooks/usePollData.ts";
 import { InstituteTable } from "@/views/institues/InstituteTable.tsx";
 import { ElectionTimeline } from "@/views/timeline/ElectionTimeline.tsx";
-import { PartyValues } from "@/utils/Party.ts";
 
 export default function ParliamentDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { data: pollData } = usePollData();
-  const { setParliamentId, addDirectCandidate, clearDirectCandidates } = useParliamentStore();
+  const { setParliamentId } = useParliamentStore();
 
   useEffect(() => {
     if (!id) return;
-    clearDirectCandidates();
     setParliamentId(id);
   }, [id]);
 
@@ -31,14 +29,6 @@ export default function ParliamentDetailPage() {
   const parliamentName = pollData?.Parliaments[id ?? ""]?.Name ?? "";
   const setOfCoalition = useSetOfCoalition(id ?? "0", pollData);
 
-  useEffect(() => {
-    setOfCoalition.forEach((party) => {
-      if (qualifiesAsParty(party)) {
-        addDirectCandidate(party.name as PartyValues);
-      }
-    });
-  }, [setOfCoalition]);
-
   const sortedParliament = useSortedParliament(setOfCoalition);
   const sortedAndLimited = useSortedParliament(useFivePercentBarrier(sortedParliament));
 
@@ -46,13 +36,6 @@ export default function ParliamentDetailPage() {
     <DefaultLayout>
       <section className="flex flex-col gap-8 py-8 md:py-10">
         <h1 className="text-3xl font-bold tracking-tight text-ink">{parliamentName}</h1>
-
-        <div className="flex md:flex-row flex-col gap-4 w-full">
-          <CoalitionsTable data={sortedParliament} />
-          <DonutChart data={sortedAndLimited} showMajorityMarker={false} />
-        </div>
-
-        <InstituteTable surveys={pollData?.Surveys} />
 
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-3">
@@ -64,6 +47,13 @@ export default function ParliamentDetailPage() {
           </p>
           <ElectionTimeline parliamentId={id} />
         </div>
+
+        <div className="flex md:flex-row flex-col gap-4 w-full">
+          <CoalitionsTable data={sortedParliament} />
+          <DonutChart data={sortedAndLimited} showMajorityMarker={false} />
+        </div>
+
+        <InstituteTable surveys={pollData?.Surveys} />
       </section>
     </DefaultLayout>
   );
