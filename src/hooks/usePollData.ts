@@ -1,37 +1,17 @@
 import { Convert } from "@/assets/poll.ts";
 import { useQuery } from "@tanstack/react-query";
-import { useLatestUpdateTime } from "@/hooks/useLatestUpdateTime.ts";
 
-export const getPollData = (lastUpdated?: number) => async () => {
-  if (typeof lastUpdated !== "number") {
-    throw new Error("lastUpdated is required");
-  }
-
-  const pollData = await fetch(`/poll.json?t=${lastUpdated}`).then((res) =>
-    res.text(),
-  );
-
-  return Convert.toPoll(pollData);
-};
+const API_URL = "https://api.dawum.de/";
 
 export const usePollData = () => {
-  const {
-    data: lastUpdatedData,
-    isSuccess,
-    refetch: refetchUpdatedTime,
-  } = useLatestUpdateTime();
-
   const { refetch, ...rest } = useQuery({
-    queryKey: ["getPollData", lastUpdatedData?.timestamp ?? "0"],
-    queryFn: getPollData(lastUpdatedData?.timestamp),
-    enabled: isSuccess,
+    queryKey: ["getPollData"],
+    queryFn: async () => {
+      const text = await fetch(API_URL).then((res) => res.text());
+      return Convert.toPoll(text);
+    },
+    staleTime: 5 * 60 * 1000, // treat data as fresh for 5 minutes
   });
 
-  return {
-    refetch: async () => {
-      await refetchUpdatedTime();
-      await refetch();
-    },
-    ...rest,
-  };
+  return { refetch, ...rest };
 };

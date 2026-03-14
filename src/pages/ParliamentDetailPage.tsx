@@ -1,0 +1,68 @@
+import { useEffect } from "react";
+import { useParams, Navigate } from "react-router-dom";
+
+import DefaultLayout from "@/layouts/default";
+import { useSetOfCoalition } from "@/hooks/useSetOfCoalition.ts";
+import { useSortedParliament } from "@/hooks/useSortedParliament.ts";
+import { useParliamentStore } from "@/model/useParliamentConfiguration";
+import { DonutChart } from "@/views/parliamentView/DonutChart.tsx";
+import { CoalitionsTable } from "@/views/CoalitionTable/table.tsx";
+import { qualifiesAsParty, useFivePercentBarrier } from "@/hooks/useFivePercentBarrier.ts";
+import { usePollData } from "@/hooks/usePollData.ts";
+import { InstituteTable } from "@/views/institues/InstituteTable.tsx";
+import { ElectionTimeline } from "@/views/timeline/ElectionTimeline.tsx";
+import { PartyValues } from "@/utils/Party.ts";
+import { title } from "@/components/primitives";
+
+export default function ParliamentDetailPage() {
+  const { id } = useParams<{ id: string }>();
+  const { data: pollData } = usePollData();
+  const { setParliamentId, addDirectCandidate, clearDirectCandidates } = useParliamentStore();
+
+  useEffect(() => {
+    if (!id) return;
+    clearDirectCandidates();
+    setParliamentId(id);
+  }, [id]);
+
+  if (pollData && id && !pollData.Parliaments[id]) {
+    return <Navigate to="/" replace />;
+  }
+
+  const parliamentName = pollData?.Parliaments[id ?? ""]?.Name ?? "";
+  const setOfCoalition = useSetOfCoalition(id ?? "0", pollData);
+
+  useEffect(() => {
+    setOfCoalition.forEach((party) => {
+      if (qualifiesAsParty(party)) {
+        addDirectCandidate(party.name as PartyValues);
+      }
+    });
+  }, [setOfCoalition]);
+
+  const sortedParliament = useSortedParliament(setOfCoalition);
+  const sortedAndLimited = useSortedParliament(useFivePercentBarrier(sortedParliament));
+
+  return (
+    <DefaultLayout>
+      <section className="flex flex-col gap-8 py-8 md:py-10">
+        <h1 className={title({ color: "cyan" })}>{parliamentName}</h1>
+
+        <div className="flex md:flex-row flex-col gap-4 w-full">
+          <CoalitionsTable data={sortedParliament} />
+          <DonutChart data={sortedAndLimited} showMajorityMarker={false} />
+        </div>
+
+        <InstituteTable surveys={pollData?.Surveys} />
+
+        <div className="flex flex-col gap-2">
+          <h2 className={title({ size: "sm", color: "cyan" })}>Poll Timeline</h2>
+          <p className="text-default-500 text-sm">
+            Historical polling trends per party. Drag the overview strip below to zoom in.
+          </p>
+          <ElectionTimeline parliamentId={id} />
+        </div>
+      </section>
+    </DefaultLayout>
+  );
+}

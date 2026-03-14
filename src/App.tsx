@@ -1,11 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 
-import IndexPage from "@/pages/index";
+import DashboardPage from "@/pages/DashboardPage";
+import ParliamentDetailPage from "@/pages/ParliamentDetailPage";
 
 function App() {
   return (
     <Routes>
-      <Route element={<IndexPage />} path="/" />
+      <Route element={<DashboardPage />} path="/" />
+      <Route element={<ParliamentDetailPage />} path="/parliament/:id" />
     </Routes>
   );
 }

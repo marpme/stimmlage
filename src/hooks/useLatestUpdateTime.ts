@@ -1,25 +1,24 @@
 import { formatDistance } from "date-fns/formatDistance";
-import { useQuery } from "@tanstack/react-query";
+import { usePollData } from "@/hooks/usePollData.ts";
 
-export const getLastUpdatedTime = async () => {
-  const timestamp = new Date().getTime();
-  const { lastUpdated } = await fetch(`/lastUpdated.json?t=${timestamp}`).then(
-    (res) => res.json(),
-  );
+export const useLatestUpdateTime = () => {
+  const { data, isFetching, refetch } = usePollData();
 
-  const parsedLastUpdated = new Date(lastUpdated);
+  const lastUpdated = data?.Database?.Last_Update
+    ? new Date(data.Database.Last_Update)
+    : null;
 
   return {
-    lastUpdated: parsedLastUpdated,
-    timestamp: parsedLastUpdated.getTime(),
-    formatedLastUpdated: formatDistance(parsedLastUpdated, new Date(), {
-      addSuffix: true,
-    }),
+    data: lastUpdated
+      ? {
+          lastUpdated,
+          timestamp: lastUpdated.getTime(),
+          formatedLastUpdated: formatDistance(lastUpdated, new Date(), {
+            addSuffix: true,
+          }),
+        }
+      : undefined,
+    isFetching,
+    refetch,
   };
 };
-
-export const useLatestUpdateTime = () =>
-  useQuery({
-    queryKey: ["getLatestUpdate"],
-    queryFn: getLastUpdatedTime,
-  });

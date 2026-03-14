@@ -9,6 +9,7 @@ type Store = {
   directCandidates: Set<PartyValues>;
   addDirectCandidate: (name: PartyValues) => void;
   removeDirectCandidate: (name: PartyValues) => void;
+  clearDirectCandidates: () => void;
 };
 
 export const useParliamentStore = create<Store>()((set) => ({
@@ -29,4 +30,8 @@ export const useParliamentStore = create<Store>()((set) => ({
       newSet.delete(name);
       return { directCandidates: newSet };
     }),
+  clearDirectCandidates: () =>
+    set(() => ({
+      directCandidates: new Set(),
+    })),
 }));
