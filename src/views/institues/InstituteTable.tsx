@@ -1,30 +1,39 @@
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Survey } from "@/assets/poll.ts";
 import { usePollData } from "@/hooks/usePollData.ts";
 import { getSortingValueOfParty } from "@/hooks/useSortedParliament.ts";
 
-export const InstituteTable: FC<{ surveys?: { [id: string]: Survey }; parliamentId?: string }> = ({
-  surveys,
-  parliamentId,
-}) => {
+export const InstituteTable: FC<{
+  surveys?: { [id: string]: Survey };
+  parliamentId?: string;
+}> = ({ surveys, parliamentId }) => {
+  const { t } = useTranslation();
   const { data: pollData } = usePollData();
 
   if (!surveys) return null;
 
   const listedSurveyIds = Object.keys(surveys)
     .filter((id) => !parliamentId || surveys[id].Parliament_ID === parliamentId)
-    .toSorted((a, b) => (surveys[b].Date > surveys[a].Date ? 1 : surveys[b].Date < surveys[a].Date ? -1 : 0))
+    .toSorted((a, b) =>
+      surveys[b].Date > surveys[a].Date
+        ? 1
+        : surveys[b].Date < surveys[a].Date
+          ? -1
+          : 0,
+    )
     .slice(0, 10);
 
   // Union of all party IDs across all listed surveys so no party is missing
   const allPartyIds = Array.from(
-    new Set(listedSurveyIds.flatMap((id) => Object.keys(surveys[id].Results)))
+    new Set(listedSurveyIds.flatMap((id) => Object.keys(surveys[id].Results))),
   );
 
   // Normalize CDU / CSU → CDU/CSU: collapse both into a single column key
   const CDU_CSU_KEY = "__CDU_CSU__";
-  const isCduCsu = (shortcut: string) => shortcut === "CDU" || shortcut === "CSU" || shortcut === "CDU/CSU";
+  const isCduCsu = (shortcut: string) =>
+    shortcut === "CDU" || shortcut === "CSU" || shortcut === "CDU/CSU";
 
   const columns = allPartyIds
     .map((key) => ({
@@ -44,15 +53,18 @@ export const InstituteTable: FC<{ surveys?: { [id: string]: Survey }; parliament
     }, [])
     .sort(
       (a, b) =>
-        getSortingValueOfParty(b.label) -
-        getSortingValueOfParty(a.label),
+        getSortingValueOfParty(b.label) - getSortingValueOfParty(a.label),
     );
 
-  const allColumns = [{ key: "name", label: "Institut" }, { key: "date", label: "Datum" }, ...columns];
+  const allColumns = [
+    { key: "name", label: t("institute.institute") },
+    { key: "date", label: t("institute.date") },
+    ...columns,
+  ];
 
   // Build the set of party IDs that map to CDU/CSU for summation
   const cduCsuIds = allPartyIds.filter((key) =>
-    isCduCsu(pollData?.Parties[key]?.Shortcut ?? "")
+    isCduCsu(pollData?.Parties[key]?.Shortcut ?? ""),
   );
 
   const items = listedSurveyIds
@@ -61,7 +73,11 @@ export const InstituteTable: FC<{ surveys?: { [id: string]: Survey }; parliament
       const row: Record<string, unknown> = {
         key: survey.Tasker_ID + survey.Date,
         name: pollData?.Institutes[survey.Institute_ID]?.Name,
-        date: new Date(survey.Date).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }),
+        date: new Date(survey.Date).toLocaleDateString("de-DE", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        }),
       };
       // Sum CDU + CSU values into the combined key
       const cduCsuTotal = cduCsuIds.reduce(

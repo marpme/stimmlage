@@ -1,7 +1,9 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
-import { UpdateIcon, Logo } from "@/components/icons";
+import { Logo } from "@/components/icons";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useLatestUpdateTime } from "@/hooks/useLatestUpdateTime.ts";
 import { usePollData } from "@/hooks/usePollData.ts";
 
@@ -15,8 +17,9 @@ const navLinkClass = (isActive: boolean) =>
   }`;
 
 export const Navbar = () => {
+  const { t } = useTranslation();
   const { data: lastUpdatedData } = useLatestUpdateTime();
-  const { data: pollData, refetch: refetchPollData, isFetching: pollDataIsFetching } = usePollData();
+  const { data: pollData } = usePollData();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -31,7 +34,7 @@ export const Navbar = () => {
         {/* Brand */}
         <Link to="/" className="flex items-center gap-2 flex-shrink-0" aria-label="Stimmlage home">
           <Logo size={22} />
-          <span className="text-sm font-bold tracking-tight text-ink">Stimmlage</span>
+          <span className="text-sm font-bold tracking-tight text-ink">{t("navbar.home")}</span>
         </Link>
 
         {/* Nav links */}
@@ -41,7 +44,7 @@ export const Navbar = () => {
             className={navLinkClass(location.pathname === "/parliament/0")}
             aria-current={location.pathname === "/parliament/0" ? "page" : undefined}
           >
-            Bundestag
+            {t("navbar.bundestag")}
           </Link>
 
           <DropdownMenu.Root>
@@ -50,7 +53,7 @@ export const Navbar = () => {
                 className={`${navLinkClass(isLandtagActive)} flex items-center gap-1 cursor-pointer`}
                 aria-current={isLandtagActive ? "page" : undefined}
               >
-                Landtage
+                {t("navbar.landtage")}
                 <svg className="w-3 h-3 opacity-60" viewBox="0 0 12 12" fill="none">
                   <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -84,22 +87,20 @@ export const Navbar = () => {
             className={navLinkClass(location.pathname === "/parliament/17")}
             aria-current={location.pathname === "/parliament/17" ? "page" : undefined}
           >
-            EU
+            {t("navbar.eu")}
           </Link>
         </div>
 
-        {/* Data freshness */}
-        <button
-          className="flex items-center gap-1.5 text-xs text-ink-tertiary hover:text-ink transition-colors ml-auto"
-          onClick={() => refetchPollData()}
-          disabled={pollDataIsFetching}
-          aria-label="Refresh poll data"
-        >
-          <UpdateIcon className={`w-3.5 h-3.5 ${pollDataIsFetching ? "animate-spin" : ""}`} />
-          <span className="tabular-nums">
-            {pollDataIsFetching ? "Updating…" : lastUpdatedData?.formatedLastUpdated}
-          </span>
-        </button>
+        {/* Language + Data freshness */}
+        <div className="flex items-center gap-3 ml-auto">
+          <LanguageSwitcher />
+
+          {lastUpdatedData && (
+            <span className="text-xs text-ink-tertiary tabular-nums">
+              {lastUpdatedData.formatedLastUpdated}
+            </span>
+          )}
+        </div>
 
       </div>
     </nav>

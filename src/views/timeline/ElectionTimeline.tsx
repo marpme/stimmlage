@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as d3 from "d3";
+import { useTranslation } from "react-i18next";
 import { useDimensions } from "@/hooks/useDimensions.ts";
 import { usePollData } from "@/hooks/usePollData.ts";
 import { useParliamentStore } from "@/model/useParliamentConfiguration.ts";
@@ -10,7 +11,10 @@ import {
 } from "@/hooks/useTimelineSurveys.ts";
 import { electionDates } from "@/assets/electionDates.ts";
 import { useTheme } from "@/hooks/use-theme.ts";
-import { usePollProjection, PartyProjection } from "@/hooks/usePollProjection.ts";
+import {
+  usePollProjection,
+  PartyProjection,
+} from "@/hooks/usePollProjection.ts";
 
 const MARGIN = { top: 20, right: 20, bottom: 40, left: 44 };
 const MINI_HEIGHT = 60;
@@ -52,6 +56,24 @@ function bisectClosest(dates: Date[], target: Date): number {
   }
   return lo;
 }
+
+// Small helper to use t() inside SVG without breaking hooks rules
+const ProjectionLabel = ({
+  x,
+  y,
+  color,
+}: {
+  x: number;
+  y: number;
+  color: string;
+}) => {
+  const { t } = useTranslation();
+  return (
+    <text x={x} y={y} fontSize={9} fill={color} opacity={0.6}>
+      {t("timeline.projection")}
+    </text>
+  );
+};
 
 // ─── Main chart ───────────────────────────────────────────────────────────────
 
@@ -311,52 +333,53 @@ const TimelineChart = ({
           </g>
 
           {/* Projection overlay */}
-          {projections.length > 0 && (() => {
-            const now = new Date();
-            const nowX = xScale(now);
-            if (nowX < 0 || nowX > boundsWidth) return null;
-            return (
-              <g clipPath="url(#chart-clip)">
-                {/* Boundary line at today */}
-                <line
-                  x1={nowX} x2={nowX}
-                  y1={0} y2={boundsHeight}
-                  stroke={themeColors(isLight).axis}
-                  strokeDasharray="4 3"
-                  strokeWidth={1}
-                  opacity={0.4}
-                />
-                <text
-                  x={nowX + 4}
-                  y={boundsHeight - 6}
-                  fontSize={9}
-                  fill={themeColors(isLight).axis}
-                  opacity={0.6}
-                >
-                  Projektion (linear)
-                </text>
-                {/* Projection lines per party */}
-                {projections.map((p) => {
-                  const x1 = xScale(p.fromDate);
-                  const x2 = xScale(p.toDate);
-                  const y1 = yScale(p.fromValue);
-                  const y2 = yScale(p.toValue);
-                  if (x2 < 0 || x1 > boundsWidth) return null;
-                  return (
-                    <line
-                      key={`proj-${p.name}`}
-                      x1={x1} y1={y1}
-                      x2={x2} y2={y2}
-                      stroke={p.color}
-                      strokeWidth={1.5}
-                      strokeDasharray="4 3"
-                      opacity={0.5}
-                    />
-                  );
-                })}
-              </g>
-            );
-          })()}
+          {projections.length > 0 &&
+            (() => {
+              const now = new Date();
+              const nowX = xScale(now);
+              if (nowX < 0 || nowX > boundsWidth) return null;
+              return (
+                <g clipPath="url(#chart-clip)">
+                  {/* Boundary line at today */}
+                  <line
+                    x1={nowX}
+                    x2={nowX}
+                    y1={0}
+                    y2={boundsHeight}
+                    stroke={themeColors(isLight).axis}
+                    strokeDasharray="4 3"
+                    strokeWidth={1}
+                    opacity={0.4}
+                  />
+                  <ProjectionLabel
+                    x={nowX + 4}
+                    y={boundsHeight - 6}
+                    color={themeColors(isLight).axis}
+                  />
+                  {/* Projection lines per party */}
+                  {projections.map((p) => {
+                    const x1 = xScale(p.fromDate);
+                    const x2 = xScale(p.toDate);
+                    const y1 = yScale(p.fromValue);
+                    const y2 = yScale(p.toValue);
+                    if (x2 < 0 || x1 > boundsWidth) return null;
+                    return (
+                      <line
+                        key={`proj-${p.name}`}
+                        x1={x1}
+                        y1={y1}
+                        x2={x2}
+                        y2={y2}
+                        stroke={p.color}
+                        strokeWidth={1.5}
+                        strokeDasharray="4 3"
+                        opacity={0.5}
+                      />
+                    );
+                  })}
+                </g>
+              );
+            })()}
 
           {tooltip && (
             <g>
@@ -571,6 +594,7 @@ export const ElectionTimeline = ({
   parliamentId: parliamentIdProp,
   showProjection = false,
 }: ElectionTimelineProps = {}) => {
+  const { t } = useTranslation();
   const { ref, dimensions } = useDimensions();
   const { data: pollData } = usePollData();
   const { parliamentId: storeParliamentId } = useParliamentStore();
@@ -617,7 +641,7 @@ export const ElectionTimeline = ({
                 className="text-xs px-2 py-1 rounded border border-rule text-ink-secondary hover:text-ink hover:border-ink-tertiary transition-colors"
                 onClick={() => setZoomDomain(null)}
               >
-                Reset zoom
+                {t("timeline.resetZoom")}
               </button>
             </div>
           )}
@@ -639,8 +663,8 @@ export const ElectionTimeline = ({
       ) : (
         <div className="flex items-center justify-center h-48 text-default-400 text-sm">
           {series.length === 0
-            ? "No timeline data available for this parliament."
-            : "Loading…"}
+            ? t("parliament.noTimelineData")
+            : t("parliament.loading")}
         </div>
       )}
     </div>

@@ -1,0 +1,43 @@
+{
+  "navbar": {
+    "home": "Stimmlage",
+    "bundestag": "Bundestag",
+    "landtage": "Parlamentos estatales",
+    "eu": "UE"
+  },
+  "parliament": {
+    "pollTimeline": "Cronología de encuestas",
+    "pollTimelineDescription": "Tendencias históricas de encuestas por partido. Arrastra la barra de vista general para hacer zoom.",
+    "currentPolls": "Encuestas actuales",
+    "pollsByInstitute": "Encuestas por instituto",
+    "noTimelineData": "No hay datos de cronología disponibles para este parlamento.",
+    "loading": "Cargando…"
+  },
+  "coalition": {
+    "party": "Partido",
+    "poll": "Encuesta",
+    "fivePercentBarrier": "Umbral del 5%",
+    "trend30d": "30d",
+    "trend90d": "90d",
+    "spread": "Variación"
+  },
+  "institute": {
+    "institute": "Instituto",
+    "date": "Fecha"
+  },
+  "partyStats": {
+    "title": "Tendencia y varianza",
+    "party": "Partido",
+    "current": "Actual",
+    "trend30d": "30d",
+    "trend90d": "90d",
+    "spread": "Variación",
+    "legend": "30d / 90d = cambio respecto a la fecha de referencia (promedio de todos los institutos). Variación = mitad de la diferencia entre el valor más alto y el más bajo por instituto.",
+    "gain": "Aumento",
+    "loss": "Descenso"
+  },
+  "timeline": {
+    "projection": "Proyección (lineal)",
+    "resetZoom": "Restablecer zoom"
+  }
+}

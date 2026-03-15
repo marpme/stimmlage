@@ -34,7 +34,9 @@ export const LandtagRow = ({ parliamentId, pollData, index }: Props) => {
               className="w-1.5 h-1.5 rounded-full flex-shrink-0"
               style={{ background: leader.color }}
             />
-            <span className="text-[11px] text-ink-tertiary truncate">{leader.name}</span>
+            <span className="text-[11px] text-ink-tertiary truncate">
+              {leader.name}
+            </span>
           </div>
         )}
       </div>

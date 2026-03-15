@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { PartyTrendStat } from "@/hooks/usePartyTrendStats.ts";
 
 type Props = {
@@ -30,6 +32,8 @@ const Delta = ({ value }: DeltaProps) => {
 };
 
 export const PartyStatsTable = ({ stats }: Props) => {
+  const { t } = useTranslation();
+
   if (stats.length === 0) return null;
 
   return (
@@ -37,7 +41,7 @@ export const PartyStatsTable = ({ stats }: Props) => {
       {/* Section header */}
       <div className="flex items-center gap-3 mb-3">
         <h2 className="text-xs font-semibold tracking-widest uppercase text-accent flex-shrink-0">
-          Trend &amp; Varianz
+          {t("partyStats.title")}
         </h2>
         <div className="flex-1 h-px bg-rule" />
       </div>
@@ -47,19 +51,19 @@ export const PartyStatsTable = ({ stats }: Props) => {
           <thead>
             <tr className="border-b border-rule bg-rule/20">
               <th className="text-left px-4 py-2 text-[10px] font-semibold tracking-widest uppercase text-ink-tertiary font-sans">
-                Partei
+                {t("partyStats.party")}
               </th>
               <th className="text-right px-4 py-2 text-[10px] font-semibold tracking-widest uppercase text-ink-tertiary font-sans w-20">
-                Aktuell
+                {t("partyStats.current")}
               </th>
               <th className="text-right px-4 py-2 text-[10px] font-semibold tracking-widest uppercase text-ink-tertiary font-sans w-20">
-                30d
+                {t("partyStats.trend30d")}
               </th>
               <th className="text-right px-4 py-2 text-[10px] font-semibold tracking-widest uppercase text-ink-tertiary font-sans w-20">
-                90d
+                {t("partyStats.trend90d")}
               </th>
               <th className="text-right px-4 py-2 text-[10px] font-semibold tracking-widest uppercase text-ink-tertiary font-sans w-24">
-                Spanne
+                {t("partyStats.spread")}
               </th>
             </tr>
           </thead>
@@ -101,7 +105,9 @@ export const PartyStatsTable = ({ stats }: Props) => {
                 <td className="px-4 py-2.5 text-right tabular-nums text-ink-secondary w-24">
                   {stat.spread !== null ? (
                     <span>
-                      <span className="text-ink-tertiary text-[10px] mr-0.5">±</span>
+                      <span className="text-ink-tertiary text-[10px] mr-0.5">
+                        ±
+                      </span>
                       {(stat.spread / 2).toFixed(1)}
                     </span>
                   ) : (
@@ -116,7 +122,10 @@ export const PartyStatsTable = ({ stats }: Props) => {
 
       {/* Legend */}
       <p className="text-[10px] text-ink-tertiary mt-2 leading-relaxed">
-        30d / 90d = Veränderung zum Stichtag (Ø aller Institute). Spanne = halbe Differenz zwischen höchstem und niedrigstem Institutwert. <span style={{ color: "var(--color-accent)" }}>+</span> Zuwachs · <span className="text-ink-secondary">−</span> Rückgang.
+        {t("partyStats.legend")}{" "}
+        <span style={{ color: "var(--color-accent)" }}>+</span>{" "}
+        {t("partyStats.gain")} · <span className="text-ink-secondary">−</span>{" "}
+        {t("partyStats.loss")}.
       </p>
     </div>
   );

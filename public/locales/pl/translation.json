@@ -1,0 +1,43 @@
+{
+  "navbar": {
+    "home": "Stimmlage",
+    "bundestag": "Bundestag",
+    "landtage": "Parlamenty krajowe",
+    "eu": "UE"
+  },
+  "parliament": {
+    "pollTimeline": "Historia sondaży",
+    "pollTimelineDescription": "Historyczne trendy sondażowe według partii. Przeciągnij pasek przeglądu, aby powiększyć.",
+    "currentPolls": "Aktualne sondaże",
+    "pollsByInstitute": "Sondaże według instytutu",
+    "noTimelineData": "Brak danych historycznych dla tego parlamentu.",
+    "loading": "Ładowanie…"
+  },
+  "coalition": {
+    "party": "Partia",
+    "poll": "Sondaż",
+    "fivePercentBarrier": "Próg 5%",
+    "trend30d": "30d",
+    "trend90d": "90d",
+    "spread": "Rozpiętość"
+  },
+  "institute": {
+    "institute": "Instytut",
+    "date": "Data"
+  },
+  "partyStats": {
+    "title": "Trend i wariancja",
+    "party": "Partia",
+    "current": "Aktualny",
+    "trend30d": "30d",
+    "trend90d": "90d",
+    "spread": "Rozpiętość",
+    "legend": "30d / 90d = zmiana względem daty odniesienia (średnia wszystkich instytutów). Rozpiętość = połowa różnicy między najwyższą a najniższą wartością instytutu.",
+    "gain": "Wzrost",
+    "loss": "Spadek"
+  },
+  "timeline": {
+    "projection": "Projekcja (liniowa)",
+    "resetZoom": "Resetuj zoom"
+  }
+}

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useParams, Navigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import DefaultLayout from "@/layouts/default";
 import { useSetOfCoalition } from "@/hooks/useSetOfCoalition.ts";
@@ -14,6 +15,7 @@ import { ElectionTimeline } from "@/views/timeline/ElectionTimeline.tsx";
 import { usePartyTrendStats } from "@/hooks/usePartyTrendStats.ts";
 
 export default function ParliamentDetailPage() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { data: pollData } = usePollData();
   const { setParliamentId } = useParliamentStore();
@@ -41,18 +43,18 @@ export default function ParliamentDetailPage() {
 
         <div className="flex flex-col gap-3 animate-fade-up" style={{ animationDelay: "60ms" }}>
           <div className="flex items-center gap-3">
-            <h2 className="text-sm font-semibold tracking-widest uppercase text-accent">Poll Timeline</h2>
+            <h2 className="text-sm font-semibold tracking-widest uppercase text-accent">{t("parliament.pollTimeline")}</h2>
             <div className="flex-1 h-px bg-rule" />
           </div>
           <p className="text-ink-tertiary text-sm">
-            Historical polling trends per party. Drag the overview strip below to zoom in.
+            {t("parliament.pollTimelineDescription")}
           </p>
           <ElectionTimeline parliamentId={id} showProjection={true} />
         </div>
 
         <div className="flex flex-col gap-4 animate-fade-up" style={{ animationDelay: "120ms" }}>
           <div className="flex items-center gap-3">
-            <h2 className="text-xs font-semibold tracking-widest uppercase text-accent flex-shrink-0">Aktuelle Umfragewerte</h2>
+            <h2 className="text-xs font-semibold tracking-widest uppercase text-accent flex-shrink-0">{t("parliament.currentPolls")}</h2>
             <div className="flex-1 h-px bg-rule" />
           </div>
           <div className="flex md:flex-row flex-col gap-4 w-full">
@@ -63,7 +65,7 @@ export default function ParliamentDetailPage() {
 
         <div className="flex flex-col gap-4 animate-fade-up" style={{ animationDelay: "180ms" }}>
           <div className="flex items-center gap-3">
-            <h2 className="text-xs font-semibold tracking-widest uppercase text-accent flex-shrink-0">Umfragen nach Institut</h2>
+            <h2 className="text-xs font-semibold tracking-widest uppercase text-accent flex-shrink-0">{t("parliament.pollsByInstitute")}</h2>
             <div className="flex-1 h-px bg-rule" />
           </div>
           <InstituteTable surveys={pollData?.Surveys} parliamentId={id} />

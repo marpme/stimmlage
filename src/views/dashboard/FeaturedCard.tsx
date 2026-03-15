@@ -50,7 +50,9 @@ export const FeaturedCard = ({ parliamentId, pollData, index }: Props) => {
         <div className="flex flex-col gap-2">
           {top4.map((p) => (
             <div key={p.name} className="flex items-center gap-2">
-              <span className="text-xs text-ink-tertiary w-16 truncate">{p.name}</span>
+              <span className="text-xs text-ink-tertiary w-16 truncate">
+                {p.name}
+              </span>
               <div className="flex-1 h-1.5 rounded-full bg-rule overflow-hidden">
                 <div
                   className="h-full rounded-full transition-[width] duration-700"

@@ -41,14 +41,19 @@ function lead(parties: CoalitionParty[]): string {
 // - Each entry is tagged with `viable` based on party compatibility
 // - Viable and inviable combos are both included — callers decide how to render them
 // - Deduplication: once a lead's viable majority is found, skip them in higher tiers
-export function buildCoalitions(parties: CoalitionParty[], total: number): Coalition[] {
+export function buildCoalitions(
+  parties: CoalitionParty[],
+  total: number,
+): Coalition[] {
   const eligible = parties.filter((d) => (d.value ?? 0) > 0);
-  const scored = coalitionCombinations(eligible).map(({ parties: ps, size }) => {
-    const combined = ps.reduce((s, p) => s + (p.value ?? 0), 0);
-    const share = combined / total;
-    const viable = isViableCoalition(ps.map((p) => p.name));
-    return { parties: ps, share, size, viable };
-  });
+  const scored = coalitionCombinations(eligible).map(
+    ({ parties: ps, size }) => {
+      const combined = ps.reduce((s, p) => s + (p.value ?? 0), 0);
+      const share = combined / total;
+      const viable = isViableCoalition(ps.map((p) => p.name));
+      return { parties: ps, share, size, viable };
+    },
+  );
 
   // Only viable majority combos block their participants from leading larger tiers
   const majorityParticipants = new Set<string>();
@@ -67,14 +72,26 @@ export function buildCoalitions(parties: CoalitionParty[], total: number): Coali
       .slice(0, 3);
 
     // Inviable candidates: same share threshold, not already covered by a viable entry
-    const viableKeys = new Set(viableCandidates.map((c) => c.parties.map((p) => p.name).sort().join("|")));
+    const viableKeys = new Set(
+      viableCandidates.map((c) =>
+        c.parties
+          .map((p) => p.name)
+          .sort()
+          .join("|"),
+      ),
+    );
     const inviableCandidates = scored
       .filter((c) => {
         if (c.size !== tier || c.viable) return false;
         if (c.share < MAJORITY - REACH) return false;
         if (tier > 1 && majorityParticipants.has(lead(c.parties))) return false;
         // Don't duplicate a combo already shown as viable
-        return !viableKeys.has(c.parties.map((p) => p.name).sort().join("|"));
+        return !viableKeys.has(
+          c.parties
+            .map((p) => p.name)
+            .sort()
+            .join("|"),
+        );
       })
       .sort((a, b) => b.share - a.share)
       .slice(0, 3);

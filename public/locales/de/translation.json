@@ -1,0 +1,43 @@
+{
+  "navbar": {
+    "home": "Stimmlage",
+    "bundestag": "Bundestag",
+    "landtage": "Landtage",
+    "eu": "EU"
+  },
+  "parliament": {
+    "pollTimeline": "Umfrageverlauf",
+    "pollTimelineDescription": "Historische Umfragewerte je Partei. Bewege den Übersichtsstreifen unten, um hineinzuzoomen.",
+    "currentPolls": "Aktuelle Umfragewerte",
+    "pollsByInstitute": "Umfragen nach Institut",
+    "noTimelineData": "Keine Verlaufsdaten für dieses Parlament verfügbar.",
+    "loading": "Laden…"
+  },
+  "coalition": {
+    "party": "Partei",
+    "poll": "Umfrage",
+    "fivePercentBarrier": "5%-Hürde",
+    "trend30d": "30d",
+    "trend90d": "90d",
+    "spread": "Spanne"
+  },
+  "institute": {
+    "institute": "Institut",
+    "date": "Datum"
+  },
+  "partyStats": {
+    "title": "Trend & Varianz",
+    "party": "Partei",
+    "current": "Aktuell",
+    "trend30d": "30d",
+    "trend90d": "90d",
+    "spread": "Spanne",
+    "legend": "30d / 90d = Veränderung zum Stichtag (Ø aller Institute). Spanne = halbe Differenz zwischen höchstem und niedrigstem Institutwert.",
+    "gain": "Zuwachs",
+    "loss": "Rückgang"
+  },
+  "timeline": {
+    "projection": "Projektion (linear)",
+    "resetZoom": "Zoom zurücksetzen"
+  }
+}
