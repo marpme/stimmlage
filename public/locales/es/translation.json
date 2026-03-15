@@ -61,7 +61,8 @@
     "landtageSection": "Parlamentos estatales",
     "listViewAriaLabel": "Vista de lista",
     "tileViewAriaLabel": "Vista de mosaico",
-    "loadingData": "Cargando datos de encuestas…"
+    "loadingData": "Cargando datos de encuestas…",
+    "mapViewAriaLabel": "Vista de mapa"
   },
   "donut": {
     "coalitions": "Coaliciones",

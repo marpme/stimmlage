@@ -61,7 +61,8 @@
     "landtageSection": "State Parliaments",
     "listViewAriaLabel": "List view",
     "tileViewAriaLabel": "Tile view",
-    "loadingData": "Loading poll data…"
+    "loadingData": "Loading poll data…",
+    "mapViewAriaLabel": "Map view"
   },
   "donut": {
     "coalitions": "Coalitions",

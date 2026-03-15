@@ -61,7 +61,8 @@
     "landtageSection": "Parlements régionaux",
     "listViewAriaLabel": "Vue en liste",
     "tileViewAriaLabel": "Vue en tuiles",
-    "loadingData": "Chargement des données de sondage…"
+    "loadingData": "Chargement des données de sondage…",
+    "mapViewAriaLabel": "Vue carte"
   },
   "donut": {
     "coalitions": "Coalitions",

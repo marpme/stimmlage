@@ -61,7 +61,8 @@
     "landtageSection": "Landtage",
     "listViewAriaLabel": "Listenansicht",
     "tileViewAriaLabel": "Kachelansicht",
-    "loadingData": "Umfragedaten werden geladen…"
+    "loadingData": "Umfragedaten werden geladen…",
+    "mapViewAriaLabel": "Kartenansicht"
   },
   "donut": {
     "coalitions": "Koalitionen",

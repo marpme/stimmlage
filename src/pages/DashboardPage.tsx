@@ -6,13 +6,14 @@ import { usePollData } from "@/hooks/usePollData.ts";
 import { FeaturedCard } from "@/views/dashboard/FeaturedCard.tsx";
 import { LandtagRow } from "@/views/dashboard/LandtagRow.tsx";
 import { ParliamentCard } from "@/views/dashboard/ParliamentCard.tsx";
+import { GermanyMap } from "@/views/dashboard/GermanyMap.tsx";
 import { title } from "@/components/primitives";
 
 const FEATURED_IDS = ["0", "17"];
 const LANDTAG_IDS = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"];
 const STORAGE_KEY = "gelection-landtag-view";
 
-type ViewMode = "list" | "tile";
+type ViewMode = "list" | "tile" | "map";
 
 const ListIcon = () => (
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -31,12 +32,23 @@ const TileIcon = () => (
   </svg>
 );
 
+const MapIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path d="M1 3l3.5 1.5L7 2l3.5 1.5L13 2v9l-2.5 1L7 10.5 4.5 12 1 10.5V3z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" fill="none" />
+    <line x1="4.5" y1="4.5" x2="4.5" y2="12" stroke="currentColor" strokeWidth="1.2" />
+    <line x1="7" y1="2" x2="7" y2="10.5" stroke="currentColor" strokeWidth="1.2" />
+  </svg>
+);
+
 export default function DashboardPage() {
   const { t } = useTranslation();
   const { data: pollData } = usePollData();
   const [view, setView] = useState<ViewMode>(() => {
-    try { return (localStorage.getItem(STORAGE_KEY) as ViewMode) ?? "list"; }
-    catch { return "list"; }
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored === "list" || stored === "tile" || stored === "map") return stored;
+      return "list";
+    } catch { return "list"; }
   });
 
   useEffect(() => {
@@ -97,16 +109,27 @@ export default function DashboardPage() {
                   >
                     <TileIcon />
                   </button>
+                  <button
+                    onClick={() => setView("map")}
+                    className={`flex items-center justify-center w-7 h-7 transition-colors ${
+                      view === "map" ? "bg-accent text-paper" : "text-ink-tertiary hover:text-ink hover:bg-rule/40"
+                    }`}
+                    aria-label={t("dashboard.mapViewAriaLabel")}
+                    aria-pressed={view === "map"}
+                  >
+                    <MapIcon />
+                  </button>
                 </div>
               </div>
 
-              {view === "list" ? (
+              {view === "list" && (
                 <div className="border border-rule rounded-lg overflow-hidden">
                   {LANDTAG_IDS.filter(id => pollData.Parliaments[id]).map((id, i) => (
                     <LandtagRow key={id} parliamentId={id} pollData={pollData} index={i} />
                   ))}
                 </div>
-              ) : (
+              )}
+              {view === "tile" && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                   {LANDTAG_IDS.filter(id => pollData.Parliaments[id]).map((id, i) => (
                     <div key={id} className="animate-fade-up" style={{ animationDelay: `${i * 40}ms` }}>
@@ -114,6 +137,9 @@ export default function DashboardPage() {
                     </div>
                   ))}
                 </div>
+              )}
+              {view === "map" && (
+                <GermanyMap pollData={pollData} />
               )}
             </div>
           </>

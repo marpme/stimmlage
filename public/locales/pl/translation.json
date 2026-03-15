@@ -61,7 +61,8 @@
     "landtageSection": "Parlamenty krajowe",
     "listViewAriaLabel": "Widok listy",
     "tileViewAriaLabel": "Widok kafelków",
-    "loadingData": "Ładowanie danych sondaży…"
+    "loadingData": "Ładowanie danych sondaży…",
+    "mapViewAriaLabel": "Widok mapy"
   },
   "donut": {
     "coalitions": "Koalicje",
