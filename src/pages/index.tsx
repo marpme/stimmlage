@@ -7,26 +7,16 @@ import { useSortedParliament } from "@/hooks/useSortedParliament.ts";
 import { useParliamentStore } from "@/model/useParliamentConfiguration";
 import { DonutChart } from "@/views/parliamentView/DonutChart.tsx";
 import { CoalitionsTable } from "@/views/CoalitionTable/table.tsx";
-import { qualifiesAsParty, useFivePercentBarrier } from "@/hooks/useFivePercentBarrier.ts";
+import { useFivePercentBarrier } from "@/hooks/useFivePercentBarrier.ts";
 import { usePollData } from "@/hooks/usePollData.ts";
-import { useEffect } from "react";
-import { PartyValues } from "@/utils/Party.ts";
 import { InstituteTable } from "@/views/institues/InstituteTable.tsx";
 import { ElectionTimeline } from "@/views/timeline/ElectionTimeline.tsx";
 
 export default function IndexPage() {
   const { data: pollData } = usePollData();
-  const { parliamentId, addDirectCandidate } = useParliamentStore();
+  const { parliamentId } = useParliamentStore();
 
   const setOfCoalition = useSetOfCoalition(parliamentId, pollData);
-
-  useEffect(() => {
-    setOfCoalition.forEach((party) => {
-      if (qualifiesAsParty(party)) {
-        addDirectCandidate(party.name as PartyValues);
-      }
-    });
-  }, [setOfCoalition]);
 
   const sortedParliament = useSortedParliament(setOfCoalition);
   const sortedAndLimited = useSortedParliament(useFivePercentBarrier(sortedParliament));
