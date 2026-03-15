@@ -70,7 +70,16 @@ export const DonutChart = ({ data }: DonutChartProps) => {
           <svg width={size} height={size} style={{ overflow: "visible" }}>
             <g transform={`translate(${cx},${cy})`}>
               {pie.map((d, i) => (
-                <path key={i} d={arc(d) ?? undefined} fill={d.data.color} fillOpacity={0.88} />
+                <path
+                  key={i}
+                  d={arc(d) ?? undefined}
+                  fill={d.data.color}
+                  fillOpacity={0.88}
+                  style={{
+                    animation: `arc-in 500ms var(--ease-out-expo) ${i * 40}ms both`,
+                    transformOrigin: `${cx}px ${cy}px`,
+                  }}
+                />
               ))}
               {pie.map((d, i) => {
                 const angle = d.endAngle - d.startAngle;
@@ -99,7 +108,7 @@ export const DonutChart = ({ data }: DonutChartProps) => {
           </svg>
 
           {/* Party legend */}
-          <div className="w-full mt-4 border-t border-rule pt-4">
+          <div className="w-full mt-4 border-t border-rule pt-4 animate-fade-up" style={{ animationDelay: "200ms" }}>
             <div className="grid grid-cols-2 gap-x-6 gap-y-1.5">
               {[...pie]
                 .sort((a, b) => (b.data.value ?? 0) - (a.data.value ?? 0))
@@ -115,7 +124,7 @@ export const DonutChart = ({ data }: DonutChartProps) => {
 
           {/* Coalition legend */}
           {coalitions.length > 0 && (
-            <div className="w-full mt-5 border-t border-rule pt-4">
+            <div className="w-full mt-5 border-t border-rule pt-4 animate-fade-up" style={{ animationDelay: "300ms" }}>
               <div className="flex items-center gap-3 mb-3">
                 <span className="text-xs font-semibold tracking-widest uppercase text-accent">Coalitions</span>
                 <div className="flex-1 h-px bg-rule" />

@@ -35,9 +35,9 @@ export default function ParliamentDetailPage() {
   return (
     <DefaultLayout>
       <section className="flex flex-col gap-8 py-8 md:py-10">
-        <h1 className="text-3xl font-bold tracking-tight text-ink">{parliamentName}</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-ink animate-fade-up">{parliamentName}</h1>
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 animate-fade-up" style={{ animationDelay: "60ms" }}>
           <div className="flex items-center gap-3">
             <h2 className="text-sm font-semibold tracking-widest uppercase text-accent">Poll Timeline</h2>
             <div className="flex-1 h-px bg-rule" />
@@ -48,12 +48,14 @@ export default function ParliamentDetailPage() {
           <ElectionTimeline parliamentId={id} />
         </div>
 
-        <div className="flex md:flex-row flex-col gap-4 w-full">
+        <div className="flex md:flex-row flex-col gap-4 w-full animate-fade-up" style={{ animationDelay: "120ms" }}>
           <CoalitionsTable data={sortedParliament} />
           <DonutChart data={sortedAndLimited} showMajorityMarker={false} />
         </div>
 
-        <InstituteTable surveys={pollData?.Surveys} />
+        <div className="animate-fade-up" style={{ animationDelay: "180ms" }}>
+          <InstituteTable surveys={pollData?.Surveys} />
+        </div>
       </section>
     </DefaultLayout>
   );

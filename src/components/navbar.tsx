@@ -8,7 +8,7 @@ import { usePollData } from "@/hooks/usePollData.ts";
 const LANDTAG_IDS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"];
 
 const navLinkClass = (isActive: boolean) =>
-  `text-sm font-medium transition-colors py-1 border-b-2 ${
+  `text-sm font-medium py-1 border-b-2 transition-[color,border-color] duration-200 ${
     isActive
       ? "text-accent border-accent"
       : "text-ink-tertiary border-transparent hover:text-ink hover:border-rule"
@@ -58,7 +58,7 @@ export const Navbar = () => {
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
               <DropdownMenu.Content
-                className="min-w-48 bg-paper border border-rule rounded-lg shadow-sm py-1 z-50"
+                className="min-w-48 bg-paper border border-rule rounded-lg shadow-sm py-1 z-50 data-[state=open]:animate-fade-up data-[state=closed]:animate-fade-in [animation-duration:150ms]"
                 sideOffset={8}
                 align="start"
               >

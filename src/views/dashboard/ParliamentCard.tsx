@@ -35,7 +35,7 @@ export const ParliamentCard = ({
   return (
     <Link
       to={`/parliament/${parliamentId}`}
-      className="block rounded-lg border border-rule bg-paper hover:border-accent/30 transition-colors p-4 group relative overflow-hidden"
+      className="block rounded-lg border border-rule bg-paper hover:border-accent/30 transition-all duration-200 p-4 group relative overflow-hidden hover:-translate-y-0.5 hover:shadow-sm"
       style={
         leader
           ? { borderTopColor: leader.color, borderTopWidth: "2px" }
@@ -71,10 +71,11 @@ export const ParliamentCard = ({
             </span>
             <div className="flex-1 h-1 rounded-full bg-rule overflow-hidden">
               <div
-                className="h-full rounded-full"
+                className="h-full rounded-full transition-[width] duration-700"
                 style={{
                   width: `${Math.min(100, (p.value / 50) * 100)}%`,
                   background: p.color,
+                  transitionTimingFunction: "var(--ease-out-expo)",
                 }}
               />
             </div>

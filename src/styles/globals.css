@@ -30,6 +30,45 @@
   }
 }
 
+/* ─── Motion tokens ─────────────────────────────────────── */
+:root {
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes arc-in {
+  from { opacity: 0; transform: scale(0.82); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Staggered card entrance — add [data-index] on each card */
+.animate-fade-up {
+  animation: fade-up 400ms var(--ease-out-quart) both;
+}
+
+.animate-fade-in {
+  animation: fade-in 300ms var(--ease-out-quart) both;
+}
+
+/* Reduced motion: collapse all durations to near-zero */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @layer utilities {
   .text-accent {
     color: var(--color-accent);
