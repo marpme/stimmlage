@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import * as d3 from "d3";
+import { useTranslation } from "react-i18next";
 import { useDimensions } from "@/hooks/useDimensions.ts";
 import { buildCoalitions } from "./coalitions.ts";
 
@@ -20,6 +21,7 @@ const MARGIN = 24;
 const MIN_LABEL_ANGLE = 0.28; // ~16°, minimum slice angle to show a label
 
 export const DonutChart = ({ data }: DonutChartProps) => {
+  const { t } = useTranslation();
   const sortedData = useMemo(
     () =>
       [...data].sort((a, b) =>
@@ -176,7 +178,7 @@ export const DonutChart = ({ data }: DonutChartProps) => {
             >
               <div className="flex items-center gap-3 mb-3">
                 <span className="text-xs font-semibold tracking-widest uppercase text-accent">
-                  Coalitions
+                  {t("donut.coalitions")}
                 </span>
                 <div className="flex-1 h-px bg-rule" />
               </div>
@@ -186,10 +188,10 @@ export const DonutChart = ({ data }: DonutChartProps) => {
                   if (tierItems.length === 0) return null;
                   const tierLabel =
                     tier === 1
-                      ? "Single party"
+                      ? t("donut.singleParty")
                       : tier === 2
-                        ? "Two-party"
-                        : "Three-party";
+                        ? t("donut.twoParty")
+                        : t("donut.threeParty");
                   const majorityMarkerPct = (MAJORITY / TWO_THIRDS) * 100;
                   return (
                     <div key={tier} className="mt-3 first:mt-0">
@@ -253,7 +255,7 @@ export const DonutChart = ({ data }: DonutChartProps) => {
                                 </span>
                                 {!c.viable && (
                                   <span className="text-[9px] text-ink-tertiary border border-rule rounded px-1 flex-shrink-0 tracking-wide uppercase">
-                                    unlikely
+                                    {t("donut.unlikely")}
                                   </span>
                                 )}
                                 <span

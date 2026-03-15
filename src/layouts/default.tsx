@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { Navbar } from "@/components/navbar";
 
 export default function DefaultLayout({
@@ -5,6 +7,7 @@ export default function DefaultLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
   const establishedYear = 2025;
   return (
@@ -16,28 +19,28 @@ export default function DefaultLayout({
       <footer className="w-full border-t border-rule py-6 px-2 md:px-6">
         <div className="container mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-ink-tertiary">
           <span>
-            Made in Germany &mdash; &copy;{" "}
+            {t("footer.madeIn")} &mdash; &copy;{" "}
             {establishedYear === currentYear
               ? establishedYear
               : `${establishedYear}–${currentYear}`}
           </span>
           <span className="flex items-center gap-1">
-            Data:{" "}
+            {t("footer.dataLabel")}{" "}
             <a
               href="https://dawum.de/"
               target="_blank"
               rel="noopener noreferrer"
-              title="Dawum - Neueste Wahlumfragen und Ergebnisse"
+              title={t("footer.dataLinkTitle")}
               className="underline underline-offset-2 hover:text-accent transition-colors"
             >
               dawum.de
             </a>
-            {" "}under{" "}
+            {" "}{t("footer.licenseConnector")}{" "}
             <a
               href="https://opendatacommons.org/licenses/odbl/1-0/"
               target="_blank"
               rel="noopener noreferrer"
-              title="Open Database License (ODbL) v1.0"
+              title={t("footer.licenseLinkTitle")}
               className="underline underline-offset-2 hover:text-accent transition-colors"
             >
               ODbL

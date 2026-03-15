@@ -1,6 +1,7 @@
 {
   "navbar": {
     "home": "Stimmlage",
+    "homeAriaLabel": "Inicio de Stimmlage",
     "bundestag": "Bundestag",
     "landtage": "Parlamentos estatales",
     "eu": "UE"
@@ -39,5 +40,44 @@
   "timeline": {
     "projection": "Proyección (lineal)",
     "resetZoom": "Restablecer zoom"
+  },
+  "home": {
+    "heroTitle": "Construye tu ",
+    "heroTitleAccent": "parlamento ",
+    "heroTitleSuffix": "con datos de encuestas en vivo.",
+    "heroSubtitle": "Distribución interactiva de escaños parlamentarios basada en los promedios de encuestas alemanas actuales. Selecciona partidos, explora coaliciones y sigue las tendencias históricas.",
+    "tabsAriaLabel": "Vistas electorales",
+    "tabParliament": "Constructor de parlamento",
+    "tabTimeline": "Cronología",
+    "parliamentBuilderTitle": "Constructor de parlamento",
+    "timelineTitle": "Cronología de encuestas electorales",
+    "timelineDescription": "Tendencias históricas de encuestas por partido, con fechas electorales marcadas como líneas de referencia."
+  },
+  "dashboard": {
+    "title": "Resumen ",
+    "titleAccent": "electoral",
+    "subtitle": "Últimas posiciones en encuestas de todos los parlamentos alemanes.",
+    "featuredSection": "Bundestag y UE",
+    "landtageSection": "Parlamentos estatales",
+    "listViewAriaLabel": "Vista de lista",
+    "tileViewAriaLabel": "Vista de mosaico",
+    "loadingData": "Cargando datos de encuestas…"
+  },
+  "donut": {
+    "coalitions": "Coaliciones",
+    "singleParty": "Partido único",
+    "twoParty": "Bipartidista",
+    "threeParty": "Tripartidista",
+    "unlikely": "improbable"
+  },
+  "footer": {
+    "madeIn": "Hecho en Alemania",
+    "dataLabel": "Datos:",
+    "dataLinkTitle": "Dawum – Últimas encuestas y resultados electorales",
+    "licenseConnector": "bajo",
+    "licenseLinkTitle": "Open Database License (ODbL) v1.0"
+  },
+  "languageSwitcher": {
+    "ariaLabel": "Seleccionar idioma"
   }
 }

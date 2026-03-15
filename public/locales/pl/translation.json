@@ -1,6 +1,7 @@
 {
   "navbar": {
     "home": "Stimmlage",
+    "homeAriaLabel": "Strona główna Stimmlage",
     "bundestag": "Bundestag",
     "landtage": "Parlamenty krajowe",
     "eu": "UE"
@@ -39,5 +40,44 @@
   "timeline": {
     "projection": "Projekcja (liniowa)",
     "resetZoom": "Resetuj zoom"
+  },
+  "home": {
+    "heroTitle": "Zbuduj swój ",
+    "heroTitleAccent": "parlament ",
+    "heroTitleSuffix": "z danymi sondaży na żywo.",
+    "heroSubtitle": "Interaktywny podział mandatów parlamentarnych oparty na aktualnych średnich sondaży niemieckich. Wybieraj partie, odkrywaj koalicje i śledź historyczne trendy.",
+    "tabsAriaLabel": "Widoki wyborcze",
+    "tabParliament": "Kreator parlamentu",
+    "tabTimeline": "Oś czasu",
+    "parliamentBuilderTitle": "Kreator parlamentu",
+    "timelineTitle": "Historia sondaży wyborczych",
+    "timelineDescription": "Historyczne trendy sondażowe według partii, z zaznaczonymi datami wyborów jako liniami odniesienia."
+  },
+  "dashboard": {
+    "title": "Przegląd ",
+    "titleAccent": "wyborczy",
+    "subtitle": "Najnowsze wyniki sondaży wszystkich niemieckich parlamentów.",
+    "featuredSection": "Bundestag i UE",
+    "landtageSection": "Parlamenty krajowe",
+    "listViewAriaLabel": "Widok listy",
+    "tileViewAriaLabel": "Widok kafelków",
+    "loadingData": "Ładowanie danych sondaży…"
+  },
+  "donut": {
+    "coalitions": "Koalicje",
+    "singleParty": "Jedna partia",
+    "twoParty": "Dwupartyjne",
+    "threeParty": "Trójpartyjne",
+    "unlikely": "mało prawdopodobne"
+  },
+  "footer": {
+    "madeIn": "Wyprodukowano w Niemczech",
+    "dataLabel": "Dane:",
+    "dataLinkTitle": "Dawum – Najnowsze sondaże i wyniki wyborów",
+    "licenseConnector": "na licencji",
+    "licenseLinkTitle": "Open Database License (ODbL) v1.0"
+  },
+  "languageSwitcher": {
+    "ariaLabel": "Wybierz język"
   }
 }

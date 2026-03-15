@@ -10,7 +10,7 @@ const LANGUAGES = [
 ] as const;
 
 export const LanguageSwitcher = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const current = i18n.language.split("-")[0];
 
   return (
@@ -18,7 +18,7 @@ export const LanguageSwitcher = () => {
       <DropdownMenu.Trigger asChild>
         <button
           className="flex items-center gap-1 text-xs font-medium text-ink-tertiary hover:text-ink transition-colors cursor-pointer"
-          aria-label="Select language"
+          aria-label={t("languageSwitcher.ariaLabel")}
         >
           <span className="uppercase tracking-wide">{current}</span>
           <svg className="w-3 h-3 opacity-60" viewBox="0 0 12 12" fill="none">

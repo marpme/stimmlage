@@ -1,6 +1,7 @@
 {
   "navbar": {
     "home": "Stimmlage",
+    "homeAriaLabel": "Stimmlage home",
     "bundestag": "Bundestag",
     "landtage": "State Parliaments",
     "eu": "EU"
@@ -39,5 +40,44 @@
   "timeline": {
     "projection": "Projection (linear)",
     "resetZoom": "Reset zoom"
+  },
+  "home": {
+    "heroTitle": "Build ",
+    "heroTitleAccent": "parliaments ",
+    "heroTitleSuffix": "with live polling data.",
+    "heroSubtitle": "Interactive parliament seat distribution based on current German poll averages. Select parties, explore coalitions, and trace historical trends.",
+    "tabsAriaLabel": "Election views",
+    "tabParliament": "Parliament Builder",
+    "tabTimeline": "Timeline",
+    "parliamentBuilderTitle": "Parliament Builder",
+    "timelineTitle": "Election Poll Timeline",
+    "timelineDescription": "Historical polling trends per party, with election dates marked as reference lines."
+  },
+  "dashboard": {
+    "title": "Election ",
+    "titleAccent": "Overview",
+    "subtitle": "Latest poll standings across all German parliaments.",
+    "featuredSection": "Bundestag & EU",
+    "landtageSection": "State Parliaments",
+    "listViewAriaLabel": "List view",
+    "tileViewAriaLabel": "Tile view",
+    "loadingData": "Loading poll data…"
+  },
+  "donut": {
+    "coalitions": "Coalitions",
+    "singleParty": "Single party",
+    "twoParty": "Two-party",
+    "threeParty": "Three-party",
+    "unlikely": "unlikely"
+  },
+  "footer": {
+    "madeIn": "Made in Germany",
+    "dataLabel": "Data:",
+    "dataLinkTitle": "Dawum – Latest election polls and results",
+    "licenseConnector": "under",
+    "licenseLinkTitle": "Open Database License (ODbL) v1.0"
+  },
+  "languageSwitcher": {
+    "ariaLabel": "Select language"
   }
 }

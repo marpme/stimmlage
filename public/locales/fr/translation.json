@@ -1,6 +1,7 @@
 {
   "navbar": {
     "home": "Stimmlage",
+    "homeAriaLabel": "Accueil Stimmlage",
     "bundestag": "Bundestag",
     "landtage": "Parlements régionaux",
     "eu": "UE"
@@ -39,5 +40,44 @@
   "timeline": {
     "projection": "Projection (linéaire)",
     "resetZoom": "Réinitialiser le zoom"
+  },
+  "home": {
+    "heroTitle": "Composez votre ",
+    "heroTitleAccent": "parlement ",
+    "heroTitleSuffix": "avec des données de sondage en direct.",
+    "heroSubtitle": "Répartition interactive des sièges parlementaires basée sur les moyennes actuelles des sondages allemands. Sélectionnez des partis, explorez des coalitions et suivez les tendances historiques.",
+    "tabsAriaLabel": "Vues électorales",
+    "tabParliament": "Constructeur de parlement",
+    "tabTimeline": "Chronologie",
+    "parliamentBuilderTitle": "Constructeur de parlement",
+    "timelineTitle": "Chronologie des sondages électoraux",
+    "timelineDescription": "Tendances historiques des sondages par parti, avec les dates électorales marquées comme lignes de référence."
+  },
+  "dashboard": {
+    "title": "Vue d'ensemble ",
+    "titleAccent": "électorale",
+    "subtitle": "Derniers résultats de sondages de tous les parlements allemands.",
+    "featuredSection": "Bundestag & UE",
+    "landtageSection": "Parlements régionaux",
+    "listViewAriaLabel": "Vue en liste",
+    "tileViewAriaLabel": "Vue en tuiles",
+    "loadingData": "Chargement des données de sondage…"
+  },
+  "donut": {
+    "coalitions": "Coalitions",
+    "singleParty": "Parti unique",
+    "twoParty": "Bipartite",
+    "threeParty": "Tripartite",
+    "unlikely": "improbable"
+  },
+  "footer": {
+    "madeIn": "Fabriqué en Allemagne",
+    "dataLabel": "Données :",
+    "dataLinkTitle": "Dawum – Derniers sondages et résultats électoraux",
+    "licenseConnector": "sous",
+    "licenseLinkTitle": "Open Database License (ODbL) v1.0"
+  },
+  "languageSwitcher": {
+    "ariaLabel": "Choisir la langue"
   }
 }

@@ -1,4 +1,5 @@
 import * as Tabs from "@radix-ui/react-tabs";
+import { useTranslation } from "react-i18next";
 
 import { title, subtitle } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
@@ -13,6 +14,7 @@ import { InstituteTable } from "@/views/institues/InstituteTable.tsx";
 import { ElectionTimeline } from "@/views/timeline/ElectionTimeline.tsx";
 
 export default function IndexPage() {
+  const { t } = useTranslation();
   const { data: pollData } = usePollData();
   const { parliamentId } = useParliamentStore();
 
@@ -26,21 +28,20 @@ export default function IndexPage() {
       <section className="flex flex-col justify-center gap-6 py-8 md:py-10">
         <div className="max-w-lg">
           <h1>
-            <span className={title()}>Build&nbsp;</span>
-            <span className={title({ color: "accent" })}>parliaments&nbsp;</span>
-            <span className={title()}>with live polling data.</span>
+            <span className={title()}>{t("home.heroTitle")}</span>
+            <span className={title({ color: "accent" })}>{t("home.heroTitleAccent")}</span>
+            <span className={title()}>{t("home.heroTitleSuffix")}</span>
           </h1>
           <p className={subtitle({ class: "mt-3" })}>
-            Interactive parliament seat distribution based on current German poll averages.
-            Select parties, explore coalitions, and trace historical trends.
+            {t("home.heroSubtitle")}
           </p>
         </div>
 
         <Tabs.Root defaultValue="parliament">
-          <Tabs.List className="flex gap-0 border-b border-rule mb-6" aria-label="Election views">
+          <Tabs.List className="flex gap-0 border-b border-rule mb-6" aria-label={t("home.tabsAriaLabel")}>
             {[
-              { value: "parliament", label: "Parliament Builder" },
-              { value: "timeline", label: "Timeline" },
+              { value: "parliament", label: t("home.tabParliament") },
+              { value: "timeline", label: t("home.tabTimeline") },
             ].map(({ value, label }) => (
               <Tabs.Trigger
                 key={value}
@@ -53,7 +54,7 @@ export default function IndexPage() {
           </Tabs.List>
 
           <Tabs.Content value="parliament" className="flex flex-col gap-4">
-            <h2 className={title({ size: "sm" })}>Parliament Builder</h2>
+            <h2 className={title({ size: "sm" })}>{t("home.parliamentBuilderTitle")}</h2>
             <div className="flex md:flex-row flex-col gap-4 w-full">
               <CoalitionsTable data={sortedParliament} />
               <DonutChart data={sortedAndLimited} showMajorityMarker={false} />
@@ -62,9 +63,9 @@ export default function IndexPage() {
           </Tabs.Content>
 
           <Tabs.Content value="timeline" className="flex flex-col gap-4">
-            <h2 className={title({ size: "sm" })}>Election Poll Timeline</h2>
+            <h2 className={title({ size: "sm" })}>{t("home.timelineTitle")}</h2>
             <p className="text-ink-tertiary text-sm">
-              Historical polling trends per party, with election dates marked as reference lines.
+              {t("home.timelineDescription")}
             </p>
             <ElectionTimeline />
           </Tabs.Content>

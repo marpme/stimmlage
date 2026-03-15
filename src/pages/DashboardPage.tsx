@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 import DefaultLayout from "@/layouts/default";
 import { usePollData } from "@/hooks/usePollData.ts";
@@ -31,6 +32,7 @@ const TileIcon = () => (
 );
 
 export default function DashboardPage() {
+  const { t } = useTranslation();
   const { data: pollData } = usePollData();
   const [view, setView] = useState<ViewMode>(() => {
     try { return (localStorage.getItem(STORAGE_KEY) as ViewMode) ?? "list"; }
@@ -46,10 +48,10 @@ export default function DashboardPage() {
       <section className="flex flex-col gap-10 py-8 md:py-10">
         <div className="animate-fade-up">
           <h1 className={title()}>
-            Election <span className={title({ color: "accent" })}>Overview</span>
+            {t("dashboard.title")}<span className={title({ color: "accent" })}>{t("dashboard.titleAccent")}</span>
           </h1>
           <p className="text-ink-tertiary text-sm mt-2">
-            Latest poll standings across all German parliaments.
+            {t("dashboard.subtitle")}
           </p>
         </div>
 
@@ -58,7 +60,7 @@ export default function DashboardPage() {
             {/* Featured: Bundestag + EU */}
             <div className="animate-fade-up" style={{ animationDelay: "60ms" }}>
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-xs font-semibold tracking-widest uppercase text-accent">Bundestag & EU</span>
+                <span className="text-xs font-semibold tracking-widest uppercase text-accent">{t("dashboard.featuredSection")}</span>
                 <div className="flex-1 h-px bg-rule" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -71,7 +73,7 @@ export default function DashboardPage() {
             {/* Landtage */}
             <div className="animate-fade-up" style={{ animationDelay: "120ms" }}>
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-xs font-semibold tracking-widest uppercase text-accent">Landtage</span>
+                <span className="text-xs font-semibold tracking-widest uppercase text-accent">{t("dashboard.landtageSection")}</span>
                 <div className="flex-1 h-px bg-rule" />
                 {/* View toggle */}
                 <div className="flex items-center border border-rule rounded overflow-hidden flex-shrink-0">
@@ -80,7 +82,7 @@ export default function DashboardPage() {
                     className={`flex items-center justify-center w-7 h-7 transition-colors ${
                       view === "list" ? "bg-accent text-paper" : "text-ink-tertiary hover:text-ink hover:bg-rule/40"
                     }`}
-                    aria-label="List view"
+                    aria-label={t("dashboard.listViewAriaLabel")}
                     aria-pressed={view === "list"}
                   >
                     <ListIcon />
@@ -90,7 +92,7 @@ export default function DashboardPage() {
                     className={`flex items-center justify-center w-7 h-7 transition-colors ${
                       view === "tile" ? "bg-accent text-paper" : "text-ink-tertiary hover:text-ink hover:bg-rule/40"
                     }`}
-                    aria-label="Tile view"
+                    aria-label={t("dashboard.tileViewAriaLabel")}
                     aria-pressed={view === "tile"}
                   >
                     <TileIcon />
@@ -117,7 +119,7 @@ export default function DashboardPage() {
           </>
         ) : (
           <div className="flex items-center justify-center h-48 text-ink-tertiary text-sm">
-            Loading poll data…
+            {t("dashboard.loadingData")}
           </div>
         )}
       </section>
