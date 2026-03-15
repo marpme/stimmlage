@@ -10,6 +10,7 @@ import {
 } from "@/hooks/useTimelineSurveys.ts";
 import { electionDates } from "@/assets/electionDates.ts";
 import { useTheme } from "@/hooks/use-theme.ts";
+import { usePollProjection, PartyProjection } from "@/hooks/usePollProjection.ts";
 
 const MARGIN = { top: 20, right: 20, bottom: 40, left: 44 };
 const MINI_HEIGHT = 60;
@@ -60,6 +61,7 @@ type ChartProps = {
   series: TimelinePartyData[];
   parliamentId: string;
   zoomDomain: [Date, Date] | null;
+  projections?: PartyProjection[];
 };
 
 const TimelineChart = ({
@@ -68,6 +70,7 @@ const TimelineChart = ({
   series,
   parliamentId,
   zoomDomain,
+  projections = [],
 }: ChartProps) => {
   const { isLight } = useTheme();
   const axesRef = useRef<SVGGElement>(null);
@@ -307,6 +310,54 @@ const TimelineChart = ({
             })}
           </g>
 
+          {/* Projection overlay */}
+          {projections.length > 0 && (() => {
+            const now = new Date();
+            const nowX = xScale(now);
+            if (nowX < 0 || nowX > boundsWidth) return null;
+            return (
+              <g clipPath="url(#chart-clip)">
+                {/* Boundary line at today */}
+                <line
+                  x1={nowX} x2={nowX}
+                  y1={0} y2={boundsHeight}
+                  stroke={themeColors(isLight).axis}
+                  strokeDasharray="4 3"
+                  strokeWidth={1}
+                  opacity={0.4}
+                />
+                <text
+                  x={nowX + 4}
+                  y={boundsHeight - 6}
+                  fontSize={9}
+                  fill={themeColors(isLight).axis}
+                  opacity={0.6}
+                >
+                  Projektion (linear)
+                </text>
+                {/* Projection lines per party */}
+                {projections.map((p) => {
+                  const x1 = xScale(p.fromDate);
+                  const x2 = xScale(p.toDate);
+                  const y1 = yScale(p.fromValue);
+                  const y2 = yScale(p.toValue);
+                  if (x2 < 0 || x1 > boundsWidth) return null;
+                  return (
+                    <line
+                      key={`proj-${p.name}`}
+                      x1={x1} y1={y1}
+                      x2={x2} y2={y2}
+                      stroke={p.color}
+                      strokeWidth={1.5}
+                      strokeDasharray="4 3"
+                      opacity={0.5}
+                    />
+                  );
+                })}
+              </g>
+            );
+          })()}
+
           {tooltip && (
             <g>
               <line
@@ -513,16 +564,19 @@ const Minimap = ({ width, series, zoomDomain, onBrush }: MinimapProps) => {
 
 type ElectionTimelineProps = {
   parliamentId?: string;
+  showProjection?: boolean;
 };
 
 export const ElectionTimeline = ({
   parliamentId: parliamentIdProp,
+  showProjection = false,
 }: ElectionTimelineProps = {}) => {
   const { ref, dimensions } = useDimensions();
   const { data: pollData } = usePollData();
   const { parliamentId: storeParliamentId } = useParliamentStore();
   const parliamentId = parliamentIdProp ?? storeParliamentId;
   const series = useTimelineSurveys(parliamentId, pollData);
+  const projections = usePollProjection(parliamentId, pollData);
   const [zoomDomain, setZoomDomain] = useState<[Date, Date] | null>(null);
 
   // Reset zoom when parliament changes
@@ -573,6 +627,7 @@ export const ElectionTimeline = ({
             series={series}
             width={dimensions.width}
             zoomDomain={zoomDomain}
+            projections={showProjection ? projections : []}
           />
           <Minimap
             series={series}

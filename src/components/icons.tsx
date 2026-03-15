@@ -1,55 +1,51 @@
 import * as React from "react";
-import styles from "./icons.module.css";
 
 import { IconSvgProps } from "@/types";
-import { useEffect } from "react";
-import { randomizeLogoBars } from "./randomizeLogoBars";
 
-export const Logo: React.FC<IconSvgProps> = ({
-  size = 36,
-  width,
-  ...props
-}) => {
-  useEffect(() => {
-    const interval = setInterval(() => {
-      randomizeLogoBars();
-    }, 3000);
+export const Logo: React.FC<IconSvgProps> = ({ size = 28, width, ...props }) => {
+  // Parliament hemicycle: 3 arcs of dots representing seats
+  // Row 1 (outer): 9 dots, Row 2 (middle): 7 dots, Row 3 (inner): 5 dots
+  const cx = 16;
+  const cy = 26;
+  const rows = [
+    { r: 15, count: 9 },
+    { r: 10, count: 6 },
+    { r: 5,  count: 3 },
+  ];
 
-    return () => clearInterval(interval);
-  }, []);
+  const dots: { x: number; y: number }[] = [];
+  for (const { r, count } of rows) {
+    for (let i = 0; i < count; i++) {
+      const angle = Math.PI + (i / (count - 1)) * Math.PI;
+      dots.push({
+        x: cx + r * Math.cos(angle),
+        y: cy + r * Math.sin(angle),
+      });
+    }
+  }
 
   return (
     <svg
       fill="none"
       width={size || width}
-      viewBox="0 0 32 32"
       height={size || width}
-      className={styles.logo}
+      viewBox="-1 9 34 19"
+      aria-label="Stimmlage"
       {...props}
     >
-      <rect
-        className={styles.blackBar}
-        width="32"
-        height="10.67"
-        fill="black"
-      />
-      <rect
-        className={styles.redBar}
-        width="24"
-        height="10.67"
-        y="10.67"
-        fill="red"
-      />
-      <rect
-        className={styles.goldBar}
-        width="16"
-        height="10.67"
-        y="21.33"
-        fill="gold"
-      />
+      {dots.map((d, i) => (
+        <circle
+          key={i}
+          cx={d.x}
+          cy={d.y}
+          r={1.6}
+          fill="var(--color-accent)"
+        />
+      ))}
     </svg>
   );
 };
+
 export const DiscordIcon: React.FC<IconSvgProps> = ({
   size = 24,
   width,

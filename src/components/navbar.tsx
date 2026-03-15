@@ -29,9 +29,9 @@ export const Navbar = () => {
       <div className="container mx-auto max-w-7xl px-2 md:px-6 h-14 flex items-center justify-between gap-6">
 
         {/* Brand */}
-        <Link to="/" className="flex items-center gap-2 flex-shrink-0" aria-label="gelection home">
-          <Logo />
-          <span className="text-sm font-bold tracking-tight text-ink">gelection</span>
+        <Link to="/" className="flex items-center gap-2 flex-shrink-0" aria-label="Stimmlage home">
+          <Logo size={22} />
+          <span className="text-sm font-bold tracking-tight text-ink">Stimmlage</span>
         </Link>
 
         {/* Nav links */}
