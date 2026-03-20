@@ -10,6 +10,7 @@
     "pollTimeline": "Historique des sondages",
     "pollTimelineDescription": "Évolution des sondages par parti. Faites glisser la barre d'aperçu pour zoomer.",
     "currentPolls": "Sondages actuels",
+    "currentPollsDescription": "Moyenne du dernier sondage de chaque institut, limité aux 30 derniers jours.",
     "pollsByInstitute": "Sondages par institut",
     "noTimelineData": "Aucune donnée historique disponible pour ce parlement.",
     "loading": "Chargement…"

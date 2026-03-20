@@ -57,6 +57,7 @@ export default function ParliamentDetailPage() {
             <h2 className="text-xs font-semibold tracking-widest uppercase text-accent flex-shrink-0">{t("parliament.currentPolls")}</h2>
             <div className="flex-1 h-px bg-rule" />
           </div>
+          <p className="text-ink-tertiary text-sm">{t("parliament.currentPollsDescription")}</p>
           <div className="flex md:flex-row flex-col gap-4 w-full">
             <CoalitionsTable data={sortedParliament} trendStats={trendStats} />
             <DonutChart data={sortedAndLimited} showMajorityMarker={false} />

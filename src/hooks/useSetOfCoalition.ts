@@ -18,13 +18,17 @@ export const useSetOfCoalition = (
       return emptyData;
     }
 
+    const allSurveys = Object.values(data.Surveys)
+      .filter((e) => e.Parliament_ID === parliamentId)
+      .toSorted((a, b) => (a.Date > b.Date ? -1 : a.Date < b.Date ? 1 : 0));
+
+    const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const withinWindow = allSurveys.filter((e) => e.Date >= cutoff);
+    const uniqueInstitutesInWindow = new Set(withinWindow.map((e) => e.Institute_ID)).size;
+    const recentSurveys = uniqueInstitutesInWindow >= 2 ? withinWindow : allSurveys;
+
     const instituteResult = Object.entries(
-      Object.groupBy(
-        Object.values(data.Surveys)
-          .filter((e) => e.Parliament_ID === parliamentId)
-          .toSorted((a, b) => (a.Date > b.Date ? -1 : a.Date < b.Date ? 1 : 0)),
-        (e) => e.Institute_ID,
-      ),
+      Object.groupBy(recentSurveys, (e) => e.Institute_ID),
     ).map(([instituteId, institutePolls]) => ({
       name: instituteId,
       value: Object.entries(institutePolls!.at(0)!.Results).map(

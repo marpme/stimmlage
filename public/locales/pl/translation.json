@@ -10,6 +10,7 @@
     "pollTimeline": "Historia sondaży",
     "pollTimelineDescription": "Historyczne trendy sondażowe według partii. Przeciągnij pasek przeglądu, aby powiększyć.",
     "currentPolls": "Aktualne sondaże",
+    "currentPollsDescription": "Średnia z najnowszego sondażu każdego instytutu, ograniczona do ostatnich 30 dni.",
     "pollsByInstitute": "Sondaże według instytutu",
     "noTimelineData": "Brak danych historycznych dla tego parlamentu.",
     "loading": "Ładowanie…"

@@ -10,6 +10,7 @@
     "pollTimeline": "Poll Timeline",
     "pollTimelineDescription": "Historical polling trends per party. Drag the overview strip below to zoom in.",
     "currentPolls": "Current Poll Numbers",
+    "currentPollsDescription": "Average of each institute's latest poll, limited to surveys from the last 30 days.",
     "pollsByInstitute": "Polls by Institute",
     "noTimelineData": "No timeline data available for this parliament.",
     "loading": "Loading…"

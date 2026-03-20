@@ -10,6 +10,7 @@
     "pollTimeline": "Cronología de encuestas",
     "pollTimelineDescription": "Tendencias históricas de encuestas por partido. Arrastra la barra de vista general para hacer zoom.",
     "currentPolls": "Encuestas actuales",
+    "currentPollsDescription": "Media de la última encuesta de cada instituto, limitada a los últimos 30 días.",
     "pollsByInstitute": "Encuestas por instituto",
     "noTimelineData": "No hay datos de cronología disponibles para este parlamento.",
     "loading": "Cargando…"

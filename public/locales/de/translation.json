@@ -10,6 +10,7 @@
     "pollTimeline": "Umfrageverlauf",
     "pollTimelineDescription": "Historische Umfragewerte je Partei. Bewege den Übersichtsstreifen unten, um hineinzuzoomen.",
     "currentPolls": "Aktuelle Umfragewerte",
+    "currentPollsDescription": "Ø der aktuellsten Umfrage je Institut, nur Erhebungen der letzten 30 Tage.",
     "pollsByInstitute": "Umfragen nach Institut",
     "noTimelineData": "Keine Verlaufsdaten für dieses Parlament verfügbar.",
     "loading": "Laden…"
