@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import * as d3 from "d3";
 import { useNavigate } from "react-router-dom";
 
@@ -35,8 +35,22 @@ export type StateDetail = {
   parties: PartyBar[];
 };
 
-// ─── Per-state hook component ──────────────────────────────────────────────
-// Each state needs its own component so React hooks aren't called conditionally.
+// ─── Breakpoint hook ──────────────────────────────────────────────────────
+
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 640);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    setIsMobile(mq.matches);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  return isMobile;
+};
+
+// ─── Per-state hook component ─────────────────────────────────────────────
+// Each state is its own component so React hooks can be called unconditionally.
 
 type StatePathProps = {
   feature: GeoJSON.Feature;
@@ -44,6 +58,7 @@ type StatePathProps = {
   parliamentId: string;
   pollData: Poll;
   isActive: boolean;
+  isMobile: boolean;
   onEnter: (detail: StateDetail) => void;
   onLeave: () => void;
   onClick: (detail: StateDetail) => void;
@@ -55,6 +70,7 @@ const StatePath = ({
   parliamentId,
   pollData,
   isActive,
+  isMobile,
   onEnter,
   onLeave,
   onClick,
@@ -90,21 +106,26 @@ const StatePath = ({
       style={{
         cursor: "pointer",
         transition: "fill-opacity 0.15s ease, stroke-width 0.15s ease",
+        // Enlarge touch target on mobile via pointer-events: painted area
+        touchAction: "manipulation",
       }}
-      onMouseEnter={() => onEnter(detail)}
-      onMouseLeave={onLeave}
+      // Desktop: hover to preview, leave to clear
+      onMouseEnter={isMobile ? undefined : () => onEnter(detail)}
+      onMouseLeave={isMobile ? undefined : onLeave}
+      // Both: click/tap to pin
       onClick={() => onClick(detail)}
     />
   );
 };
 
-// ─── AllStates renders all 16 state paths ─────────────────────────────────
+// ─── AllStates ────────────────────────────────────────────────────────────
 
 type AllStatesProps = {
   features: GeoJSON.Feature[];
   pathGenerator: d3.GeoPath;
   pollData: Poll;
   activeId: string | null;
+  isMobile: boolean;
   onEnter: (detail: StateDetail) => void;
   onLeave: () => void;
   onClick: (detail: StateDetail) => void;
@@ -115,6 +136,7 @@ const AllStates = ({
   pathGenerator,
   pollData,
   activeId,
+  isMobile,
   onEnter,
   onLeave,
   onClick,
@@ -132,6 +154,7 @@ const AllStates = ({
           parliamentId={parliamentId}
           pollData={pollData}
           isActive={activeId === parliamentId}
+          isMobile={isMobile}
           onEnter={onEnter}
           onLeave={onLeave}
           onClick={onClick}
@@ -161,8 +184,7 @@ const ColorLegend = ({ entries }: { entries: LegendEntry[] }) => (
   </div>
 );
 
-// A hidden component that collects all leader party names+colors for the legend.
-// Renders nothing visible, calls hooks per parliament.
+// Hidden render-only component to collect each state's leading party for the legend.
 type LeaderCollectorProps = {
   parliamentId: string;
   pollData: Poll;
@@ -176,26 +198,22 @@ const LeaderCollector = ({
 }: LeaderCollectorProps) => {
   const parties = useSetOfCoalition(parliamentId, pollData);
 
-  const leader = useMemo(() => {
-    return (
+  const leader = useMemo(
+    () =>
       [...parties]
         .filter((p) => !p.name.includes("Sonstige"))
-        .sort((a, b) => b.value - a.value)[0] ?? null
-    );
-  }, [parties]);
+        .sort((a, b) => b.value - a.value)[0] ?? null,
+    [parties],
+  );
 
-  // Use a ref-like pattern — call during render is fine for collecting
-  if (leader) {
-    onLeader(leader.name, leader.color);
-  }
-
+  if (leader) onLeader(leader.name, leader.color);
   return null;
 };
 
 // ─── Detail Panel ─────────────────────────────────────────────────────────
 
-const EmptyPanel = () => (
-  <div className="flex flex-col items-start justify-start gap-3 pt-2">
+const EmptyPanel = ({ isMobile }: { isMobile: boolean }) => (
+  <div className="flex flex-col items-start gap-2">
     <div className="text-xs font-semibold tracking-widest uppercase text-ink-tertiary">
       Umfrageergebnis
     </div>
@@ -203,8 +221,9 @@ const EmptyPanel = () => (
       Bundesland auswählen
     </p>
     <p className="text-xs text-ink-tertiary leading-relaxed opacity-60">
-      Bewege die Maus über ein Bundesland, um die aktuellen Umfragewerte zu
-      sehen.
+      {isMobile
+        ? "Tippe auf ein Bundesland, um die Umfragewerte zu sehen."
+        : "Bewege die Maus über ein Bundesland, um die aktuellen Umfragewerte zu sehen."}
     </p>
   </div>
 );
@@ -212,18 +231,25 @@ const EmptyPanel = () => (
 type DetailPanelProps = {
   detail: StateDetail | null;
   pollData: Poll;
+  isMobile: boolean;
   onNavigate: (id: string) => void;
 };
 
-const DetailPanel = ({ detail, pollData, onNavigate }: DetailPanelProps) => {
-  if (!detail || detail.parties.length === 0) return <EmptyPanel />;
+const DetailPanel = ({
+  detail,
+  pollData,
+  isMobile,
+  onNavigate,
+}: DetailPanelProps) => {
+  if (!detail || detail.parties.length === 0)
+    return <EmptyPanel isMobile={isMobile} />;
 
   const parliament = pollData.Parliaments[detail.parliamentId];
   const maxVal = detail.parties[0]?.value ?? 50;
 
   return (
     <div
-      className="flex flex-col gap-0 animate-fade-up"
+      className="flex flex-col animate-fade-up"
       style={{ animationDuration: "160ms" }}
     >
       {/* Header */}
@@ -306,10 +332,10 @@ const DetailPanel = ({ detail, pollData, onNavigate }: DetailPanelProps) => {
         ))}
       </div>
 
-      {/* CTA */}
+      {/* CTA — larger touch target on mobile */}
       <button
         onClick={() => onNavigate(detail.parliamentId)}
-        className="flex items-center justify-between w-full px-3 py-2 rounded border border-rule text-xs text-ink-tertiary hover:border-accent/40 hover:text-accent hover:bg-accent/[0.03] transition-all group"
+        className="flex items-center justify-between w-full px-3 py-2.5 sm:py-2 rounded border border-rule text-xs text-ink-tertiary hover:border-accent/40 hover:text-accent hover:bg-accent/[0.03] active:bg-accent/[0.06] transition-all group min-h-[44px] sm:min-h-0"
       >
         <span>Vollständige Analyse</span>
         <svg
@@ -339,11 +365,12 @@ type GermanyMapProps = { pollData: Poll };
 export const GermanyMap = ({ pollData }: GermanyMapProps) => {
   const { ref, dimensions } = useDimensions();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const [hovered, setHovered] = useState<StateDetail | null>(null);
   const [pinned, setPinned] = useState<StateDetail | null>(null);
 
-  // Collect legend entries during render (called synchronously, safe)
+  // Collect leader colors for the legend (synchronous during render, safe)
   const legendMap = useMemo(() => new Map<string, string>(), []);
   const collectLeader = useCallback(
     (name: string, color: string) => {
@@ -354,16 +381,19 @@ export const GermanyMap = ({ pollData }: GermanyMapProps) => {
 
   const geojson = germanyGeoJson as unknown as GeoJSON.FeatureCollection;
 
-  const pathGenerator = useMemo(() => {
-    if (!dimensions.width) return null;
-    // In the two-column layout, map gets ~60% of the container, capped at 380px
-    const mapW = Math.min(dimensions.width * 0.58, 380);
-    const mapH = mapW * 1.18;
-    const projection = d3.geoMercator().fitSize([mapW, mapH], geojson);
-    return d3.geoPath().projection(projection);
-  }, [dimensions.width, geojson]);
+  // On mobile: map fills full container width.
+  // On desktop: map takes ~58% of container, capped at 380px.
+  const mapWidth = isMobile
+    ? dimensions.width || 0
+    : Math.min((dimensions.width || 0) * 0.58, 380);
 
-  const mapWidth = Math.min((dimensions.width || 0) * 0.58, 380);
+  const pathGenerator = useMemo(() => {
+    if (!mapWidth) return null;
+    const mapH = mapWidth * 1.18;
+    const projection = d3.geoMercator().fitSize([mapWidth, mapH], geojson);
+    return d3.geoPath().projection(projection);
+  }, [mapWidth, geojson]);
+
   const svgHeight = mapWidth ? Math.round(mapWidth * 1.18) : 450;
 
   const handleEnter = useCallback(
@@ -372,6 +402,7 @@ export const GermanyMap = ({ pollData }: GermanyMapProps) => {
   );
   const handleLeave = useCallback(() => setHovered(null), []);
   const handleClick = useCallback((detail: StateDetail) => {
+    // On mobile, tap always pins (no hover). On desktop, click toggles pin.
     setPinned((prev) =>
       prev?.parliamentId === detail.parliamentId ? null : detail,
     );
@@ -381,29 +412,31 @@ export const GermanyMap = ({ pollData }: GermanyMapProps) => {
     [navigate],
   );
 
+  // Hover wins over pin on desktop; on mobile only pin exists
   const displayDetail = hovered ?? pinned;
   const activeId = hovered?.parliamentId ?? pinned?.parliamentId ?? null;
 
-  // Legend: build from legendMap (populated synchronously by LeaderCollector renders)
   const legendEntries = Array.from(legendMap.entries()).map(
-    ([name, color]) => ({
-      name,
-      color,
-    }),
+    ([name, color]) => ({ name, color }),
   );
 
   return (
     <div ref={ref} className="w-full">
       {dimensions.width > 0 && pathGenerator ? (
         <div className="flex flex-col gap-4">
-          {/* Two-column: map + detail panel */}
-          <div className="flex gap-6 items-start">
-            {/* Map */}
-            <div className="flex-shrink-0">
+          {/*
+           * Layout:
+           *  Mobile  (<640px): map full-width, detail panel below (stacked)
+           *  Desktop (≥640px): map left (~58%), detail panel right (side-by-side)
+           */}
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
+            {/* Map SVG */}
+            <div className="flex-shrink-0 w-full sm:w-auto">
               <svg
                 width={mapWidth}
                 height={svgHeight}
-                style={{ display: "block", overflow: "visible" }}
+                style={{ display: "block", overflow: "visible", width: "100%" }}
+                viewBox={`0 0 ${mapWidth} ${svgHeight}`}
                 aria-label="Karte der deutschen Bundesländer"
               >
                 <AllStates
@@ -411,6 +444,7 @@ export const GermanyMap = ({ pollData }: GermanyMapProps) => {
                   pathGenerator={pathGenerator}
                   pollData={pollData}
                   activeId={activeId}
+                  isMobile={isMobile}
                   onEnter={handleEnter}
                   onLeave={handleLeave}
                   onClick={handleClick}
@@ -419,23 +453,27 @@ export const GermanyMap = ({ pollData }: GermanyMapProps) => {
             </div>
 
             {/* Detail panel */}
-            <div className="flex-1 min-w-0 self-stretch">
+            <div className="w-full sm:flex-1 sm:min-w-0 sm:self-stretch">
               <div
-                className="h-full border border-rule rounded-lg p-4"
-                style={{ minHeight: Math.min(svgHeight, 380) }}
+                className="border border-rule rounded-lg p-4 sm:h-full"
+                style={
+                  !isMobile
+                    ? { minHeight: Math.min(svgHeight, 380) }
+                    : undefined
+                }
               >
                 <DetailPanel
                   detail={displayDetail}
                   pollData={pollData}
+                  isMobile={isMobile}
                   onNavigate={handleNavigate}
                 />
               </div>
             </div>
           </div>
 
-          {/* Legend — hidden LeaderCollectors + rendered legend */}
+          {/* Legend: invisible collectors + rendered legend row */}
           <div>
-            {/* Invisible collectors to populate legendMap */}
             {Object.values(PARLIAMENT_ID_BY_STATE).map((id) => (
               <LeaderCollector
                 key={id}

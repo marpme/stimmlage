@@ -31,7 +31,7 @@ const ROLLING_DAYS = 14;
 const ROLLING_MS = ROLLING_DAYS * 24 * 60 * 60 * 1000;
 
 /** O(n) sliding-window rolling average. Points must be sorted ascending. */
-function rollingAverageLinear(points: TimelinePoint[]): TimelinePoint[] {
+export function rollingAverageLinear(points: TimelinePoint[]): TimelinePoint[] {
   if (points.length === 0) return [];
   const result: TimelinePoint[] = new Array(points.length);
   let windowStart = 0;
@@ -54,7 +54,7 @@ function rollingAverageLinear(points: TimelinePoint[]): TimelinePoint[] {
 }
 
 /** Bucket raw points into calendar months, returning min/max per bucket. */
-function monthlyBand(points: TimelinePoint[]): TimelineBucket[] {
+export function monthlyBand(points: TimelinePoint[]): TimelineBucket[] {
   if (points.length === 0) return [];
   const buckets = new Map<string, { min: number; max: number; ts: number }>();
   for (const p of points) {

@@ -24,7 +24,9 @@
   },
   "institute": {
     "institute": "Instytut",
-    "date": "Data"
+    "date": "Data",
+    "showHistory": "Pokaż historię",
+    "hideHistory": "Ukryj historię"
   },
   "partyStats": {
     "title": "Trend i wariancja",

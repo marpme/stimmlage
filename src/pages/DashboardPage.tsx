@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import DefaultLayout from "@/layouts/default";
 import { usePollData } from "@/hooks/usePollData.ts";
+import { useLatestUpdateTime } from "@/hooks/useLatestUpdateTime.ts";
 import { FeaturedCard } from "@/views/dashboard/FeaturedCard.tsx";
 import { LandtagRow } from "@/views/dashboard/LandtagRow.tsx";
 import { ParliamentCard } from "@/views/dashboard/ParliamentCard.tsx";
@@ -43,6 +44,7 @@ const MapIcon = () => (
 export default function DashboardPage() {
   const { t } = useTranslation();
   const { data: pollData } = usePollData();
+  const { data: lastUpdatedData } = useLatestUpdateTime();
   const [view, setView] = useState<ViewMode>(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -64,6 +66,14 @@ export default function DashboardPage() {
           </h1>
           <p className="text-ink-tertiary text-sm mt-2">
             {t("dashboard.subtitle")}
+            {lastUpdatedData && (
+              <span
+                className="ml-2 text-xs text-ink-tertiary opacity-60 tabular-nums"
+                title={lastUpdatedData.lastUpdated.toLocaleDateString()}
+              >
+                · {lastUpdatedData.formatedLastUpdated}
+              </span>
+            )}
           </p>
         </div>
 

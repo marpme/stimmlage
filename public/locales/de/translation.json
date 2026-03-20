@@ -24,7 +24,9 @@
   },
   "institute": {
     "institute": "Institut",
-    "date": "Datum"
+    "date": "Datum",
+    "showHistory": "Verlauf anzeigen",
+    "hideHistory": "Verlauf ausblenden"
   },
   "partyStats": {
     "title": "Trend & Varianz",

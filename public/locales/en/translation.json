@@ -24,7 +24,9 @@
   },
   "institute": {
     "institute": "Institute",
-    "date": "Date"
+    "date": "Date",
+    "showHistory": "Show history",
+    "hideHistory": "Hide history"
   },
   "partyStats": {
     "title": "Trend & Variance",

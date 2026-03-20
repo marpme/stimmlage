@@ -1,9 +1,10 @@
-import { FC } from "react";
+import { FC, Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Survey } from "@/assets/poll.ts";
 import { usePollData } from "@/hooks/usePollData.ts";
 import { getSortingValueOfParty } from "@/hooks/useSortedParliament.ts";
+import { InstituteSparkPanel } from "@/views/institues/InstituteSparkPanel.tsx";
 
 export const InstituteTable: FC<{
   surveys?: { [id: string]: Survey };
@@ -11,9 +12,20 @@ export const InstituteTable: FC<{
 }> = ({ surveys, parliamentId }) => {
   const { t } = useTranslation();
   const { data: pollData } = usePollData();
+  const [expandedInstitutes, setExpandedInstitutes] = useState<Set<string>>(
+    new Set(),
+  );
 
   if (!surveys) return null;
 
+  const toggleExpand = (id: string) =>
+    setExpandedInstitutes((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+
+  const seenInstitutes = new Set<string>();
   const listedSurveyIds = Object.keys(surveys)
     .filter((id) => !parliamentId || surveys[id].Parliament_ID === parliamentId)
     .toSorted((a, b) =>
@@ -23,6 +35,12 @@ export const InstituteTable: FC<{
           ? -1
           : 0,
     )
+    .filter((id) => {
+      const iid = surveys[id].Institute_ID;
+      if (seenInstitutes.has(iid)) return false;
+      seenInstitutes.add(iid);
+      return true;
+    })
     .slice(0, 10);
 
   // Union of all party IDs across all listed surveys so no party is missing
@@ -72,6 +90,7 @@ export const InstituteTable: FC<{
     .map((survey) => {
       const row: Record<string, unknown> = {
         key: survey.Tasker_ID + survey.Date,
+        instituteId: survey.Institute_ID,
         name: pollData?.Institutes[survey.Institute_ID]?.Name,
         date: new Date(survey.Date).toLocaleDateString("de-DE", {
           day: "2-digit",
@@ -109,26 +128,65 @@ export const InstituteTable: FC<{
           </tr>
         </thead>
         <tbody>
-          {items.map((item, i) => (
-            <tr
-              key={item.key as string}
-              className={`border-b border-rule last:border-0 ${i % 2 === 1 ? "bg-rule/20" : ""}`}
-            >
-              {allColumns.map((col) => {
-                const val = (item as Record<string, unknown>)[col.key];
-                return (
-                  <td
-                    key={col.key}
-                    className="px-3 py-2 text-ink-secondary tabular-nums whitespace-nowrap"
-                  >
-                    {typeof val === "number"
-                      ? `${val.toFixed(1)}%`
-                      : String(val ?? "—")}
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
+          {items.map((item, i) => {
+            const iid = item.instituteId as string;
+            const isExpanded = expandedInstitutes.has(iid);
+            return (
+              <Fragment key={item.key as string}>
+                <tr
+                  className={`border-b border-rule cursor-pointer hover:bg-rule/30 transition-colors ${i % 2 === 1 ? "bg-rule/20" : ""}`}
+                  onClick={() => toggleExpand(iid)}
+                  aria-expanded={isExpanded}
+                  aria-label={
+                    isExpanded
+                      ? t("institute.hideHistory")
+                      : t("institute.showHistory")
+                  }
+                >
+                  {allColumns.map((col) => {
+                    const val = (item as Record<string, unknown>)[col.key];
+                    return (
+                      <td
+                        key={col.key}
+                        className="px-3 py-2 text-ink-secondary tabular-nums whitespace-nowrap"
+                      >
+                        {col.key === "name" ? (
+                          <span className="flex items-center gap-1.5">
+                            <svg
+                              width="10"
+                              height="10"
+                              viewBox="0 0 10 10"
+                              className={`flex-shrink-0 text-ink-tertiary transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
+                              fill="currentColor"
+                            >
+                              <path d="M3 2l4 3-4 3V2z" />
+                            </svg>
+                            {String(val ?? "—")}
+                          </span>
+                        ) : typeof val === "number" ? (
+                          `${val.toFixed(1)}%`
+                        ) : (
+                          String(val ?? "—")
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+                {isExpanded && (
+                  <tr className={i % 2 === 1 ? "bg-rule/10" : "bg-rule/5"}>
+                    <td colSpan={allColumns.length} className="p-0">
+                      <InstituteSparkPanel
+                        instituteId={iid}
+                        parliamentId={parliamentId ?? ""}
+                        surveys={surveys}
+                        pollData={pollData}
+                      />
+                    </td>
+                  </tr>
+                )}
+              </Fragment>
+            );
+          })}
         </tbody>
       </table>
     </div>
