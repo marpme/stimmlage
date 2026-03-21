@@ -14,4 +14,7 @@ export default defineConfig({
       exclude: ["**/*.test.*", "**/node_modules/**"],
     },
   },
+  resolve: {
+    alias: [{ find: "@", replacement: "/src" }],
+  },
 });
