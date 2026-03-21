@@ -13,7 +13,10 @@ export type PartyTrendStat = {
 };
 
 /** Returns all surveys for a given parliament, sorted newest-first. */
-function surveysForParliament(parliamentId: string, pollData: Poll): Survey[] {
+export function surveysForParliament(
+  parliamentId: string,
+  pollData: Poll,
+): Survey[] {
   return Object.values(pollData.Surveys)
     .filter((s) => s.Parliament_ID === parliamentId)
     .sort((a, b) => (a.Date > b.Date ? -1 : a.Date < b.Date ? 1 : 0));
@@ -23,7 +26,7 @@ function surveysForParliament(parliamentId: string, pollData: Poll): Survey[] {
  * For each institute, get its most recent survey for this parliament.
  * Returns a map: partyShortcut → array of values (one per institute).
  */
-function latestPerInstitute(
+export function latestPerInstitute(
   parliamentId: string,
   pollData: Poll,
 ): Map<string, number[]> {
@@ -50,7 +53,7 @@ function latestPerInstitute(
  * Average each institute's most recent poll within a date window (surveys
  * published on or before `cutoffDate`). Returns map: partyShortcut → average.
  */
-function averageAtCutoff(
+export function averageAtCutoff(
   parliamentId: string,
   pollData: Poll,
   cutoffDate: Date,
@@ -117,13 +120,9 @@ export function usePartyTrendStats(
       const past90 = avg90Map.get(name);
 
       const delta30 =
-        past30 !== undefined
-          ? parseFloat((current - past30).toFixed(1))
-          : null;
+        past30 !== undefined ? parseFloat((current - past30).toFixed(1)) : null;
       const delta90 =
-        past90 !== undefined
-          ? parseFloat((current - past90).toFixed(1))
-          : null;
+        past90 !== undefined ? parseFloat((current - past90).toFixed(1)) : null;
 
       const spread =
         values.length >= 2
