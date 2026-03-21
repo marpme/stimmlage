@@ -9,7 +9,16 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov"],
-      include: ["src/utils/**", "src/views/parliamentView/**"],
+      include: [
+        "src/utils/**",
+        "src/hooks/**",
+        "src/views/parliamentView/**",
+        "src/assets/**",
+        "src/model/**",
+        "src/config/**",
+        "src/components/primitives.ts",
+        "src/types/**",
+      ],
       // Exclude tests and generated files from coverage
       exclude: ["**/*.test.*", "**/node_modules/**"],
     },
