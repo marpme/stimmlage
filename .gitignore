@@ -27,3 +27,8 @@ dist-ssr
 yarn.lock
 package-lock.json
 bun.lockb
+
+# Vitest coverage output
+coverage/
+coverage-lcov/
+coverage-final.json
