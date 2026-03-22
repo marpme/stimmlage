@@ -7,12 +7,12 @@ export default defineConfig({
       enabled: true,
       name: "chromium",
       provider: "playwright",
+      headless: true,
     },
     setupFiles: ["./src/__tests__/setup.ts"],
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov"],
-      include: ["src/views/CoalitionTable/**", "src/views/dashboard/**"],
       exclude: ["**/*.test.*", "**/node_modules/**"],
     },
   },
