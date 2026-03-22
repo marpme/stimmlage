@@ -10,9 +10,38 @@ pnpm build        # Type-check + build (tsc && vite build)
 pnpm lint         # ESLint with auto-fix
 pnpm preview      # Preview production build
 pnpm update:poll  # Fetch latest poll data from dawum.de API
+pnpm test         # Build + run all tests (unit + browser) with coverage
+pnpm test:unit    # Run unit tests with coverage (no build required)
+pnpm test:browser # Build + run browser tests with coverage via Playwright
 ```
 
-No tests are configured in this project.
+## Testing
+
+Tests are co-located next to their source files:
+
+```
+src/utils/getPartyColor.unit.test.ts
+src/utils/partyCompatibility.unit.test.ts
+src/hooks/useFivePercentBarrier.unit.test.ts
+src/hooks/useSortedParliament.unit.test.ts
+src/hooks/useSetOfCoalition.unit.test.ts
+src/hooks/usePartyTrendStats.unit.test.ts
+src/hooks/usePollProjection.unit.test.ts
+src/hooks/useTimelineSurveys.unit.test.ts
+src/model/useParliamentConfiguration.unit.test.ts
+src/views/parliamentView/coalitions.unit.test.ts
+src/views/CoalitionTable/table.browser.test.tsx
+src/views/dashboard/LandtagRow.browser.test.tsx
+src/views/dashboard/FeaturedCard.browser.test.tsx
+src/views/dashboard/ParliamentCard.browser.test.tsx
+```
+
+### Conventions
+
+- **`*.unit.test.ts`** — Pure logic tests, run in Node via Vitest. No React, no DOM. Place next to the source file being tested.
+- **`*.browser.test.tsx`** — Component render tests, run in headless Chromium via Playwright. Place next to the component being tested.
+- Hooks that call React APIs (`useMemo`, `useTheme`, etc.) are tested by extracting and testing their pure inner logic directly, without a hook wrapper.
+- The `src/__tests__/setup.ts` file configures `@testing-library/jest-dom` matchers for browser tests.
 
 ## Architecture
 
@@ -41,7 +70,7 @@ No tests are configured in this project.
 
 ### Views
 
-- `CoalitionsTable` — HeroUI table with inline D3 SVG bar charts comparing current polls vs last election (2021 results hardcoded in `src/assets/lastElectionResult.ts`)
+- `CoalitionsTable` — HeroUI table with inline D3 SVG bar charts showing current poll results per party
 - `DonutChart` — D3-based parliament seat donut visualization
 - `InstituteTable` — Shows individual institute survey data
 - `Violin` / `VerticalViolinShape` — Historical poll distribution charts (violin plots via D3)
