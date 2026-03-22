@@ -2,20 +2,17 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    include: ["**/*.unit.test.ts"],
+    include: ["**/*.browser.test.tsx"],
+    browser: {
+      enabled: true,
+      name: "chromium",
+      provider: "playwright",
+    },
+    setupFiles: ["./src/__tests__/setup.ts"],
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov"],
-      include: [
-        "src/utils/**",
-        "src/hooks/**",
-        "src/views/parliamentView/**",
-        "src/assets/**",
-        "src/model/**",
-        "src/config/**",
-        "src/components/primitives.ts",
-        "src/types/**",
-      ],
+      include: ["src/views/CoalitionTable/**", "src/views/dashboard/**"],
       exclude: ["**/*.test.*", "**/node_modules/**"],
     },
   },
