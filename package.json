@@ -9,11 +9,10 @@
     "lint": "eslint -c .eslintrc.json ./src/**/**/*.{ts,tsx} --fix",
     "preview": "vite preview",
     "update:poll": "node --experimental-strip-types ./scripts/update.ts",
-    "test": "vitest --run",
-    "test:unit": "vitest --run --config vitest.config.ts --coverage",
-    "test:browser": "vitest --run --config vitest.browser.config.ts --coverage",
-    "test:watch": "vitest --run --config vitest.config.ts --coverage",
-    "test:watch:browser": "vitest --run --config vitest.browser.config.ts --coverage"
+    "test": "vitest --run --workspace vitest-workspace.ts --coverage",
+    "test:unit": "vitest --run --config vitest.config.ts",
+    "test:browser": "vitest --run --config vitest.browser.config.ts",
+    "test:watch": "vitest --run --workspace vitest-workspace.ts"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.16",
