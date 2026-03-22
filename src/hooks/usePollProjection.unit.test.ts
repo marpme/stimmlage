@@ -8,10 +8,6 @@ function makeDate(daysFromNow: number): Date {
   return new Date(Date.now() + daysFromNow * DAY);
 }
 
-function makeParty(id: string, shortcut: string, name: string) {
-  return [id, { Shortcut: shortcut, Name: name }] as const;
-}
-
 function makeSurvey(
   id: string,
   parliamentId: string,
@@ -36,7 +32,7 @@ function makeSurvey(
 
 function buildPoll(
   surveys: ReturnType<typeof makeSurvey>[],
-  parties: ReturnType<typeof makeParty>[],
+  parties: [string, { Shortcut: string; Name: string }][],
 ) {
   return {
     Database: {
@@ -59,11 +55,11 @@ function buildPoll(
   } as unknown as Poll;
 }
 
-const PARTIES = [
-  makeParty("p1", "SPD", "Sozialdemokratische Partei"),
-  makeParty("p2", "CDU/CSU", "Christlich Demokratische Union"),
-  makeParty("p3", "AfD", "Alternative für Deutschland"),
-  makeParty("p4", "Sonstige", "Sonstige Parteien"),
+const PARTIES: [string, { Shortcut: string; Name: string }][] = [
+  ["p1", { Shortcut: "SPD", Name: "Sozialdemokratische Partei" }],
+  ["p2", { Shortcut: "CDU/CSU", Name: "Christlich Demokratische Union" }],
+  ["p3", { Shortcut: "AfD", Name: "Alternative für Deutschland" }],
+  ["p4", { Shortcut: "Sonstige", Name: "Sonstige Parteien" }],
 ];
 
 describe("projectPollData", () => {
@@ -77,36 +73,30 @@ describe("projectPollData", () => {
   });
 
   it("excludes parties with 'Sonstige' in shortcut", () => {
-    const now = new Date();
     const surveys = [
       makeSurvey("s1", "1", makeDate(-5), "institute1", { p1: 25, p4: 10 }),
     ];
     const poll = buildPoll(surveys, PARTIES);
-    const result = projectPollData("1", poll, now, true);
-    const names = result.map((r) => r.name);
-    expect(names).not.toContain("Sonstige");
+    const result = projectPollData("1", poll, new Date(), true);
+    expect(result.map((r) => r.name)).not.toContain("Sonstige");
   });
 
   it("returns empty array when fewer than MIN_POINTS surveys exist", () => {
-    const now = new Date();
     const surveys = [
       makeSurvey("s1", "1", makeDate(-5), "institute1", { p1: 20 }),
       makeSurvey("s2", "1", makeDate(-4), "institute1", { p1: 22 }),
       makeSurvey("s3", "1", makeDate(-3), "institute1", { p1: 21 }),
     ];
     const poll = buildPoll(surveys, PARTIES);
-    expect(projectPollData("1", poll, now, true)).toEqual([]);
+    expect(projectPollData("1", poll, new Date(), true)).toEqual([]);
   });
 
   it("produces a projection when enough surveys exist", () => {
-    const now = new Date();
     const surveys = Array.from({ length: 6 }, (_, i) =>
-      makeSurvey(`s${i}`, "1", makeDate(-(6 - i)), "institute1", {
-        p1: 20 + i,
-      }),
+      makeSurvey(`s${i}`, "1", makeDate(-(6 - i)), "institute1", { p1: 20 + i }),
     );
     const poll = buildPoll(surveys, PARTIES);
-    const result = projectPollData("1", poll, now, true);
+    const result = projectPollData("1", poll, new Date(), true);
     expect(result.length).toBeGreaterThan(0);
     const spd = result.find((r) => r.name === "SPD");
     expect(spd).toBeDefined();
@@ -116,34 +106,27 @@ describe("projectPollData", () => {
   });
 
   it("clamps projected values between 0 and 100", () => {
-    const now = new Date();
     const surveys = Array.from({ length: 6 }, (_, i) =>
       makeSurvey(`s${i}`, "1", makeDate(-(6 - i)), "institute1", { p1: 99 }),
     );
     const poll = buildPoll(surveys, PARTIES);
-    const result = projectPollData("1", poll, now, true);
+    const result = projectPollData("1", poll, new Date(), true);
     const spd = result.find((r) => r.name === "SPD");
     expect(spd!.toValue).toBeLessThanOrEqual(100);
     expect(spd!.toValue).toBeGreaterThanOrEqual(0);
   });
 
   it("returns one entry per qualifying party", () => {
-    const now = new Date();
     const surveys = Array.from({ length: 6 }, (_, i) =>
-      makeSurvey(`s${i}`, "1", makeDate(-(6 - i)), "institute1", {
-        p1: 20,
-        p2: 30,
-      }),
+      makeSurvey(`s${i}`, "1", makeDate(-(6 - i)), "institute1", { p1: 20, p2: 30 }),
     );
     const poll = buildPoll(surveys, PARTIES);
-    const result = projectPollData("1", poll, now, true);
-    const names = result.map((r) => r.name).sort();
-    expect(names).toContain("SPD");
-    expect(names).toContain("CDU/CSU");
+    const result = projectPollData("1", poll, new Date(), true);
+    expect(result.map((r) => r.name)).toContain("SPD");
+    expect(result.map((r) => r.name)).toContain("CDU/CSU");
   });
 
   it("filters surveys outside the 60-day window", () => {
-    const now = new Date();
     const surveys = [
       ...Array.from({ length: 5 }, (_, i) =>
         makeSurvey(`s${i}`, "1", makeDate(-(5 + i)), "institute1", { p1: 20 }),
@@ -152,7 +135,7 @@ describe("projectPollData", () => {
       makeSurvey("snew", "1", makeDate(1), "institute1", { p1: 20 }),
     ];
     const poll = buildPoll(surveys, PARTIES);
-    const result = projectPollData("1", poll, now, true);
+    const result = projectPollData("1", poll, new Date(), true);
     const spd = result.find((r) => r.name === "SPD");
     expect(spd!.fromValue).toBeCloseTo(20);
   });
