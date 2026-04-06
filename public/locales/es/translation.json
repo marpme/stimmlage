@@ -79,7 +79,41 @@
     "dataLabel": "Datos:",
     "dataLinkTitle": "Dawum – Últimas encuestas y resultados electorales",
     "licenseConnector": "bajo",
-    "licenseLinkTitle": "Open Database License (ODbL) v1.0"
+    "licenseLinkTitle": "Open Database License (ODbL) v1.0",
+    "impressum": "Aviso legal",
+    "datenschutz": "Privacidad",
+    "methodology": "Metodología"
+  },
+  "methodology": {
+    "title": "Metodología",
+    "intro": "Cómo Stimmlage agrega, suaviza y visualiza los datos de encuestas — una descripción de todos los métodos de cálculo utilizados.",
+    "sectionDataSource": "Fuente de datos",
+    "sectionCurrentAverage": "Promedio actual de encuestas",
+    "sectionFivePercent": "Umbral del 5%",
+    "sectionSeats": "Distribución de escaños",
+    "sectionTrends": "Cálculo de tendencias (30d / 90d / variación)",
+    "sectionProjection": "Proyección lineal",
+    "sectionRollingAverage": "Media móvil y bandas mensuales"
+  },
+  "impressum": {
+    "title": "Aviso legal (Impressum)",
+    "sectionContact": "Información según §5 TMG",
+    "sectionNoAffiliation": "Sin afiliación partidaria",
+    "sectionNoEndorsement": "Sin respaldo político",
+    "sectionDataSource": "Fuente de datos",
+    "sectionOpenSource": "Código abierto",
+    "linkDatenschutz": "Política de privacidad"
+  },
+  "datenschutz": {
+    "title": "Política de privacidad (Datenschutzerklärung)",
+    "sectionPrinciple": "Principio",
+    "sectionNoCollection": "Sin recopilación de datos",
+    "sectionNoCookies": "Sin cookies",
+    "sectionNoTracking": "Sin seguimiento ni análisis",
+    "sectionExternalApi": "Fuente de datos externa: dawum.de",
+    "sectionHosting": "Alojamiento",
+    "sectionContact": "Contacto para consultas de privacidad",
+    "linkImpressum": "Aviso legal"
   },
   "languageSwitcher": {
     "ariaLabel": "Seleccionar idioma"

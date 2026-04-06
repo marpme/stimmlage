@@ -79,7 +79,41 @@
     "dataLabel": "Données :",
     "dataLinkTitle": "Dawum – Derniers sondages et résultats électoraux",
     "licenseConnector": "sous",
-    "licenseLinkTitle": "Open Database License (ODbL) v1.0"
+    "licenseLinkTitle": "Open Database License (ODbL) v1.0",
+    "impressum": "Mentions légales",
+    "datenschutz": "Confidentialité",
+    "methodology": "Méthodologie"
+  },
+  "methodology": {
+    "title": "Méthodologie",
+    "intro": "Comment Stimmlage agrège, lisse et visualise les données de sondage — une description de toutes les méthodes de calcul utilisées.",
+    "sectionDataSource": "Source des données",
+    "sectionCurrentAverage": "Moyenne actuelle des sondages",
+    "sectionFivePercent": "Seuil de 5%",
+    "sectionSeats": "Répartition des sièges",
+    "sectionTrends": "Calcul des tendances (30j / 90j / écart)",
+    "sectionProjection": "Projection linéaire",
+    "sectionRollingAverage": "Moyenne mobile et bandes mensuelles"
+  },
+  "impressum": {
+    "title": "Mentions légales (Impressum)",
+    "sectionContact": "Informations selon §5 TMG",
+    "sectionNoAffiliation": "Aucune affiliation partisane",
+    "sectionNoEndorsement": "Aucun soutien politique",
+    "sectionDataSource": "Source des données",
+    "sectionOpenSource": "Open Source",
+    "linkDatenschutz": "Politique de confidentialité"
+  },
+  "datenschutz": {
+    "title": "Politique de confidentialité (Datenschutzerklärung)",
+    "sectionPrinciple": "Principe",
+    "sectionNoCollection": "Aucune collecte de données",
+    "sectionNoCookies": "Aucun cookie",
+    "sectionNoTracking": "Aucun suivi ni analyse",
+    "sectionExternalApi": "Source de données externe : dawum.de",
+    "sectionHosting": "Hébergement",
+    "sectionContact": "Contact pour les questions de confidentialité",
+    "linkImpressum": "Mentions légales"
   },
   "languageSwitcher": {
     "ariaLabel": "Choisir la langue"

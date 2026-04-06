@@ -79,7 +79,41 @@
     "dataLabel": "Dane:",
     "dataLinkTitle": "Dawum – Najnowsze sondaże i wyniki wyborów",
     "licenseConnector": "na licencji",
-    "licenseLinkTitle": "Open Database License (ODbL) v1.0"
+    "licenseLinkTitle": "Open Database License (ODbL) v1.0",
+    "impressum": "Nota prawna",
+    "datenschutz": "Prywatność",
+    "methodology": "Metodologia"
+  },
+  "methodology": {
+    "title": "Metodologia",
+    "intro": "Jak Stimmlage agreguje, wygładza i wizualizuje dane sondażowe — opis wszystkich stosowanych metod obliczeniowych.",
+    "sectionDataSource": "Źródło danych",
+    "sectionCurrentAverage": "Bieżąca średnia sondażowa",
+    "sectionFivePercent": "Próg 5%",
+    "sectionSeats": "Podział mandatów",
+    "sectionTrends": "Obliczanie trendów (30d / 90d / rozpiętość)",
+    "sectionProjection": "Projekcja liniowa",
+    "sectionRollingAverage": "Średnia krocząca i pasma miesięczne"
+  },
+  "impressum": {
+    "title": "Nota prawna (Impressum)",
+    "sectionContact": "Informacje zgodnie z §5 TMG",
+    "sectionNoAffiliation": "Brak afiliacji partyjnej",
+    "sectionNoEndorsement": "Brak poparcia politycznego",
+    "sectionDataSource": "Źródło danych",
+    "sectionOpenSource": "Open Source",
+    "linkDatenschutz": "Polityka prywatności"
+  },
+  "datenschutz": {
+    "title": "Polityka prywatności (Datenschutzerklärung)",
+    "sectionPrinciple": "Zasada",
+    "sectionNoCollection": "Brak zbierania danych",
+    "sectionNoCookies": "Brak plików cookie",
+    "sectionNoTracking": "Brak śledzenia i analityki",
+    "sectionExternalApi": "Zewnętrzne źródło danych: dawum.de",
+    "sectionHosting": "Hosting",
+    "sectionContact": "Kontakt w sprawach prywatności",
+    "linkImpressum": "Nota prawna"
   },
   "languageSwitcher": {
     "ariaLabel": "Wybierz język"

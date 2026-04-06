@@ -79,7 +79,41 @@
     "dataLabel": "Daten:",
     "dataLinkTitle": "Dawum – Neueste Wahlumfragen und Ergebnisse",
     "licenseConnector": "unter",
-    "licenseLinkTitle": "Open Database License (ODbL) v1.0"
+    "licenseLinkTitle": "Open Database License (ODbL) v1.0",
+    "impressum": "Impressum",
+    "datenschutz": "Datenschutz",
+    "methodology": "Methodik"
+  },
+  "methodology": {
+    "title": "Methodik",
+    "intro": "Wie Stimmlage Umfragedaten aggregiert, glättet und visualisiert — eine Beschreibung aller verwendeten Berechnungsverfahren.",
+    "sectionDataSource": "Datengrundlage",
+    "sectionCurrentAverage": "Aktueller Umfragewert",
+    "sectionFivePercent": "5-%-Sperrklausel",
+    "sectionSeats": "Sitzverteilung",
+    "sectionTrends": "Trendberechnung (30d / 90d / Spanne)",
+    "sectionProjection": "Lineare Projektion",
+    "sectionRollingAverage": "Gleitender Durchschnitt & Monatsbänder"
+  },
+  "impressum": {
+    "title": "Impressum",
+    "sectionContact": "Angaben gemäß §5 TMG",
+    "sectionNoAffiliation": "Keine Parteiaffiliierung",
+    "sectionNoEndorsement": "Kein politisches Bekenntnis",
+    "sectionDataSource": "Datenquelle",
+    "sectionOpenSource": "Open Source",
+    "linkDatenschutz": "Datenschutzerklärung"
+  },
+  "datenschutz": {
+    "title": "Datenschutzerklärung",
+    "sectionPrinciple": "Grundsatz",
+    "sectionNoCollection": "Keine Datenerhebung",
+    "sectionNoCookies": "Keine Cookies",
+    "sectionNoTracking": "Kein Tracking, keine Analyse",
+    "sectionExternalApi": "Externe Datenquelle: dawum.de",
+    "sectionHosting": "Hosting",
+    "sectionContact": "Kontakt bei Datenschutzfragen",
+    "linkImpressum": "Impressum"
   },
   "languageSwitcher": {
     "ariaLabel": "Sprache auswählen"
