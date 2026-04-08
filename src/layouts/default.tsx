@@ -27,6 +27,12 @@ export default function DefaultLayout({
                 : `${establishedYear}–${currentYear}`}
             </span>
             <Link
+              to="/daten"
+              className="underline underline-offset-2 hover:text-accent transition-colors"
+            >
+              {t("footer.datasource")}
+            </Link>
+            <Link
               to="/methodik"
               className="underline underline-offset-2 hover:text-accent transition-colors"
             >

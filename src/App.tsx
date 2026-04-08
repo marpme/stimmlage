@@ -5,6 +5,7 @@ import ParliamentDetailPage from "@/pages/ParliamentDetailPage";
 import ImpressumPage from "@/pages/ImpressumPage";
 import DatenschutzPage from "@/pages/DatenschutzPage";
 import MethodologyPage from "@/pages/MethodologyPage";
+import DatasourcePage from "@/pages/DatasourcePage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Route element={<ImpressumPage />} path="/impressum" />
       <Route element={<DatenschutzPage />} path="/datenschutz" />
       <Route element={<MethodologyPage />} path="/methodik" />
+      <Route element={<DatasourcePage />} path="/daten" />
     </Routes>
   );
 }

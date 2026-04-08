@@ -82,7 +82,8 @@
     "licenseLinkTitle": "Open Database License (ODbL) v1.0",
     "impressum": "Nota prawna",
     "datenschutz": "Prywatność",
-    "methodology": "Metodologia"
+    "methodology": "Metodologia",
+    "datasource": "Dane"
   },
   "methodology": {
     "title": "Metodologia",
@@ -117,5 +118,23 @@
   },
   "languageSwitcher": {
     "ariaLabel": "Wybierz język"
+  },
+  "datasource": {
+    "title": "Przegląd danych",
+    "intro": "Przegląd danych sondażowych — ile instytutów, badań i respondentów kryje się za liczbami.",
+    "source": "Źródło",
+    "lastUpdate": "Aktualizacja",
+    "loading": "Ładowanie danych…",
+    "sectionScope": "Zakres zbioru danych",
+    "sectionByYear": "Wolumen sondaży według roku",
+    "sectionSampleSize": "Wielkości próby",
+    "sectionCoverage": "Ciągłość czasowa",
+    "sectionInstitutes": "Instytuty i koncentracja",
+    "sectionParliaments": "Parlamenty",
+    "sectionMethods": "Metody badań",
+    "surveys": "sondaży",
+    "institutes": "instytutów",
+    "loading": "Ładowanie danych…",
+    "footerNote": "Wszystkie dane pochodzą z dawum.de i są wyświetlane bez zmian. Stimmlage nie ponosi odpowiedzialności za kompletność ani dokładność surowych danych."
   }
 }

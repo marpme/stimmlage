@@ -73,6 +73,9 @@
   .text-accent {
     color: var(--color-accent);
   }
+  .bg-accent {
+    background-color: var(--color-accent);
+  }
   .bg-accent-subtle {
     background-color: var(--color-accent-subtle);
   }
@@ -81,6 +84,12 @@
   }
   .bg-paper {
     background-color: var(--color-paper);
+  }
+  .bg-rule {
+    background-color: var(--color-rule);
+  }
+  .bg-surface {
+    background-color: oklch(96% 0.005 80);
   }
   .text-ink {
     color: var(--color-ink);

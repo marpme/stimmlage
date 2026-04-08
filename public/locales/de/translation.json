@@ -82,7 +82,8 @@
     "licenseLinkTitle": "Open Database License (ODbL) v1.0",
     "impressum": "Impressum",
     "datenschutz": "Datenschutz",
-    "methodology": "Methodik"
+    "methodology": "Methodik",
+    "datasource": "Datenbasis"
   },
   "methodology": {
     "title": "Methodik",
@@ -117,5 +118,23 @@
   },
   "languageSwitcher": {
     "ariaLabel": "Sprache auswählen"
+  },
+  "datasource": {
+    "title": "Datenbasis",
+    "intro": "Eine Übersicht der zugrundeliegenden Umfragedaten — wie viele Institute, Erhebungen und befragte Personen hinter den Zahlen stecken.",
+    "source": "Quelle",
+    "lastUpdate": "Stand",
+    "loading": "Daten werden geladen…",
+    "sectionScope": "Umfang des Datensatzes",
+    "sectionByYear": "Umfragevolumen nach Jahr",
+    "sectionSampleSize": "Stichprobengrößen",
+    "sectionCoverage": "Zeitliche Abdeckung",
+    "sectionInstitutes": "Institute & Konzentration",
+    "sectionParliaments": "Parlamente",
+    "sectionMethods": "Erhebungsmethoden",
+    "surveys": "Umfragen",
+    "institutes": "Institute",
+    "loading": "Daten werden geladen…",
+    "footerNote": "Alle Daten stammen von dawum.de und werden unverändert dargestellt. Stimmlage übernimmt keine Verantwortung für Vollständigkeit oder Richtigkeit der Rohdaten."
   }
 }

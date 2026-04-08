@@ -82,7 +82,8 @@
     "licenseLinkTitle": "Open Database License (ODbL) v1.0",
     "impressum": "Aviso legal",
     "datenschutz": "Privacidad",
-    "methodology": "Metodología"
+    "methodology": "Metodología",
+    "datasource": "Datos"
   },
   "methodology": {
     "title": "Metodología",
@@ -117,5 +118,23 @@
   },
   "languageSwitcher": {
     "ariaLabel": "Seleccionar idioma"
+  },
+  "datasource": {
+    "title": "Descripción de datos",
+    "intro": "Una visión general de los datos de encuestas subyacentes.",
+    "source": "Fuente",
+    "lastUpdate": "Actualizado",
+    "loading": "Cargando datos…",
+    "sectionScope": "Alcance del conjunto de datos",
+    "sectionByYear": "Volumen de encuestas por año",
+    "sectionSampleSize": "Tamaños de muestra",
+    "sectionCoverage": "Cobertura temporal",
+    "sectionInstitutes": "Institutos y concentración",
+    "sectionParliaments": "Parlamentos",
+    "sectionMethods": "Métodos de encuesta",
+    "surveys": "encuestas",
+    "institutes": "institutos",
+    "loading": "Cargando datos…",
+    "footerNote": "Todos los datos provienen de dawum.de y se muestran tal cual. Stimmlage no asume responsabilidad por la integridad o exactitud de los datos."
   }
 }

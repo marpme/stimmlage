@@ -82,7 +82,8 @@
     "licenseLinkTitle": "Open Database License (ODbL) v1.0",
     "impressum": "Legal Notice",
     "datenschutz": "Privacy Policy",
-    "methodology": "Methodology"
+    "methodology": "Methodology",
+    "datasource": "Data"
   },
   "methodology": {
     "title": "Methodology",
@@ -117,5 +118,23 @@
   },
   "languageSwitcher": {
     "ariaLabel": "Select language"
+  },
+  "datasource": {
+    "title": "Data Overview",
+    "intro": "An overview of the underlying polling data — how many institutes, surveys and respondents are behind the numbers.",
+    "source": "Source",
+    "lastUpdate": "Last updated",
+    "loading": "Loading data…",
+    "sectionScope": "Dataset Scope",
+    "sectionByYear": "Survey Volume by Year",
+    "sectionSampleSize": "Sample Sizes",
+    "sectionCoverage": "Temporal Coverage",
+    "sectionInstitutes": "Institutes & Concentration",
+    "sectionParliaments": "Parliaments",
+    "sectionMethods": "Survey Methods",
+    "surveys": "surveys",
+    "institutes": "institutes",
+    "loading": "Loading data…",
+    "footerNote": "All data is sourced from dawum.de and displayed as-is. Stimmlage accepts no responsibility for the completeness or accuracy of the raw data."
   }
 }
